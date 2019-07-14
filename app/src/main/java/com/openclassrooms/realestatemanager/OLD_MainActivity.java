@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class OLD_MainActivity extends AppCompatActivity {
 
     private TextView textViewMain;
     private TextView textViewQuantity;
@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.OLD_activity_main);
 
         this.textViewMain = findViewById(R.id.activity_main_activity_text_view_main);
         this.textViewQuantity = findViewById(R.id.activity_main_activity_text_view_quantity);
