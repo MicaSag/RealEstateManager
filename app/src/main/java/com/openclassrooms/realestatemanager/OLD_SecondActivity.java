@@ -8,6 +8,6 @@ public class OLD_SecondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.OLD_activity_second);
+        setContentView(R.layout.old_activity_second);
     }
 }

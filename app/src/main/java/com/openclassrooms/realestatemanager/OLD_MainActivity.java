@@ -12,7 +12,7 @@ public class OLD_MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.OLD_activity_main);
+        setContentView(R.layout.old_activity_main);
 
         this.textViewMain = findViewById(R.id.activity_main_activity_text_view_main);
         this.textViewQuantity = findViewById(R.id.activity_main_activity_text_view_quantity);
