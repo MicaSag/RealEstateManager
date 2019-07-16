@@ -35,4 +35,12 @@ public class RealEstateManagerActivity extends BaseActivity {
     protected View getCoordinatorLayout() {
         return mCoordinatorLayout;
     }
+
+    // BASE METHOD Implementation
+    // Get the menu toolbar Layout
+    // CALLED BY BASE METHOD
+    @Override
+    protected int getToolbarMenu() {
+        return R.menu.menu_activity_real_estate_manager;
+    }
 }
