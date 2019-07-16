@@ -1,7 +1,9 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
 import android.support.design.widget.CoordinatorLayout;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
@@ -42,5 +44,26 @@ public class RealEstateManagerActivity extends BaseActivity {
     @Override
     protected int getToolbarMenu() {
         return R.menu.menu_activity_real_estate_manager;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    //                                             UI
+    // ---------------------------------------------------------------------------------------------
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //3 - Handle actions on menu items
+        switch (item.getItemId()) {
+            case R.id.menu_activity_real_estate_manager_search:
+                showSnackBar("Search Button Activated");
+                return true;
+            case R.id.menu_activity_real_estate_manager_edit:
+                showSnackBar("Edit Button Activated");
+                return true;
+            case R.id.menu_activity_real_estate_manager_add:
+                showSnackBar("Add Button Activated");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

@@ -70,7 +70,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         getMenuInflater().inflate(this.getToolbarMenu(), menu);
         return true;
     }
-
     // Show Snack Bar with a message
     public void showSnackBar(String message){
         Log.d(TAG, "showSnackBar: ");
