@@ -60,8 +60,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setSupportActionBar(mToolBar);
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
     }
     // Configure toolbar Menu
     @Override

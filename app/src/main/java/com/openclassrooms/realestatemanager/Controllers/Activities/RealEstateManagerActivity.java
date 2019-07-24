@@ -1,11 +1,14 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
+import com.openclassrooms.realestatemanager.Controllers.Fragments.DetailFragment;
+import com.openclassrooms.realestatemanager.Controllers.Fragments.ListFragment;
 import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
@@ -14,6 +17,10 @@ public class RealEstateManagerActivity extends BaseActivity {
 
     // For debugging Mode
     private static final String TAG = RealEstateManagerActivity.class.getSimpleName();
+
+    // Declare fragments
+    private DetailFragment mDetailFragment;
+    private ListFragment mListFragment;
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     // - Get Coordinator Layout
@@ -46,6 +53,49 @@ public class RealEstateManagerActivity extends BaseActivity {
         return R.menu.menu_activity_real_estate_manager;
     }
 
+    // ---------------------------------------------------------------------------------------------
+    //                                        ENTRY POINT
+    // ---------------------------------------------------------------------------------------------
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Configuring List Fragment (left position on Tablet)
+        this.configureAndShowListFragment();
+
+        // Configuring Detail Fragment (right position on Tablet)
+        this.configureAndShowDetailFragment();
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                        FRAGMENTS
+    // ---------------------------------------------------------------------------------------------
+    private void configureAndShowListFragment() {
+        // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
+        mListFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_list);
+
+        if (mListFragment == null) {
+            // Create new main fragment
+            mListFragment = ListFragment.newInstance();
+            // Add it to FrameLayout container
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_list, mListFragment)
+                    .commit();
+        }
+    }
+    private void configureAndShowDetailFragment() {
+        // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
+        mDetailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_detail);
+
+        // We only add DetailsFragment in Tablet mode (If found frame_layout_detail)
+            if (mDetailFragment == null && findViewById(R.id.fragment_detail) != null) {
+            // Create new main fragment
+            mDetailFragment = DetailFragment.newInstance();
+            // Add it to FrameLayout container
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_detail, mDetailFragment)
+                    .commit();
+        }
+    }
     // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
