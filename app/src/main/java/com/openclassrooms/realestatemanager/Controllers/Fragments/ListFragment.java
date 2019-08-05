@@ -9,10 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.openclassrooms.realestatemanager.Models.Property;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.propertyList.PropertyAdapter;
+import com.openclassrooms.realestatemanager.Utils.ItemClickSupport;
+import com.openclassrooms.realestatemanager.PropertyList.PropertyAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +60,13 @@ public class ListFragment extends Fragment implements PropertyAdapter.Listener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this, view);
-        this.configureRecyclerView(); // Call during UI creation
+
+        // Call during UI creation
+        this.configureRecyclerView();
+
+        // Allows management of a click on an element of the list
+        this.configureOnClickRecyclerView();
+
         return view;
     }
 
@@ -88,6 +96,21 @@ public class ListFragment extends Fragment implements PropertyAdapter.Listener {
     // -------------------
     @Override
     public void onClickDeleteButton(int position) {}
+
+    // Configure item click on RecyclerView
+    private void configureOnClickRecyclerView(){
+        ItemClickSupport.addTo(mRecyclerView, R.layout.fragment_list_property)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Log.e("TAG", "Position : "+position);
+                        // 1 - Get user from adapter
+                        Property property = adapter.getProperty(position);
+                        // 2 - Show result in a Toast
+                        Toast.makeText(getContext(), "You clicked on property : "+property.getType(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
     // -------------------
     // UPDATE UI

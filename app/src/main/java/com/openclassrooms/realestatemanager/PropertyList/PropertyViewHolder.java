@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.propertyList;
+package com.openclassrooms.realestatemanager.PropertyList;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,19 +14,23 @@ import butterknife.ButterKnife;
 
 public class PropertyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    @BindView(R.id.fragment_list_property_name) TextView textView;
+    @BindView(R.id.fragment_list_property_location) TextView mLocation;
+    @BindView(R.id.fragment_list_property_type) TextView mType;
+    @BindView(R.id.fragment_list_property_prize) TextView mPrize;
 
-    // FOR DATA
+    // For data
     private WeakReference<PropertyAdapter.Listener> callbackWeakRef;
 
+    // Constructor
     public PropertyViewHolder(View propertyView) {
         super(propertyView);
         ButterKnife.bind(this, propertyView);
     }
 
+    // Method to update the current item
     public void updateWithProperty(Property property, PropertyAdapter.Listener callback){
-        this.callbackWeakRef = new WeakReference<PropertyAdapter.Listener>(callback);
-        this.textView.setText(property.getType());
+        this.callbackWeakRef = new WeakReference<>(callback);
+        this.mLocation.setText(property.getType());
     }
 
     @Override
