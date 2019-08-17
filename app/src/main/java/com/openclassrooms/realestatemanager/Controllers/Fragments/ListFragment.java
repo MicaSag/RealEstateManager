@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.Controllers.Fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +14,6 @@ import android.widget.Toast;
 
 import com.openclassrooms.realestatemanager.Models.Property;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.Utils.ItemClickSupport;
 import com.openclassrooms.realestatemanager.PropertyList.PropertyAdapter;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Michaël SAGOT on 23/07/2019.
  */
-public class ListFragment extends Fragment implements PropertyAdapter.Listener {
+public class ListFragment extends Fragment {
 
     // For debugging Mode
     private static final String TAG = ListFragment.class.getSimpleName();
@@ -35,6 +35,8 @@ public class ListFragment extends Fragment implements PropertyAdapter.Listener {
     // Declare list of property & Adapter
     private List<Property> mListProperty;
     private PropertyAdapter adapter;
+
+    private PropertyAdapter.OnPropertyClick mOnPropertyClick;
 
     // For Design
     @BindView(R.id.fragment_list_recycler_view) RecyclerView mRecyclerView;
@@ -51,6 +53,14 @@ public class ListFragment extends Fragment implements PropertyAdapter.Listener {
         // Create new fragment
         return new ListFragment();
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mOnPropertyClick = (PropertyAdapter.OnPropertyClick)context;
+    }
+
     // ---------------------------------------------------------------------------------------------
     //                                    ENTRY POINT
     // ---------------------------------------------------------------------------------------------
@@ -63,9 +73,6 @@ public class ListFragment extends Fragment implements PropertyAdapter.Listener {
 
         // Call during UI creation
         this.configureRecyclerView();
-
-        // Allows management of a click on an element of the list
-        this.configureOnClickRecyclerView();
 
         return view;
     }
@@ -85,7 +92,7 @@ public class ListFragment extends Fragment implements PropertyAdapter.Listener {
         propertyTwo.setType("HEHEHE");
         mListProperty.add(propertyTwo);
         // Create adapter passing the list of users
-        this.adapter = new PropertyAdapter(mListProperty, this);
+        this.adapter = new PropertyAdapter(mListProperty, mOnPropertyClick);
         // Attach the adapter to the recyclerView to populate items
         mRecyclerView.setAdapter(this.adapter);
         // Set layout manager to position the items
@@ -94,23 +101,6 @@ public class ListFragment extends Fragment implements PropertyAdapter.Listener {
     // -------------------
     // ACTIONS
     // -------------------
-    @Override
-    public void onClickDeleteButton(int position) {}
-
-    // Configure item click on RecyclerView
-    private void configureOnClickRecyclerView(){
-        ItemClickSupport.addTo(mRecyclerView, R.layout.fragment_list_property)
-                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        Log.e("TAG", "Position : "+position);
-                        // 1 - Get user from adapter
-                        Property property = adapter.getProperty(position);
-                        // 2 - Show result in a Toast
-                        Toast.makeText(getContext(), "You clicked on property : "+property.getType(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
 
     // -------------------
     // UPDATE UI

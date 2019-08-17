@@ -7,8 +7,6 @@ import android.widget.TextView;
 import com.openclassrooms.realestatemanager.Models.Property;
 import com.openclassrooms.realestatemanager.R;
 
-import java.lang.ref.WeakReference;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -18,24 +16,25 @@ public class PropertyViewHolder extends RecyclerView.ViewHolder implements View.
     @BindView(R.id.fragment_list_property_type) TextView mType;
     @BindView(R.id.fragment_list_property_prize) TextView mPrize;
 
-    // For data
-    private WeakReference<PropertyAdapter.Listener> callbackWeakRef;
+    private PropertyAdapter.OnPropertyClick mOnPropertyClick;
+    private Property mProperty;
 
     // Constructor
     public PropertyViewHolder(View propertyView) {
         super(propertyView);
         ButterKnife.bind(this, propertyView);
+        propertyView.setOnClickListener(this);
     }
 
     // Method to update the current item
-    public void updateWithProperty(Property property, PropertyAdapter.Listener callback){
-        this.callbackWeakRef = new WeakReference<>(callback);
-        this.mLocation.setText(property.getType());
+    public void updateWithProperty(Property property, PropertyAdapter.OnPropertyClick callback){
+        mProperty = property;
+        mOnPropertyClick = callback;
+        mLocation.setText(property.getType());
     }
 
     @Override
     public void onClick(View view) {
-        PropertyAdapter.Listener callback = callbackWeakRef.get();
-        if (callback != null) callback.onClickDeleteButton(getAdapterPosition());
+        if (mOnPropertyClick != null) mOnPropertyClick.onPropertyClick(mProperty);
     }
 }

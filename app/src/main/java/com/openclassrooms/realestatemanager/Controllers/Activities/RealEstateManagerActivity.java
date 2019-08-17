@@ -3,17 +3,20 @@ package com.openclassrooms.realestatemanager.Controllers.Activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.Controllers.Fragments.DetailFragment;
 import com.openclassrooms.realestatemanager.Controllers.Fragments.ListFragment;
+import com.openclassrooms.realestatemanager.Models.Property;
+import com.openclassrooms.realestatemanager.PropertyList.PropertyAdapter;
 import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
 
-public class RealEstateManagerActivity extends BaseActivity {
+public class RealEstateManagerActivity extends BaseActivity implements PropertyAdapter.OnPropertyClick {
 
     // For debugging Mode
     private static final String TAG = RealEstateManagerActivity.class.getSimpleName();
@@ -115,5 +118,14 @@ public class RealEstateManagerActivity extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    //                                      INTERFACE
+    // ---------------------------------------------------------------------------------------------
+    @Override
+    public void onPropertyClick(Property property) {
+        Log.d(TAG, "onPropertyClick: ");
+
     }
 }

@@ -24,11 +24,10 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyViewHolder> {
     private List<Property> mListProperty;
 
     // CALLBACK
-    public interface Listener { void onClickDeleteButton(int position); }
-    private final Listener mCallback;
+    private final OnPropertyClick mCallback;
 
     // CONSTRUCTOR
-    public PropertyAdapter(List<Property> listProperty, Listener callback) {
+    public PropertyAdapter(List<Property> listProperty, OnPropertyClick callback) {
         mListProperty = listProperty;
         mCallback = callback;
     }
@@ -63,5 +62,9 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyViewHolder> {
     public void updateData(List<Property> property){
         this.mListProperty = property;
         this.notifyDataSetChanged();
+    }
+
+    public interface OnPropertyClick{
+        void onPropertyClick(Property property);
     }
 }

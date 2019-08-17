@@ -4,8 +4,10 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
+
+import org.threeten.bp.LocalDateTime;
+
 import java.util.ArrayList;
-import java.util.Date;
 
 @Entity(foreignKeys = @ForeignKey(entity = RealEstateAgent.class,
         parentColumns = "realEstateAgent_Id",
@@ -25,8 +27,8 @@ public class Property {
     private String address;
     private ArrayList<String> pointOfInterest;
     private Integer status;
-    private Date dateEntryOfTheMarket;
-    private Date dateOfSale;
+    private LocalDateTime dateEntryOfTheMarket;
+    private LocalDateTime dateOfSale;
     private long realEstateAgent_Id;
 
     // --- GETTER ---
@@ -42,8 +44,8 @@ public class Property {
     public String getAddress() { return address; }
     public ArrayList<String> getPointOfInterest() { return pointOfInterest; }
     public Integer getStatus() { return status; }
-    public Date getDateEntryOfTheMarket() { return dateEntryOfTheMarket; }
-    public Date getDateOfSale() { return dateOfSale; }
+    public LocalDateTime getDateEntryOfTheMarket() { return dateEntryOfTheMarket; }
+    public LocalDateTime getDateOfSale() { return dateOfSale; }
     public long getRealEstateAgent_Id() { return realEstateAgent_Id; }
 
     // --- SETTER ---
@@ -59,8 +61,8 @@ public class Property {
     public void setAddress(String address) {  this.address = address;  }
     public void setPointOfInterest(ArrayList<String> pointOfInterest) {  this.pointOfInterest = pointOfInterest;  }
     public void setStatus(Integer status) {  this.status = status;  }
-    public void setDateEntryOfTheMarket(Date dateEntryOfTheMarket) {  this.dateEntryOfTheMarket = dateEntryOfTheMarket;  }
-    public void setDateOfSale(Date dateOfSale) {  this.dateOfSale = dateOfSale;  }
+    public void setDateEntryOfTheMarket(LocalDateTime dateEntryOfTheMarket) {  this.dateEntryOfTheMarket = dateEntryOfTheMarket;  }
+    public void setDateOfSale(LocalDateTime dateOfSale) {  this.dateOfSale = dateOfSale;  }
     public void setRealEstateAgent_Id(long realEstateAgent) {  this.realEstateAgent_Id = realEstateAgent;  }
 }
 
