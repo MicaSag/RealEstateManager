@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.Database;
+package com.openclassrooms.realestatemanager.Database.Dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;

@@ -10,6 +10,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.openclassrooms.realestatemanager.Database.Dao.PropertyDao;
 import com.openclassrooms.realestatemanager.Database.Dao.RealEstateAgentDao;
 import com.openclassrooms.realestatemanager.Models.Property;
 import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
@@ -23,7 +24,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
     private static volatile RealEstateManagerDatabase INSTANCE;
 
     // --- DAO ---
-    public abstract PropertyDao PropertyDao();
+    public abstract PropertyDao propertyDao();
     public abstract RealEstateAgentDao realEstateAgentDao();
 
     // --- INSTANCE ---

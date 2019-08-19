@@ -10,6 +10,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // Initialize ThreeTen Android Backport
         AndroidThreeTen.init(this);
     }
 }

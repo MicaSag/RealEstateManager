@@ -8,24 +8,24 @@ public class RealEstateAgent {
 
     @PrimaryKey
     private long realEstateAgent_Id;
-    private String username;
+    private String userName;
     private String urlPicture;
 
-    public RealEstateAgent(long realEstateAgent_Id, String username, String urlPicture) {
+    public RealEstateAgent(long realEstateAgent_Id, String userName, String urlPicture) {
         this.realEstateAgent_Id = realEstateAgent_Id;
-        this.username = username;
+        this.userName = userName;
         this.urlPicture = urlPicture;
     }
 
     // --- GETTER ---
 
     public long getRealEstateAgent_Id() { return realEstateAgent_Id; }
-    public String getUsername() { return username; }
+    public String getUserName() { return userName; }
     public String getUrlPicture() { return urlPicture; }
 
     // --- SETTER ---
 
     public void setRealEstateAgent_Id(long realEstateAgent_Id) { this.realEstateAgent_Id = realEstateAgent_Id; }
-    public void setUsername(String username) { this.username = username; }
+    public void setUserName(String userName) { this.userName = userName; }
     public void setUrlPicture(String urlPicture) { this.urlPicture = urlPicture; }
 }
