@@ -15,5 +15,5 @@ public interface RealEstateAgentDao {
     void createRealEstateAgent(RealEstateAgent realEstateAgent);
 
     @Query("SELECT * FROM RealEstateAgent WHERE realEstateAgent_Id = :realEstateAgent_Id")
-    LiveData<RealEstateAgent> getRealEstateAgent_Id(long realEstateAgent_Id);
+    LiveData<RealEstateAgent> getRealEstateAgent(long realEstateAgent_Id);
 }

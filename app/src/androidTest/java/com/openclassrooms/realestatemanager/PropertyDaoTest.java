@@ -92,7 +92,7 @@ public class PropertyDaoTest {
         this.database.realEstateAgentDao().createRealEstateAgent(REAL_ESTATE_AGENT_DEMO);
         // TEST
         RealEstateAgent realEstateAgent =
-                LiveDataTestUtil.getValue(this.database.realEstateAgentDao().getRealEstateAgent_Id(REAL_ESTATE_AGENT_ID));
+                LiveDataTestUtil.getValue(this.database.realEstateAgentDao().getRealEstateAgent(REAL_ESTATE_AGENT_ID));
 
         assertTrue(realEstateAgent.getUserName().equals(REAL_ESTATE_AGENT_DEMO.getUserName())
                 && realEstateAgent.getRealEstateAgent_Id() == REAL_ESTATE_AGENT_ID);
@@ -139,7 +139,7 @@ public class PropertyDaoTest {
         this.database.realEstateAgentDao().createRealEstateAgent(REAL_ESTATE_AGENT_DEMO);
         this.database.propertyDao().insertProperty(NEW_PROPERTY_FLAT);
         Property propertyAdded = LiveDataTestUtil.getValue(this.database.propertyDao().getPropertys(REAL_ESTATE_AGENT_ID)).get(0);
-        this.database.propertyDao().deleteItem(propertyAdded.getProperty_Id());
+        this.database.propertyDao().deleteProperty(propertyAdded.getProperty_Id());
 
         //TEST
         List<Property> items = LiveDataTestUtil.getValue(this.database.propertyDao().getPropertys(REAL_ESTATE_AGENT_ID));
