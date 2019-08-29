@@ -17,4 +17,12 @@ public class RealEstateAgentDataRepository {
     public LiveData<RealEstateAgent> getRealEstateAgent(long realEstateAgent_Id){
         return this.realEstateAgentDao.getRealEstateAgent(realEstateAgent_Id);
     }
+
+    // -- CREATE RealEstateAgent
+    public void createRealEstateAgent(RealEstateAgent realEstateAgent) {
+        realEstateAgentDao.createRealEstateAgent(realEstateAgent);
+    }
+
+    // -- DELETE RealEstateAgent
+    public void deleteRealEstateAgent(long realEstateAgent_Id){realEstateAgentDao.deleteRealEstateAgent(realEstateAgent_Id); }
 }

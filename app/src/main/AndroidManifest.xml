@@ -4,6 +4,8 @@
     package="com.openclassrooms.realestatemanager">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- Using for make internet requests (necessary for Glide) -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"

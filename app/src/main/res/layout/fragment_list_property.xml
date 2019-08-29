@@ -16,67 +16,67 @@
 
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/margin"
             android:layout_marginBottom="@dimen/margin"
-            android:gravity="center">
-
-            <!-- THIRD COLUMN -->
-            <!-- Image of the Restaurant -->
-            <ImageView
-                android:id="@+id/fragment_list_restaurant_view_item_image"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="@dimen/margin"
-                android:layout_marginBottom="@dimen/margin"
-                android:layout_width="@dimen/recycler_image_width"
-                android:layout_height="@dimen/recycler_image_height"
-                android:layout_weight="0.2"
-                android:layout_margin="@dimen/recycler_image_margin"/>
+            android:orientation="horizontal">
 
             <!-- FIRST COLUMN -->
+            <!-- Image of the Restaurant -->
+            <ImageView
+                android:id="@+id/fragment_list_property_image"
+                android:layout_width="@dimen/recycler_image_width"
+                android:layout_height="@dimen/recycler_image_height"
+                android:layout_margin="@dimen/recycler_image_margin"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin"
+                android:layout_weight="0.2"
+                android:baselineAligned="false"
+                android:scaleType="centerCrop" />
+
+            <!-- SECOND COLUMN -->
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/half_margin"
                 android:layout_weight="0.8"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <!-- First line -->
-                <!-- Restaurant Name -->
+                <!-- Property type -->
                 <TextView
                     android:id="@+id/fragment_list_property_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="@dimen/recycler_text_size"
                     android:hint="@string/type_of_property"
-                    android:textStyle="bold"/>
+                    android:textSize="@dimen/recycler_text_size"
+                    android:textStyle="bold" />
 
                 <!-- Second line -->
-                <!-- Address of the Restaurant -->
+                <!-- property location -->
                 <TextView
                     android:id="@+id/fragment_list_property_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="@dimen/recycler_text_size"
-                    android:maxLines="1"
                     android:ellipsize="end"
-                    android:hint="@string/location_of_the_property"/>
+                    android:hint="@string/location_of_the_property"
+                    android:maxLines="1"
+                    android:textSize="@dimen/recycler_text_size" />
 
                 <!-- Third line -->
-                <!-- Opening hours -->
+                <!-- property prize -->
                 <TextView
                     android:id="@+id/fragment_list_property_prize"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="@dimen/recycler_text_size"
                     android:hint="@string/prize_of_the_property"
-                    android:textStyle="italic"/>
+                    android:textSize="@dimen/recycler_text_size"
+                    android:textStyle="italic" />
 
             </LinearLayout>
 

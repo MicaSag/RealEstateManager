@@ -10,8 +10,8 @@
     <dimen name="margin">5dip</dimen>
     <dimen name="half_margin">10dip</dimen>
     <dimen name="recycler_padding">1dip</dimen>
-    <dimen name="recycler_image_width">150dip</dimen>
-    <dimen name="recycler_image_height">150dip</dimen>
+    <dimen name="recycler_image_width">75dip</dimen>
+    <dimen name="recycler_image_height">75dip</dimen>
     <dimen name="recycler_image_margin">5dip</dimen>
     <!-->> Text -->
     <dimen name="recycler_text_size">20sp</dimen>

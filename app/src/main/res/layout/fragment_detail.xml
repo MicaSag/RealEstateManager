@@ -1,15 +1,320 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/recycler_padding"
     tools:context=".Controllers.Fragments.DetailFragment">
 
-    <!--  -->
-    <TextView
+    <!--    FIRST LINE    -->
+    <!-- Media -->
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_weight="0.4">
+        <!-- Title -->
+        <TextView
+            android:id="@+id/fragment_detail_text_media_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Media"
+            android:textSize="@dimen/recycler_text_size"
+            android:textStyle="bold"
+            />
+        <!-- List of photos -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_detail_recycler_view_photos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
 
-</RelativeLayout>
+    <!--     SECOND LINE    -->
+    <!-- Description -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4">
+        <!-- Title -->
+        <TextView
+            android:id="@+id/fragment_detail_text_description_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:maxLines="1"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin"
+            android:textStyle="bold"
+            android:textSize="@dimen/recycler_text_size"
+            />
+        <!-- Text -->
+        <TextView
+            android:id="@+id/fragment_detail_text_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description text khkh kjkgh jh jk l jmlj lkj mlj klj mlkj ljl l mljggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
+            android:maxLines="10"
+            android:textSize="@dimen/recycler_text_size"
+            />
+    </LinearLayout>
+
+    <!--    THIRD LINE    -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3">
+        <!-- First column -->
+        <!-- Details Property -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3">
+            <!-- Surface Title -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin">
+                <!-- Logo Surface title -->
+                <ImageView
+                    android:id="@+id/fragment_detail_logo_surface_number_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/baseline_settings_overscan_black_24"/>
+                <!-- Surface number title -->
+                <TextView
+                    android:id="@+id/fragment_detail_text_surface_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Surface"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/recycler_text_size"
+                    />
+            </LinearLayout>
+            <!-- Surface value -->
+            <TextView
+                android:id="@+id/fragment_detail_text_surface"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 sq m"
+                android:maxLines="1"
+                android:layout_marginLeft="35dp"
+                android:textSize="@dimen/recycler_text_size"
+                />
+            <!-- Rooms number title -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin">
+                <!-- Logo Rooms title -->
+                <ImageView
+                    android:id="@+id/fragment_detail_logo_rooms_number_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/baseline_home_black_24"/>
+                <!-- Rooms text title -->
+                <TextView
+                    android:id="@+id/fragment_detail_text_rooms_number_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Number of rooms"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:layout_marginRight="15dp"
+                    android:textSize="@dimen/recycler_text_size"
+                    />
+            </LinearLayout>
+            <!-- Roms number -->
+            <TextView
+                android:id="@+id/fragment_detail_text_rooms_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:maxLines="1"
+                android:layout_marginLeft="35dp"
+                android:textSize="@dimen/recycler_text_size"
+                />
+            <!-- Bathrooms number Title -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin">
+                <!-- Logo Bathrooms title -->
+                <ImageView
+                    android:id="@+id/fragment_detail_logo_bathrooms_number_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/baseline_hot_tub_black_24"/>
+                <!-- Bathrooms text title -->
+                <TextView
+                    android:id="@+id/fragment_detail_tet_bathrooms_number_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Number of bathrooms"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/recycler_text_size"
+                    />
+            </LinearLayout>
+            <!-- Bathrooms number -->
+            <TextView
+                android:id="@+id/fragment_detail_text_bathrooms_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:maxLines="1"
+                android:layout_marginLeft="35dp"
+                android:textSize="@dimen/recycler_text_size"
+                />
+            <!-- Bedrooms number Title -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin">
+                <!-- Logo Bedrooms title -->
+                <ImageView
+                    android:id="@+id/fragment_detail_logo_bedrooms_number_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/baseline_hotel_black_24"/>
+                <!-- Bedrooms title -->
+                <TextView
+                    android:id="@+id/fragment_detail_text_bedrooms_number_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Number of bedrooms"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/recycler_text_size"
+                    />
+            </LinearLayout>
+            <!-- Bedrooms number -->
+            <TextView
+                android:id="@+id/fragment_detail_text_bedrooms_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:maxLines="1"
+                android:layout_marginLeft="35dp"
+                android:textSize="@dimen/recycler_text_size"
+                />
+        </LinearLayout>
+
+        <!-- Second column -->
+        <!-- Location Property -->
+        <!-- Location Title -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin">
+                <!-- Logo Location title -->
+                <ImageView
+                    android:id="@+id/fragment_detail_logo_location_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/baseline_room_black_24"/>
+                <!-- Location title -->
+                <TextView
+                    android:id="@+id/fragment_detail_text_location_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/recycler_text_size"
+                    />
+            </LinearLayout>
+            <!-- Location -->
+            <!-- line 1 -->
+            <TextView
+                android:id="@+id/fragment_detail_text_location_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:layout_marginLeft="35dp"
+                android:text="location address"
+                android:textSize="@dimen/recycler_text_size" />
+            <!-- line 2 -->
+            <TextView
+                android:id="@+id/fragment_detail_text_location_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:layout_marginLeft="35dp"
+                android:text="location address"
+                android:textSize="@dimen/recycler_text_size" />
+            <!-- line 3 -->
+            <TextView
+                android:id="@+id/fragment_detail_text_location_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:layout_marginLeft="35dp"
+                android:text="location address"
+                android:textSize="@dimen/recycler_text_size" />
+            <!-- line 4 -->
+            <TextView
+                android:id="@+id/fragment_detail_text_location_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:layout_marginLeft="35dp"
+                android:text="location address"
+                android:textSize="@dimen/recycler_text_size" />
+            <!-- line 5 -->
+            <TextView
+                android:id="@+id/fragment_detail_text_location_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:layout_marginLeft="35dp"
+                android:text="location address"
+                android:textSize="@dimen/recycler_text_size" />
+        </LinearLayout>
+
+        <!-- Third column -->
+        <!-- Map -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4">
+            <TextView
+                android:id="@+id/fragment_detail_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MAP"
+                android:maxLines="10"
+                android:textSize="@dimen/recycler_text_size"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -17,14 +17,15 @@ public class PropertyDataRepository {
 
     // --- GET ---
 
-    public LiveData<List<Property>> getItems(long userId){ return this.propertyDao.getPropertys(userId); }
+    public LiveData<List<Property>> getPropertys(long realEstateAgent_Id){ return this.propertyDao.getPropertys(realEstateAgent_Id); }
 
     // --- CREATE ---
 
     public void createProperty(Property property){ propertyDao.insertProperty(property); }
 
-    // --- DELETE ---
+    // --- DELETE/S ---
     public void deleteProperty(long property_Id){ propertyDao.deleteProperty(property_Id); }
+    public void deletePropertys(long realEstateAgent_Id){ propertyDao.deletePropertys(realEstateAgent_Id); }
 
     // --- UPDATE ---
     public void updateProperty(Property property){ propertyDao.updateProperty(property); }

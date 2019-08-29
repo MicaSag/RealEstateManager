@@ -25,17 +25,24 @@ public class Property {
     private Integer numberOfBedrooms;
     private String  description;
     private ArrayList<String> photos;
-    private String address;
+    private ArrayList<String> address;
     private ArrayList<String> pointOfInterest;
     private Boolean status;                     // True = sold, False = for sale
     private LocalDateTime dateEntryOfTheMarket;
     private LocalDateTime dateOfSale;
     private long realEstateAgent_Id;
 
+    // --- CONSTRUCTOR ---
+
     public Property(){}
+
+    public Property(long property_Id){
+        this.property_Id = property_Id;
+    }
+
     public Property(String type, Integer price, Integer area,
                     Integer numberOfParts, Integer numberOfBathrooms, Integer numberOfBedrooms,
-                    String description, ArrayList<String> photos, String address,
+                    String description, ArrayList<String> photos, ArrayList<String> address,
                     ArrayList<String> pointOfInterest, LocalDateTime dateEntryOfTheMarket,
                     LocalDateTime dateOfSale, long realEstateAgent_Id) {
         this.type = type;
@@ -65,7 +72,7 @@ public class Property {
     public Integer getNumberOfBedrooms() { return numberOfBedrooms; }
     public String getDescription() { return description; }
     public ArrayList<String> getPhotos() { return photos; }
-    public String getAddress() { return address; }
+    public ArrayList<String> getAddress() { return address; }
     public ArrayList<String> getPointOfInterest() { return pointOfInterest; }
     public Boolean getStatus() { return status; }
     public LocalDateTime getDateEntryOfTheMarket() { return dateEntryOfTheMarket; }
@@ -83,7 +90,7 @@ public class Property {
     public void setNumberOfBedrooms(Integer numberOfBedrooms) { this.numberOfBedrooms = numberOfBedrooms;  }
     public void setDescription(String description) {  this.description = description;  }
     public void setPhotos(ArrayList<String> photos) {  this.photos = photos;  }
-    public void setAddress(String address) {  this.address = address;  }
+    public void setAddress(ArrayList<String> address) {  this.address = address;  }
     public void setPointOfInterest(ArrayList<String> pointOfInterest) {  this.pointOfInterest = pointOfInterest;  }
     public void setStatus(Boolean status) {  this.status = status;  }
     public void setDateEntryOfTheMarket(LocalDateTime dateEntryOfTheMarket) {  this.dateEntryOfTheMarket = dateEntryOfTheMarket;  }

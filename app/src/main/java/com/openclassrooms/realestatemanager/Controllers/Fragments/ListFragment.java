@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.Controllers.Fragments;
 
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.ClipData;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.openclassrooms.realestatemanager.Injections.Injection;
+import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.Property;
+import com.openclassrooms.realestatemanager.PropertyList.PropertyViewModel;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.PropertyList.PropertyAdapter;
 
@@ -34,8 +40,9 @@ public class ListFragment extends Fragment {
     //For Data
     // Declare list of property & Adapter
     private List<Property> mListProperty;
-    private PropertyAdapter adapter;
+    private PropertyAdapter mAdapter;
 
+    // Declare OnPropertyClick Interface
     private PropertyAdapter.OnPropertyClick mOnPropertyClick;
 
     // For Design
@@ -77,37 +84,36 @@ public class ListFragment extends Fragment {
         return view;
     }
 
-    // -----------------
-    // CONFIGURATION
-    // -----------------
+    // --------------------------------------------------------------------------------------------
+    //                                    CONFIGURATION
+    // --------------------------------------------------------------------------------------------
 
-    // 3 - Configure RecyclerView, Adapter, LayoutManager & glue it together
+    // Configure RecyclerView, Adapter, LayoutManager & glue it together
     private void configureRecyclerView(){
         // Reset list
         mListProperty = new ArrayList<>();
-        Property propertyOne = new Property();
-        propertyOne.setType("COUCOU");
-        mListProperty.add(propertyOne);
-        Property propertyTwo = new Property();
-        propertyTwo.setType("HEHEHE");
-        mListProperty.add(propertyTwo);
         // Create adapter passing the list of users
-        this.adapter = new PropertyAdapter(mListProperty, mOnPropertyClick);
+        mAdapter = new PropertyAdapter(mListProperty, Glide.with(this), mOnPropertyClick);
         // Attach the adapter to the recyclerView to populate items
-        mRecyclerView.setAdapter(this.adapter);
+        mRecyclerView.setAdapter(mAdapter);
         // Set layout manager to position the items
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
-    // -------------------
-    // ACTIONS
-    // -------------------
+    // ---------------------------------------------------------------------------------------------
+    //                                           DATA
+    // ---------------------------------------------------------------------------------------------
+    public PropertyAdapter getmAdapter() {
+        return mAdapter;
+    }
 
-    // -------------------
-    // UPDATE UI
-    // -------------------
+    // --------------------------------------------------------------------------------------------
+    //                                        ACTIONS
+    // --------------------------------------------------------------------------------------------
 
-    private void updateUI(List<Property> listProperty){
-        mListProperty.addAll(listProperty);
-        adapter.notifyDataSetChanged();
+    // ---------------------------------------------------------------------------------------------
+    //                                          UI
+    // ---------------------------------------------------------------------------------------------
+    public void updateUI(List<Property> listProperty){
+        mAdapter.updateData(listProperty);
     }
 }

@@ -16,4 +16,7 @@ public interface RealEstateAgentDao {
 
     @Query("SELECT * FROM RealEstateAgent WHERE realEstateAgent_Id = :realEstateAgent_Id")
     LiveData<RealEstateAgent> getRealEstateAgent(long realEstateAgent_Id);
+
+    @Query("DELETE FROM RealEstateAgent WHERE realEstateAgent_Id = :realEstateAgent_Id")
+    int deleteRealEstateAgent(long realEstateAgent_Id);
 }

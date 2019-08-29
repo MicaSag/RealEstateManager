@@ -27,8 +27,9 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyViewHolder> {
     private final OnPropertyClick mCallback;
 
     // CONSTRUCTOR
-    public PropertyAdapter(List<Property> listProperty, OnPropertyClick callback) {
+    public PropertyAdapter(List<Property> listProperty, RequestManager glide, OnPropertyClick callback) {
         mListProperty = listProperty;
+        mGlide = glide;
         mCallback = callback;
     }
 
@@ -44,7 +45,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyViewHolder> {
     // For update View Holder with Property
     @Override
     public void onBindViewHolder(PropertyViewHolder viewHolder, int position) {
-        viewHolder.updateWithProperty(mListProperty.get(position), mCallback);
+        viewHolder.updateWithProperty(mListProperty.get(position), mGlide, mCallback);
     }
 
     // Return the size of the recycler view

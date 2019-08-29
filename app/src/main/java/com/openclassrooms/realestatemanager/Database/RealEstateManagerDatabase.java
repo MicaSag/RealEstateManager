@@ -35,6 +35,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RealEstateManagerDatabase.class, "RealEstateManagerDatabase.db")
                             .addCallback(prepopulateDatabase())
+                            .setJournalMode(JournalMode.TRUNCATE)  // Disable .wal (write ahead logging)
                             .build();
                 }
             }
