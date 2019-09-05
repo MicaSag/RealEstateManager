@@ -13,10 +13,10 @@ import java.util.ArrayList;
         parentColumns = "realEstateAgent_Id",
         childColumns = "realEstateAgent_Id"))
 
-public class Property {
+public class Estate {
 
     @PrimaryKey(autoGenerate = true)
-    private long property_Id;
+    private long estate_Id;
     private String type;
     private Integer price;
     private Integer area;
@@ -34,17 +34,17 @@ public class Property {
 
     // --- CONSTRUCTOR ---
 
-    public Property(){}
+    public Estate(){}
 
-    public Property(long property_Id){
-        this.property_Id = property_Id;
+    public Estate(long estate_Id){
+        this.estate_Id = estate_Id;
     }
 
-    public Property(String type, Integer price, Integer area,
-                    Integer numberOfParts, Integer numberOfBathrooms, Integer numberOfBedrooms,
-                    String description, ArrayList<String> photos, ArrayList<String> address,
-                    ArrayList<String> pointOfInterest, LocalDateTime dateEntryOfTheMarket,
-                    LocalDateTime dateOfSale, long realEstateAgent_Id) {
+    public Estate(String type, Integer price, Integer area,
+                  Integer numberOfParts, Integer numberOfBathrooms, Integer numberOfBedrooms,
+                  String description, ArrayList<String> photos, ArrayList<String> address,
+                  ArrayList<String> pointOfInterest, LocalDateTime dateEntryOfTheMarket,
+                  LocalDateTime dateOfSale, long realEstateAgent_Id) {
         this.type = type;
         this.price = price;
         this.area = area;
@@ -63,7 +63,7 @@ public class Property {
 
     // --- GETTER ---
 
-    public long getProperty_Id() { return property_Id; }
+    public long getEstate_Id() { return estate_Id; }
     public String getType() { return type; }
     public Integer getPrice() { return price; }
     public Integer getArea() { return area; }
@@ -81,7 +81,7 @@ public class Property {
 
     // --- SETTER ---
 
-    public void setProperty_Id(long propertyId) { this.property_Id = propertyId;  }
+    public void setEstate_Id(long estate_Id) { this.estate_Id = estate_Id;  }
     public void setType(String type) {  this.type = type;  }
     public void setPrice(Integer price) {  this.price = price;  }
     public void setArea(Integer area) {  this.area = area;  }

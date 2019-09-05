@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Controllers.Fragments.ListFragment">
+    tools:context=".Controllers.Fragments.EstateListFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_list_recycler_view"
+        android:id="@+id/fragment_list_estate_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

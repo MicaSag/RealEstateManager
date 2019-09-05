@@ -8,7 +8,7 @@
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fragment_list_restaurant_view_item_card"
+        android:id="@+id/fragment_list_estate_view_item_card"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             <!-- FIRST COLUMN -->
             <!-- Image of the Restaurant -->
             <ImageView
-                android:id="@+id/fragment_list_property_image"
+                android:id="@+id/fragment_list_estate_image"
                 android:layout_width="@dimen/recycler_image_width"
                 android:layout_height="@dimen/recycler_image_height"
                 android:layout_margin="@dimen/recycler_image_margin"
@@ -45,9 +45,9 @@
                 android:orientation="vertical">
 
                 <!-- First line -->
-                <!-- Property type -->
+                <!-- Estate type -->
                 <TextView
-                    android:id="@+id/fragment_list_property_type"
+                    android:id="@+id/fragment_list_estate_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -56,9 +56,9 @@
                     android:textStyle="bold" />
 
                 <!-- Second line -->
-                <!-- property location -->
+                <!-- estate location -->
                 <TextView
-                    android:id="@+id/fragment_list_property_location"
+                    android:id="@+id/fragment_list_estate_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -68,9 +68,9 @@
                     android:textSize="@dimen/recycler_text_size" />
 
                 <!-- Third line -->
-                <!-- property prize -->
+                <!-- estate prize -->
                 <TextView
-                    android:id="@+id/fragment_list_property_prize"
+                    android:id="@+id/fragment_list_estate_prize"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

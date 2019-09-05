@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
 
-    <!-- List Property RecyclerView -->
+    <!-- List Estate RecyclerView -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="type_of_property">Type of Property</string>
     <string name="location_of_the_property">Location of the Property</string>

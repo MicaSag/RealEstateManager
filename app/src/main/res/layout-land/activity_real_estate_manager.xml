@@ -27,14 +27,14 @@
 
             <!--LIST FRAGMENT-->
             <FrameLayout
-                android:id="@+id/fragment_list"
+                android:id="@+id/fragment_estate_list"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="30" />
 
             <!-- DETAIL FRAGMENT -->
             <FrameLayout
-                android:id="@+id/fragment_detail"
+                android:id="@+id/fragment_estate_details"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="70"

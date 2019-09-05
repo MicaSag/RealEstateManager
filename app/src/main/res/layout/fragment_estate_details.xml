@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/recycler_padding"
-    tools:context=".Controllers.Fragments.DetailFragment">
+    tools:context=".Controllers.Fragments.EstateDetailsFragment">
 
     <!--    FIRST LINE    -->
     <!-- Media -->
@@ -69,7 +69,7 @@
         android:layout_height="match_parent"
         android:layout_weight="0.3">
         <!-- First column -->
-        <!-- Details Property -->
+        <!-- Details Estate -->
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
@@ -219,7 +219,7 @@
         </LinearLayout>
 
         <!-- Second column -->
-        <!-- Location Property -->
+        <!-- Location Estate -->
         <!-- Location Title -->
         <LinearLayout
             android:orientation="vertical"

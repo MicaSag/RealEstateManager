@@ -9,31 +9,32 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
-import com.openclassrooms.realestatemanager.Controllers.Fragments.DetailFragment;
-import com.openclassrooms.realestatemanager.Controllers.Fragments.ListFragment;
+import com.openclassrooms.realestatemanager.Controllers.Fragments.EstateDetailsFragment;
+import com.openclassrooms.realestatemanager.Controllers.Fragments.EstateListFragment;
+import com.openclassrooms.realestatemanager.EstateList.EstateListAdapter;
+import com.openclassrooms.realestatemanager.EstateList.EstateListViewModel;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.Models.Property;
+import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
-import com.openclassrooms.realestatemanager.PropertyList.PropertyAdapter;
-import com.openclassrooms.realestatemanager.PropertyList.PropertyViewModel;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.RealEstateAgent.RealEstateAgentViewModel;
+import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentRepository;
 
 import org.threeten.bp.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 
-public class RealEstateManagerActivity extends BaseActivity implements PropertyAdapter.OnPropertyClick {
+public class RealEstateManagerActivity extends BaseActivity implements EstateListAdapter.OnEstateClick {
 
     // For debugging Mode
     private static final String TAG = RealEstateManagerActivity.class.getSimpleName();
 
-    // Declare PropertyViewModel
-    private PropertyViewModel mPropertyViewModel;
+    // Declare EstateListViewModel
+    private RealEstateAgentViewModel mRealEstateAgentViewModel;
 
     // --> New RealEstateAgent
     private static long REAL_ESTATE_AGENT_ID_1 = 1;
@@ -46,8 +47,8 @@ public class RealEstateManagerActivity extends BaseActivity implements PropertyA
             = new RealEstateAgent(REAL_ESTATE_AGENT_ID_2,
             "Pierre",
             "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg");
-    private static Property NEW_PROPERTY_FLAT
-            = new Property("Flat", 10000000, 750,
+    private static Estate newEstateFlat
+            = new Estate("Flat", 10000000, 750,
             5, 2, 4, "Beautifull FLAT in Paris",
             new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
@@ -57,8 +58,8 @@ public class RealEstateManagerActivity extends BaseActivity implements PropertyA
             (LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
             LocalDateTime.now(),
             REAL_ESTATE_AGENT_ID_1);
-    private static Property NEW_PROPERTY_HOUSE
-            = new Property("House", 10000000, 750,
+    private static Estate newEstateHouse
+            = new Estate("House", 10000000, 750,
             5, 2, 4, "Beautifull FLAT in Paris",
             new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
@@ -68,8 +69,8 @@ public class RealEstateManagerActivity extends BaseActivity implements PropertyA
             (LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
             LocalDateTime.now(),
             REAL_ESTATE_AGENT_ID_1);
-    private static Property NEW_PROPERTY_PENTHOUSE
-            = new Property("Penthouse", 10000000, 750,
+    private static Estate newEstatePenthouse
+            = new Estate("Penthouse", 10000000, 750,
             5, 2, 4, "Beautifull FLAT in Paris",
             new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
@@ -81,8 +82,11 @@ public class RealEstateManagerActivity extends BaseActivity implements PropertyA
             REAL_ESTATE_AGENT_ID_1);
 
     // Declare fragments
-    private DetailFragment mDetailFragment;
-    private ListFragment mListFragment;
+    private EstateDetailsFragment mEstateDetailsFragment;
+    private EstateListFragment mEstateListFragment;
+
+    // Data
+    private long mCurrentRealEstateAgent_Id;
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     // - Get Coordinator Layout
@@ -122,140 +126,135 @@ public class RealEstateManagerActivity extends BaseActivity implements PropertyA
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        long realEstateAgent_Id = REAL_ESTATE_AGENT_ID_2;
+        mCurrentRealEstateAgent_Id = REAL_ESTATE_AGENT_ID_1;
 
-        // Configure PropertyViewModel
-        this.configurePropertyViewModel(realEstateAgent_Id);
+        // Configure RealEstateViewModel
+        this.configureRealEstateAgentViewModel();
 
-        /*
         // FOR TEST, create RealEstateAgent
-        createRealEstateAgent(REAL_ESTATE_AGENT_2);
-                // FOR TEST, create Property
-        NEW_PROPERTY_FLAT.setRealEstateAgent_Id(2);
-        createProperty(NEW_PROPERTY_FLAT);
-        NEW_PROPERTY_HOUSE.setRealEstateAgent_Id(2);
-        createProperty(NEW_PROPERTY_HOUSE);
+        //createRealEstateAgent(REAL_ESTATE_AGENT_2);
 
-        NEW_PROPERTY_PENTHOUSE.setRealEstateAgent_Id(2);
-        createProperty(NEW_PROPERTY_PENTHOUSE);
 
-        deletePropertys(REAL_ESTATE_AGENT_ID_2);
-        deleteRealEstateAgent(REAL_ESTATE_AGENT_ID_2);
+        // FOR TEST, create Estate
+        /*newEstateFlat.setRealEstateAgent_Id(2);
+        createEstate(newEstateFlat);
+        newEstateHouse.setRealEstateAgent_Id(2);
+        createEstate(newEstateHouse);
+        newEstatePenthouse.setRealEstateAgent_Id(2);
+        createEstate(newEstatePenthouse);
         */
+        //deleteRealEstateAgent(REAL_ESTATE_AGENT_ID_2);
 
-        // Configuring List Fragment (left position on Tablet)
-        this.configureAndShowListFragment();
 
-        // Configuring Detail Fragment (right position on Tablet)
-        this.configureAndShowDetailFragment();
+        // Configuring Estate List Fragment (left position on Tablet)
+        this.configureAndShowEstateListFragment();
 
-        // Get current RealEstateAgent & propertys from Database
+        // Configuring Estate Details Fragment (right position on Tablet)
+        this.configureAndShowEstateDetailsFragment();
+
+        // Get current RealEstateAgent & Estates from Database
         this.getCurrentRealEstateAgent();
-        this.getPropertys(realEstateAgent_Id);
     }
     // ---------------------------------------------------------------------------------------------
     //                                        VIEW MODEL
     // ---------------------------------------------------------------------------------------------
-    // Configure PropertyViewModel
-    private void configurePropertyViewModel(long realEstateAgent_Id){
-        ViewModelFactory mPropertyViewModelFactory = Injection.provideViewModelFactory(this);
-        mPropertyViewModel = ViewModelProviders.of(this, mPropertyViewModelFactory).get(PropertyViewModel.class);
-        /*
+    // Configure RealEstateViewModel
+    private void configureRealEstateAgentViewModel(){
+        ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
+        mRealEstateAgentViewModel = ViewModelProviders.of(this, modelFactory).get(RealEstateAgentViewModel.class);
+
         // BEGIN -- INITIALIZE CURRENT REAL ESTATE AGENT
-        // == Delete RealEstateAgent and Propertys
-        deletePropertys(REAL_ESTATE_AGENT_ID_1);
+        // == Delete RealEstateAgent and Estates
+        /*deleteEstates(REAL_ESTATE_AGENT_ID_1);
         deleteRealEstateAgent(REAL_ESTATE_AGENT_ID_1);
-        // == Create RealEstateAgent and Propertys
-        createRealEstateAgent(REAL_ESTATE_AGENT_1);
-        createProperty(NEW_PROPERTY_FLAT);
-        createProperty(NEW_PROPERTY_HOUSE);
-        createProperty(NEW_PROPERTY_PENTHOUSE);
+        deleteEstates(REAL_ESTATE_AGENT_ID_2);
+        deleteRealEstateAgent(REAL_ESTATE_AGENT_ID_2);*/
+
+        // == Create RealEstateAgent and Estates
+        //createRealEstateAgent(REAL_ESTATE_AGENT_1);
+        //createEstate(newEstateFlat);
+        //createEstate(newEstateHouse);
+        //createEstate(newEstatePenthouse);
         // END -- INITIALIZE CURRENT REAL ESTATE AGENT
-        */
-        mPropertyViewModel.init(realEstateAgent_Id);
+
+        mRealEstateAgentViewModel.init(mCurrentRealEstateAgent_Id);
     }
     // ---------------------------------------------------------------------------------------------
     //                                        FRAGMENTS
     // ---------------------------------------------------------------------------------------------
-    private void configureAndShowListFragment() {
+    private void configureAndShowEstateListFragment() {
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        mListFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_list);
+        mEstateListFragment = (EstateListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_estate_list);
 
-        if (mListFragment == null) {
+        if (mEstateListFragment == null) {
             // Create new main fragment
-            mListFragment = ListFragment.newInstance();
+            mEstateListFragment = EstateListFragment.newInstance(mCurrentRealEstateAgent_Id);
             // Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_list, mListFragment)
+                    .add(R.id.fragment_estate_list, mEstateListFragment)
                     .commit();
         }
     }
-    private void configureAndShowDetailFragment() {
+    private void configureAndShowEstateDetailsFragment() {
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        mDetailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_detail);
+        mEstateDetailsFragment = (EstateDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_estate_details);
 
         // We only add DetailsFragment in Tablet mode (If found frame_layout_detail)
-        if (mDetailFragment == null && findViewById(R.id.fragment_detail) != null) {
+        if (mEstateDetailsFragment == null && findViewById(R.id.fragment_estate_details) != null) {
             // Create new main fragment
-            mDetailFragment = DetailFragment.newInstance();
+            mEstateDetailsFragment = EstateDetailsFragment.newInstance(mCurrentRealEstateAgent_Id,10);
             // Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_detail, mDetailFragment)
+                    .add(R.id.fragment_estate_details, mEstateDetailsFragment)
                     .commit();
         }
     }
     // ---------------------------------------------------------------------------------------------
     //                                           DATA
     // ---------------------------------------------------------------------------------------------
+    // >>>> RealEstateAgent <<<<<
+    // --------------------------
     // Get Current RealEstateAgent
     private void getCurrentRealEstateAgent(){
         Log.d(TAG, "getCurrentRealEstateAgent: ");
-       mPropertyViewModel.getCurrentRealEstateAgent().observe(this, this::updateRealEstateAgent);
+        mRealEstateAgentViewModel.getCurrentRealEstateAgent().observe(this, this::updateCurrentRealEstateAgent_Id);
     }
-
     // Create a new RealEstateAgent
     private void createRealEstateAgent(RealEstateAgent realEstateAgent){
         Log.d(TAG, "createRealestateAgent: ");
-        mPropertyViewModel.createRealEstateAgent(realEstateAgent);
+        mRealEstateAgentViewModel.createRealEstateAgent(realEstateAgent);
     }
-
     // Delete a RealEstateAgent
     private void deleteRealEstateAgent(long realEstateAgent_Id){
         Log.d(TAG, "deleteRealEstateAgent: ");
-        mPropertyViewModel.deleteRealEstateAgent(realEstateAgent_Id);
+        mRealEstateAgentViewModel.deleteRealEstateAgent(realEstateAgent_Id);
     }
-
-    // ---
-
-    // Get all propertys for a RealEstateAgent
-    private void getPropertys(long realEstateAgent_Id){
-        Log.d(TAG, "getPropertys: ");
-        mPropertyViewModel.getPropertys(realEstateAgent_Id).observe(this, this::updatePropertyList);
-    }
-
+/*    // --------------------
+    // >>>> Propertys <<<<<
+    // --------------------
     // Create a new property
-    private void createProperty(Property property){
+    private void createEstate(Estate estate){
         Log.d(TAG, "createProperty: ");
-        mPropertyViewModel.createProperty(property);
+        mEstateListViewModel.createEstate(estate);
     }
 
-    // Delete an Property
-    private void deleteProperty(long property_Id){
+    // Delete an Estate
+    private void deleteEstate(long estate_Id){
         Log.d(TAG, "deleteProperty: ");
-        mPropertyViewModel.deleteProperty(property_Id);
+        mEstateListViewModel.deleteEstate(estate_Id);
     }
 
     // Delete Propertys of an RealEstateAgent
-    private void deletePropertys(long realEstateAgent_Id){
+    private void deleteEstates(long realEstateAgent_Id){
         Log.d(TAG, "deleteProperty: ");
-        mPropertyViewModel.deletePropertys(realEstateAgent_Id);
+        mEstateListViewModel.deleteEstates(realEstateAgent_Id);
     }
 
     // Update an property (selected or not)
-    private void updateProperty(Property property){
+    private void updateEstate(Estate estate){
         Log.d(TAG, "updateProperty: ");
-        mPropertyViewModel.updateProperty(property);
-    }
+        mEstateListViewModel.updateEstate(estate);
+    }*/
     // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
@@ -264,7 +263,9 @@ public class RealEstateManagerActivity extends BaseActivity implements PropertyA
         //3 - Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.menu_activity_real_estate_manager_search:
-                showSnackBar("Search Button Activated");
+                //showSnackBar("Search Button Activated");
+                //mRealEstateAgentViewModel.setCurrentRealEstateAgent(2);
+                CurrentRealEstateAgentRepository.getInstance().setCurrentRealEstateAgent_Id(2);
                 return true;
             case R.id.menu_activity_real_estate_manager_edit:
                 showSnackBar("Edit Button Activated");
@@ -276,26 +277,16 @@ public class RealEstateManagerActivity extends BaseActivity implements PropertyA
                 return super.onOptionsItemSelected(item);
         }
     }
-
     @Override
-    public void onPropertyClick(Property property) {
-        Log.d(TAG, "onPropertyClick: ");
-        property.setType(property.getType().equals("House") ? "Penthouse": "House");
-        updateProperty(property);
+    public void onEstateClick(Estate estate) {
+        Log.d(TAG, "onEstateClick: ");
+        estate.setType(estate.getType().equals("House") ? "Penthouse": "House");
+       // updateProperty(estate);
     }
-
-    // Update the list of Property
-    private void updatePropertyList(List<Property> propertys){
-        Log.d(TAG, "updatePropertyList: ");
-        Log.d(TAG, "updatePropertyList: propertys.size = "+ propertys.size());
-        mListFragment.updateUI(propertys);
-        //mDetailFragment.updateUI(propertys.get(mListFragment.getmAdapter().get));
-        mDetailFragment.updateUI(propertys.get(0));
-    }
-
     // Update the RealEstateAgent Data
-    private void updateRealEstateAgent(RealEstateAgent realEstateAgent){
+    private void updateCurrentRealEstateAgent_Id(RealEstateAgent realEstateAgent){
         Log.d(TAG, "updateRealEstateAgent: ");
         this.showSnackBar("RealEstateAgent = "+realEstateAgent.getUserName());
+        mCurrentRealEstateAgent_Id = realEstateAgent.getRealEstateAgent_Id();
     }
 }

@@ -6,7 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.openclassrooms.realestatemanager.Database.RealEstateManagerDatabase;
-import com.openclassrooms.realestatemanager.Models.Property;
+import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
 
 import org.junit.After;
@@ -23,7 +23,7 @@ import java.util.List;
 import static junit.framework.TestCase.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class PropertyDaoTest {
+public class EstateDaoTest {
 
     // FOR DATA
     private RealEstateManagerDatabase database;
@@ -35,9 +35,9 @@ public class PropertyDaoTest {
             = new RealEstateAgent(REAL_ESTATE_AGENT_ID,
             "Michaël",
             "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg");
-    // --> New Property
-    private static Property NEW_PROPERTY_FLAT
-            = new Property("Flat", 10000000, 750,
+    // --> New Estate
+    private static Estate newEstateFlat
+            = new Estate("Flat", 10000000, 750,
     5, 2, 4, "Beautifull FLAT in Paris",
             new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
@@ -47,8 +47,8 @@ public class PropertyDaoTest {
             (LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
             LocalDateTime.now(),
             REAL_ESTATE_AGENT_ID);
-    private static Property NEW_PROPERTY_HOUSE
-            = new Property("House", 10000000, 750,
+    private static Estate newEstateHouse
+            = new Estate("House", 10000000, 750,
             5, 2, 4, "Beautifull FLAT in Paris",
             new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
@@ -58,8 +58,8 @@ public class PropertyDaoTest {
             (LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
             LocalDateTime.now(),
             REAL_ESTATE_AGENT_ID);
-    private static Property NEW_PROPERTY_PENTHOUSE
-            = new Property("Penthouse", 10000000, 750,
+    private static Estate newEstatePenthouse
+            = new Estate("Penthouse", 10000000, 750,
             5, 2, 4, "Beautifull FLAT in Paris",
             new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
@@ -99,50 +99,50 @@ public class PropertyDaoTest {
     }
 
     @Test
-    public void getPropertysWhenNoPropertyInserted() throws InterruptedException {
+    public void getEstatesWhenNoEstateInserted() throws InterruptedException {
         // TEST
-        List<Property> propertys = LiveDataTestUtil.getValue(this.database.propertyDao().getPropertys(REAL_ESTATE_AGENT_ID));
-        assertTrue(propertys.isEmpty());
+        List<Estate> estates = LiveDataTestUtil.getValue(this.database.estateDao().getEstates(REAL_ESTATE_AGENT_ID));
+        assertTrue(estates.isEmpty());
     }
 
     @Test
-    public void insertAndGetPropertys() throws InterruptedException {
-        // BEFORE : Adding demo realEstateAgent & demo propertys
+    public void insertAndGetEstates() throws InterruptedException {
+        // BEFORE : Adding demo realEstateAgent & demo estates
 
         this.database.realEstateAgentDao().createRealEstateAgent(REAL_ESTATE_AGENT_DEMO);
-        this.database.propertyDao().insertProperty(NEW_PROPERTY_FLAT);
-        this.database.propertyDao().insertProperty(NEW_PROPERTY_HOUSE);
-        this.database.propertyDao().insertProperty(NEW_PROPERTY_PENTHOUSE);
+        this.database.estateDao().insertEstate(newEstateFlat);
+        this.database.estateDao().insertEstate(newEstateHouse);
+        this.database.estateDao().insertEstate(newEstatePenthouse);
 
         // TEST
-        List<Property> items = LiveDataTestUtil.getValue(this.database.propertyDao().getPropertys(REAL_ESTATE_AGENT_ID));
+        List<Estate> items = LiveDataTestUtil.getValue(this.database.estateDao().getEstates(REAL_ESTATE_AGENT_ID));
         assertTrue(items.size() == 3);
     }
 
     @Test
     public void insertAndUpdateProperty() throws InterruptedException {
-        // BEFORE : Adding demo realEstateAgent & demo propertys. Next, update property added & re-save it.
+        // BEFORE : Adding demo realEstateAgent & demo estates. Next, update property added & re-save it.
         this.database.realEstateAgentDao().createRealEstateAgent(REAL_ESTATE_AGENT_DEMO);
-        this.database.propertyDao().insertProperty(NEW_PROPERTY_FLAT);
-        Property propertyAdded = LiveDataTestUtil.getValue(this.database.propertyDao().getPropertys(REAL_ESTATE_AGENT_ID)).get(0);
-        propertyAdded.setStatus(true);
-        this.database.propertyDao().updateProperty(propertyAdded);
+        this.database.estateDao().insertEstate(newEstateFlat);
+        Estate estateAdded = LiveDataTestUtil.getValue(this.database.estateDao().getEstates(REAL_ESTATE_AGENT_ID)).get(0);
+        estateAdded.setStatus(true);
+        this.database.estateDao().updateEstate(estateAdded);
 
         //TEST
-        List<Property> propertys = LiveDataTestUtil.getValue(this.database.propertyDao().getPropertys(REAL_ESTATE_AGENT_ID));
-        assertTrue(propertys.size() == 1 && propertys.get(0).getStatus());
+        List<Estate> estates = LiveDataTestUtil.getValue(this.database.estateDao().getEstates(REAL_ESTATE_AGENT_ID));
+        assertTrue(estates.size() == 1 && estates.get(0).getStatus());
     }
 
     @Test
-    public void insertAndDeleteProperty() throws InterruptedException {
-        // BEFORE : Adding demo realEstateAgent & demo propertys. Next, update property added & delete it.
+    public void insertAndDeleteEstate() throws InterruptedException {
+        // BEFORE : Adding demo realEstateAgent & demo estates. Next, update property added & delete it.
         this.database.realEstateAgentDao().createRealEstateAgent(REAL_ESTATE_AGENT_DEMO);
-        this.database.propertyDao().insertProperty(NEW_PROPERTY_FLAT);
-        Property propertyAdded = LiveDataTestUtil.getValue(this.database.propertyDao().getPropertys(REAL_ESTATE_AGENT_ID)).get(0);
-        this.database.propertyDao().deleteProperty(propertyAdded.getProperty_Id());
+        this.database.estateDao().insertEstate(newEstateFlat);
+        Estate estateAdded = LiveDataTestUtil.getValue(this.database.estateDao().getEstates(REAL_ESTATE_AGENT_ID)).get(0);
+        this.database.estateDao().deleteEstate(estateAdded.getEstate_Id());
 
         //TEST
-        List<Property> items = LiveDataTestUtil.getValue(this.database.propertyDao().getPropertys(REAL_ESTATE_AGENT_ID));
+        List<Estate> items = LiveDataTestUtil.getValue(this.database.estateDao().getEstates(REAL_ESTATE_AGENT_ID));
         assertTrue(items.isEmpty());
     }
 }

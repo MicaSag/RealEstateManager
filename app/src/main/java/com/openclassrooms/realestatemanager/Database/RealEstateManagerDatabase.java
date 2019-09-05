@@ -10,13 +10,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.openclassrooms.realestatemanager.Database.Dao.PropertyDao;
+import com.openclassrooms.realestatemanager.Database.Dao.EstateDao;
 import com.openclassrooms.realestatemanager.Database.Dao.RealEstateAgentDao;
-import com.openclassrooms.realestatemanager.Models.Property;
+import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
 import com.openclassrooms.realestatemanager.Utils.Converters;
 
-@Database(entities = {Property.class, RealEstateAgent.class}, version = 1, exportSchema = false)
+@Database(entities = {Estate.class, RealEstateAgent.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class RealEstateManagerDatabase extends RoomDatabase {
 
@@ -24,7 +24,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
     private static volatile RealEstateManagerDatabase INSTANCE;
 
     // --- DAO ---
-    public abstract PropertyDao propertyDao();
+    public abstract EstateDao estateDao();
     public abstract RealEstateAgentDao realEstateAgentDao();
 
     // --- INSTANCE ---
