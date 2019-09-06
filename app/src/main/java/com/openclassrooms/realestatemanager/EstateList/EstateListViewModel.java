@@ -4,8 +4,8 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentRepository;
@@ -25,7 +25,7 @@ public class EstateListViewModel extends ViewModel {
     private final Executor mExecutor;
 
     // DATA
-    @Nullable
+    @NonNull
     private MediatorLiveData<List<Estate>> mCurrentEstates = new MediatorLiveData<>();
 
     public EstateListViewModel(EstateDataRepository estateDataSource,
@@ -33,35 +33,37 @@ public class EstateListViewModel extends ViewModel {
         mEstateDataSource = estateDataSource;
         mExecutor = executor;
 
+        LiveData<List<Estate>> estates = mEstateDataSource.getEstates();
 
         mCurrentEstates.addSource(CurrentRealEstateAgentRepository.getInstance().getRealEstateAgent_Id(),
                 new Observer<Long>() {
                     @Override
-                    public void onChanged(@Nullable Long aLong) {
-                        filterEstates(aLong,mEstateDataSource.getEstates().getValue());
+                    public void onChanged(@Nullable Long agentId) {
+                        filterEstates(agentId, estates.getValue());
                     }
                 });
-        mCurrentEstates.addSource(mEstateDataSource.getEstates(),
+        mCurrentEstates.addSource(estates,
                 new Observer<List<Estate>>() {
                     @Override
                     public void onChanged(@Nullable List<Estate> estates) {
-                        filterEstates(CurrentRealEstateAgentRepository.getInstance().getRealEstateAgent_Id().getValue()
-                                ,estates);
+                        filterEstates(CurrentRealEstateAgentRepository.getInstance().getRealEstateAgent_Id().getValue(), estates);
                     }
-        });
+                });
     }
 
     private void filterEstates(Long realEstateAgent_Id, List<Estate> estates) {
         ArrayList<Estate> localEstate = new ArrayList<>();
 
-        if (realEstateAgent_Id==null|| estates==null)return ;
+        if (realEstateAgent_Id == null || estates == null) {
+            return;
+        }
 
-        for (Estate estate:estates)
-        {
-            if (estate.getRealEstateAgent_Id() == realEstateAgent_Id){
+        for (Estate estate : estates) {
+            if (estate.getRealEstateAgent_Id() == realEstateAgent_Id) {
                 localEstate.add(estate);
             }
         }
+
         mCurrentEstates.setValue(localEstate);
     }
 
