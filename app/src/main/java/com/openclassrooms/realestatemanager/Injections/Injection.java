@@ -11,9 +11,15 @@ import java.util.concurrent.Executors;
 
 public class Injection {
 
+    private static EstateDataRepository mEstateDataRepository;
+
     public static EstateDataRepository providePropertyDataSource(Context context) {
-        RealEstateManagerDatabase database = RealEstateManagerDatabase.getInstance(context);
-        return new EstateDataRepository(database.estateDao());
+        if (mEstateDataRepository == null) {
+            RealEstateManagerDatabase database = RealEstateManagerDatabase.getInstance(context);
+            mEstateDataRepository = new EstateDataRepository(database.estateDao());
+        }
+
+        return mEstateDataRepository;
     }
 
     public static RealEstateAgentDataRepository provideRealEstateAgentDataSource(Context context) {
@@ -21,7 +27,9 @@ public class Injection {
         return new RealEstateAgentDataRepository(database.realEstateAgentDao());
     }
 
-    public static Executor provideExecutor(){ return Executors.newSingleThreadExecutor(); }
+    public static Executor provideExecutor() {
+        return Executors.newSingleThreadExecutor();
+    }
 
     public static ViewModelFactory provideViewModelFactory(Context context) {
         EstateDataRepository dataSourceProperty = providePropertyDataSource(context);
