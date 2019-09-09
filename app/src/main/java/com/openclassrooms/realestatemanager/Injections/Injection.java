@@ -12,8 +12,9 @@ import java.util.concurrent.Executors;
 public class Injection {
 
     private static EstateDataRepository mEstateDataRepository;
+    private static RealEstateAgentDataRepository mRealEstateAgentDataRepository;
 
-    public static EstateDataRepository providePropertyDataSource(Context context) {
+    public static EstateDataRepository provideEstateDataSource(Context context) {
         if (mEstateDataRepository == null) {
             RealEstateManagerDatabase database = RealEstateManagerDatabase.getInstance(context);
             mEstateDataRepository = new EstateDataRepository(database.estateDao());
@@ -23,8 +24,12 @@ public class Injection {
     }
 
     public static RealEstateAgentDataRepository provideRealEstateAgentDataSource(Context context) {
-        RealEstateManagerDatabase database = RealEstateManagerDatabase.getInstance(context);
-        return new RealEstateAgentDataRepository(database.realEstateAgentDao());
+        if (mRealEstateAgentDataRepository == null) {
+            RealEstateManagerDatabase database = RealEstateManagerDatabase.getInstance(context);
+            mRealEstateAgentDataRepository = new RealEstateAgentDataRepository(database.realEstateAgentDao());
+        }
+
+        return mRealEstateAgentDataRepository;
     }
 
     public static Executor provideExecutor() {
@@ -32,9 +37,9 @@ public class Injection {
     }
 
     public static ViewModelFactory provideViewModelFactory(Context context) {
-        EstateDataRepository dataSourceProperty = providePropertyDataSource(context);
+        EstateDataRepository dataSourceEstate = provideEstateDataSource(context);
         RealEstateAgentDataRepository dataSourceRealEstateAgent = provideRealEstateAgentDataSource(context);
         Executor executor = provideExecutor();
-        return new ViewModelFactory(dataSourceProperty, dataSourceRealEstateAgent, executor);
+        return new ViewModelFactory(dataSourceEstate, dataSourceRealEstateAgent, executor);
     }
 }

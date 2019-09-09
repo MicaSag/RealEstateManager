@@ -12,19 +12,14 @@ import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.Controllers.Fragments.EstateDetailsFragment;
 import com.openclassrooms.realestatemanager.Controllers.Fragments.EstateListFragment;
 import com.openclassrooms.realestatemanager.EstateList.EstateListAdapter;
-import com.openclassrooms.realestatemanager.EstateList.EstateListViewModel;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.RealEstateAgent.RealEstateAgentViewModel;
-import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentRepository;
-
-import org.threeten.bp.LocalDateTime;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.openclassrooms.realestatemanager.Repositories.CurrentEstateDataRepository;
+import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentDataRepository;
 
 import butterknife.BindView;
 
@@ -38,48 +33,7 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
 
     // --> New RealEstateAgent
     private static long REAL_ESTATE_AGENT_ID_1 = 1;
-    private static RealEstateAgent REAL_ESTATE_AGENT_1
-            = new RealEstateAgent(REAL_ESTATE_AGENT_ID_1,
-            "Michaël",
-            "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg");
     private static long REAL_ESTATE_AGENT_ID_2 = 2;
-    private static RealEstateAgent REAL_ESTATE_AGENT_2
-            = new RealEstateAgent(REAL_ESTATE_AGENT_ID_2,
-            "Pierre",
-            "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg");
-    private static Estate newEstateFlat
-            = new Estate("Flat", 10000000, 750,
-            5, 2, 4, "Beautifull FLAT in Paris",
-            new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                    "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                    "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg")),
-            new ArrayList<>(Arrays.asList("3 way of the temple","","PARIS","75001","France","1er arrond")),
-            new ArrayList<>(Arrays.asList("School Jean Baptiste" , "Super Market Lidl")),
-            (LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
-            LocalDateTime.now(),
-            REAL_ESTATE_AGENT_ID_1);
-    private static Estate newEstateHouse
-            = new Estate("House", 10000000, 750,
-            5, 2, 4, "Beautifull FLAT in Paris",
-            new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                    "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                    "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg")),
-            new ArrayList<>(Arrays.asList("3 way of the temple","","PARIS","75010","France","10ème arrond")),
-            new ArrayList<>(Arrays.asList("School Jean Baptiste" , "Super Market Lidl")),
-            (LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
-            LocalDateTime.now(),
-            REAL_ESTATE_AGENT_ID_1);
-    private static Estate newEstatePenthouse
-            = new Estate("Penthouse", 10000000, 750,
-            5, 2, 4, "Beautifull FLAT in Paris",
-            new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                    "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                    "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg")),
-            new ArrayList<>(Arrays.asList("3 way of the temple","","PARIS","75005","France","5ième arrond")),
-            new ArrayList<>(Arrays.asList("School Jean Baptiste" , "Super Market Lidl")),
-            (LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
-            LocalDateTime.now(),
-            REAL_ESTATE_AGENT_ID_1);
 
     // Declare fragments
     private EstateDetailsFragment mEstateDetailsFragment;
@@ -131,21 +85,6 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
         // Configure RealEstateViewModel
         this.configureRealEstateAgentViewModel();
 
-        // FOR TEST, create RealEstateAgent
-        //createRealEstateAgent(REAL_ESTATE_AGENT_2);
-
-
-        // FOR TEST, create Estate
-        /*newEstateFlat.setRealEstateAgent_Id(2);
-        createEstate(newEstateFlat);
-        newEstateHouse.setRealEstateAgent_Id(2);
-        createEstate(newEstateHouse);
-        newEstatePenthouse.setRealEstateAgent_Id(2);
-        createEstate(newEstatePenthouse);
-        */
-        //deleteRealEstateAgent(REAL_ESTATE_AGENT_ID_2);
-
-
         // Configuring Estate List Fragment (left position on Tablet)
         this.configureAndShowEstateListFragment();
 
@@ -163,20 +102,6 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
         mRealEstateAgentViewModel = ViewModelProviders.of(this, modelFactory).get(RealEstateAgentViewModel.class);
 
-        // BEGIN -- INITIALIZE CURRENT REAL ESTATE AGENT
-        // == Delete RealEstateAgent and Estates
-        /*deleteEstates(REAL_ESTATE_AGENT_ID_1);
-        deleteRealEstateAgent(REAL_ESTATE_AGENT_ID_1);
-        deleteEstates(REAL_ESTATE_AGENT_ID_2);
-        deleteRealEstateAgent(REAL_ESTATE_AGENT_ID_2);*/
-
-        // == Create RealEstateAgent and Estates
-        //createRealEstateAgent(REAL_ESTATE_AGENT_1);
-        //createEstate(newEstateFlat);
-        //createEstate(newEstateHouse);
-        //createEstate(newEstatePenthouse);
-        // END -- INITIALIZE CURRENT REAL ESTATE AGENT
-
         mRealEstateAgentViewModel.init(mCurrentRealEstateAgent_Id);
     }
     // ---------------------------------------------------------------------------------------------
@@ -188,7 +113,7 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
 
         if (mEstateListFragment == null) {
             // Create new main fragment
-            mEstateListFragment = EstateListFragment.newInstance(mCurrentRealEstateAgent_Id);
+            mEstateListFragment = EstateListFragment.newInstance();
             // Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_estate_list, mEstateListFragment)
@@ -229,32 +154,6 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
         Log.d(TAG, "deleteRealEstateAgent: ");
         mRealEstateAgentViewModel.deleteRealEstateAgent(realEstateAgent_Id);
     }
-/*    // --------------------
-    // >>>> Propertys <<<<<
-    // --------------------
-    // Create a new property
-    private void createEstate(Estate estate){
-        Log.d(TAG, "createProperty: ");
-        mEstateListViewModel.createEstate(estate);
-    }
-
-    // Delete an Estate
-    private void deleteEstate(long estate_Id){
-        Log.d(TAG, "deleteProperty: ");
-        mEstateListViewModel.deleteEstate(estate_Id);
-    }
-
-    // Delete Propertys of an RealEstateAgent
-    private void deleteEstates(long realEstateAgent_Id){
-        Log.d(TAG, "deleteProperty: ");
-        mEstateListViewModel.deleteEstates(realEstateAgent_Id);
-    }
-
-    // Update an property (selected or not)
-    private void updateEstate(Estate estate){
-        Log.d(TAG, "updateProperty: ");
-        mEstateListViewModel.updateEstate(estate);
-    }*/
     // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
@@ -263,15 +162,18 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
         //3 - Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.menu_activity_real_estate_manager_search:
-                //showSnackBar("Search Button Activated");
-                //mRealEstateAgentViewModel.setCurrentRealEstateAgent(2);
-                CurrentRealEstateAgentRepository.getInstance().setCurrentRealEstateAgent_Id(2);
+                //Log.d(TAG, "onOptionsItemSelected: Search Button Activated");
+                long agent_Id;
+                agent_Id = (CurrentRealEstateAgentDataRepository.getInstance().
+                        getCurrentRealEstateAgent_Id().getValue() == 2) ? 1 : 2;
+                CurrentRealEstateAgentDataRepository.getInstance().setCurrentRealEstateAgent_Id(agent_Id);
                 return true;
             case R.id.menu_activity_real_estate_manager_edit:
-                showSnackBar("Edit Button Activated");
+                //Log.d(TAG, "onOptionsItemSelected: Edit Button Activated");
+
                 return true;
             case R.id.menu_activity_real_estate_manager_add:
-                showSnackBar("Add Button Activated");
+                Log.d(TAG, "onOptionsItemSelected: Add Button Activated");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -280,9 +182,11 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
     @Override
     public void onEstateClick(Estate estate) {
         Log.d(TAG, "onEstateClick: ");
-        estate.setType(estate.getType().equals("House") ? "Penthouse": "House");
-       // updateProperty(estate);
+        CurrentEstateDataRepository.getInstance().setCurrentEstate_Id(estate.getEstate_Id());
+
+        this.showSnackBar("Estate_Id = "+estate.getEstate_Id());
     }
+
     // Update the RealEstateAgent Data
     private void updateCurrentRealEstateAgent_Id(RealEstateAgent realEstateAgent){
         Log.d(TAG, "updateRealEstateAgent: ");

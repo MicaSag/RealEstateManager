@@ -7,22 +7,33 @@ import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
 
 public class RealEstateAgentDataRepository {
 
-    public final RealEstateAgentDao realEstateAgentDao;
+    public final RealEstateAgentDao mRealEstateAgentDao;
 
     public RealEstateAgentDataRepository(RealEstateAgentDao realEstateAgentDao) {
-        this.realEstateAgentDao = realEstateAgentDao;
+        mRealEstateAgentDao = realEstateAgentDao;
     }
 
-    // -- GET RealEstateAgent
+    // --- GET ---
+    // ===========
+
+    // Return an RealEstateAgent
     public LiveData<RealEstateAgent> getRealEstateAgent(long realEstateAgent_Id){
-        return this.realEstateAgentDao.getRealEstateAgent(realEstateAgent_Id);
+        return mRealEstateAgentDao.getRealEstateAgent(realEstateAgent_Id);
     }
 
-    // -- CREATE RealEstateAgent
+    // --- CREATE ---
+    // ==============
+
+    // Create a new RealEstateAgent
     public void createRealEstateAgent(RealEstateAgent realEstateAgent) {
-        realEstateAgentDao.createRealEstateAgent(realEstateAgent);
+        mRealEstateAgentDao.createRealEstateAgent(realEstateAgent);
     }
 
-    // -- DELETE RealEstateAgent
-    public void deleteRealEstateAgent(long realEstateAgent_Id){realEstateAgentDao.deleteRealEstateAgent(realEstateAgent_Id); }
+    // --- DELETE/S ---
+    // ================
+
+    // Delete an RealEstateAgent
+    public void deleteRealEstateAgent(long realEstateAgent_Id){
+        mRealEstateAgentDao.deleteRealEstateAgent(realEstateAgent_Id);
+    }
 }

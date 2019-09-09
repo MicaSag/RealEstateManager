@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.Controllers.Fragments;
 
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
@@ -35,18 +36,13 @@ public class EstateListFragment extends Fragment {
     // For debugging Mode
     private static final String TAG = EstateListFragment.class.getSimpleName();
 
-
     // Declare EstateListViewModel
-    private EstateListViewModel mEstatesViewModel;
-
-    // Static variables for intent parameters
-    public static final String BUNDLE_REAL_ESTATE_AGENT_ID = "AGENT_ID";
+    private EstateListViewModel mEstatesListViewModel;
 
     //For Data
     // Declare list of property & Adapter
     private List<Estate> mEstates;
     private EstateListAdapter mEstateListAdapter;
-    private Long mRealEstateAgent_Id;
 
     // Declare OnPropertyClick Interface
     private EstateListAdapter.OnEstateClick mOnPropertyClick;
@@ -60,25 +56,11 @@ public class EstateListFragment extends Fragment {
     // ---------------------------------------------------------------------------------------------
     //                                  FRAGMENT INSTANTIATION
     // ---------------------------------------------------------------------------------------------
-    public static EstateListFragment newInstance(long realEstateAgent_Id) {
+    public static EstateListFragment newInstance() {
         Log.d(TAG, "newInstance: ");
 
         // Create new fragment
-        EstateListFragment fragment = new EstateListFragment();
-
-        // Create bundle and add it some data
-        Bundle args = new Bundle();
-        // Put realEstateAgent_Id
-        args.putLong(BUNDLE_REAL_ESTATE_AGENT_ID, realEstateAgent_Id);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        mOnPropertyClick = (EstateListAdapter.OnEstateClick)context;
+        return new EstateListFragment();
     }
     // ---------------------------------------------------------------------------------------------
     //                                    ENTRY POINT
@@ -90,11 +72,8 @@ public class EstateListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_estate_list, container, false);
         ButterKnife.bind(this, view);
 
-        // Get data from Bundle (created in method newInstance)
-        mRealEstateAgent_Id = getArguments().getLong(BUNDLE_REAL_ESTATE_AGENT_ID, 0);
-
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
-        mEstatesViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EstateListViewModel.class);
+        mEstatesListViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EstateListViewModel.class);
 
         // Call during UI creation
         this.configureRecyclerView();
@@ -118,18 +97,23 @@ public class EstateListFragment extends Fragment {
         // Set layout manager to position the items
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
-    // ---------------------------------------------------------------------------------------------
-    //                                           DATA
-    // ---------------------------------------------------------------------------------------------
-    // Get all Estates for a RealEstateAgent
-    private void getCurrentEstates() {
-        Log.d(TAG, "getEstates: ");
-        mEstatesViewModel.getCurrentEstates().observe(this, this::updateEstateList);
-    }
     // --------------------------------------------------------------------------------------------
     //                                        ACTIONS
     // --------------------------------------------------------------------------------------------
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
+        mOnPropertyClick = (EstateListAdapter.OnEstateClick)context;
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                           DATA
+    // ---------------------------------------------------------------------------------------------
+    // Get all Estates for CurrentRealEstateAgent
+    private void getCurrentEstates() {
+        Log.d(TAG, "getEstates: ");
+        mEstatesListViewModel.getCurrentEstates().observe(this, this::updateEstateList);
+    }
     // ---------------------------------------------------------------------------------------------
     //                                          UI
     // ---------------------------------------------------------------------------------------------

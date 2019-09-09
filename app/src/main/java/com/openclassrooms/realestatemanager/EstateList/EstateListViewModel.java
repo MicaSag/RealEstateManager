@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.openclassrooms.realestatemanager.Models.Estate;
-import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentRepository;
+import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentDataRepository;
 import com.openclassrooms.realestatemanager.Repositories.EstateDataRepository;
 
 import java.util.ArrayList;
@@ -33,24 +33,33 @@ public class EstateListViewModel extends ViewModel {
         mEstateDataSource = estateDataSource;
         mExecutor = executor;
 
+        // list of all Estates contained in the table
         LiveData<List<Estate>> estates = mEstateDataSource.getEstates();
 
-        mCurrentEstates.addSource(CurrentRealEstateAgentRepository.getInstance().getRealEstateAgent_Id(),
+        // MediatorLiveData.addSource(LiveData, new Observer(){
+        // @Override public void onChanged(@Nullable Long agentId){}
+        // } );
+        // When CurrentRealEstateAgent change
+        mCurrentEstates.addSource(CurrentRealEstateAgentDataRepository.
+                        getInstance().getCurrentRealEstateAgent_Id(),
                 new Observer<Long>() {
                     @Override
                     public void onChanged(@Nullable Long agentId) {
                         filterEstates(agentId, estates.getValue());
                     }
                 });
+        // When Estate List change
         mCurrentEstates.addSource(estates,
                 new Observer<List<Estate>>() {
                     @Override
                     public void onChanged(@Nullable List<Estate> estates) {
-                        filterEstates(CurrentRealEstateAgentRepository.getInstance().getRealEstateAgent_Id().getValue(), estates);
+                        filterEstates(CurrentRealEstateAgentDataRepository.getInstance()
+                                .getCurrentRealEstateAgent_Id().getValue(), estates);
                     }
                 });
     }
 
+    // Retrieves only the Estate list of the agent specified as a parameter
     private void filterEstates(Long realEstateAgent_Id, List<Estate> estates) {
         ArrayList<Estate> localEstate = new ArrayList<>();
 
@@ -67,22 +76,20 @@ public class EstateListViewModel extends ViewModel {
         mCurrentEstates.setValue(localEstate);
     }
 
-    // ------------
-    //  FOR ESTATE
-    // ------------
-
     // Get current Estate List
     public LiveData<List<Estate>> getCurrentEstates() {
+
         return mCurrentEstates;
     }
 
-
-
-/*
-    public LiveData<Estate> getEstate(long property_Id) {
-        return mEstateDataSource.getEstate(property_Id);
+    public LiveData<Estate> getEstate(long estate_Id) {
+        return mEstateDataSource.getEstate(estate_Id);
     }
 
+    public LiveData<List<Estate>> getEstates() {
+        return mEstateDataSource.getEstates();
+    }
+/*
     public void createEstate(Estate estate) {
         mExecutor.execute(() -> {
             mEstateDataSource.createEstate(estate);

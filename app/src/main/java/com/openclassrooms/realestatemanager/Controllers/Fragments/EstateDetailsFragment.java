@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.openclassrooms.realestatemanager.EstateDetails.EstateDetailsViewModel;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.Estate;
-import com.openclassrooms.realestatemanager.EstateList.EstateListViewModel;
 import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
@@ -27,8 +27,8 @@ public class EstateDetailsFragment extends Fragment {
     // For debugging Mode
     private static final String TAG = EstateDetailsFragment.class.getSimpleName();
 
-    // Declare EstateListViewModel
-    private EstateListViewModel mEstateListViewModel;
+    // Declare EstateDetailsViewModel
+    private EstateDetailsViewModel mEstateDetailsViewModel;
 
     // Static variables for intent parameters
     public static final String BUNDLE_REAL_ESTATE_AGENT_ID = "AGENT_ID";
@@ -77,6 +77,7 @@ public class EstateDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_estate_details, container, false);
         ButterKnife.bind(this, view);
@@ -85,34 +86,40 @@ public class EstateDetailsFragment extends Fragment {
         mRealEstateAgent_Id = getArguments().getLong(BUNDLE_REAL_ESTATE_AGENT_ID, 0);
         mProperty_Id = getArguments().getLong(BUNDLE_PROPERTY_ID, 0);
 
-        ViewModelFactory mPropertyViewModelFactory = Injection.provideViewModelFactory(getContext());
-        mEstateListViewModel = ViewModelProviders.of(this, mPropertyViewModelFactory).get(EstateListViewModel.class);
+        ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
+        mEstateDetailsViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EstateDetailsViewModel.class);
 
-        int num = 1;
-        // Call during UI creation
-        //mEstateListViewModel.getEstate(num).observe(this, this::updateUI);
+        // Get and Observe Current Estate
+        this.getCurrentEstate();
 
         return view;
     }
     // ---------------------------------------------------------------------------------------------
     //                                           DATA
     // ---------------------------------------------------------------------------------------------
-
-
+    // Get Estate selected in EstateList
+    private void getCurrentEstate() {
+        Log.d(TAG, "getCurrentEstate: ");
+        mEstateDetailsViewModel.getCurrentEstate().observe(this, this::updateUI);
+    }
     // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
     public void updateUI(Estate estate){
+        Log.d(TAG, "updateUI: ");
 
-        mDescription.setText(estate.getDescription());
-        mSurface.setText(estate.getArea().toString());
-        mRoomsNumber.setText(estate.getNumberOfParts().toString());
-        mBathroomsNumber.setText(estate.getNumberOfBathrooms().toString());
-        mBedroomsNumber.setText(estate.getNumberOfBedrooms().toString());
-        mLocation_1.setText(estate.getAddress().get(0));
-        mLocation_2.setText(estate.getAddress().get(1));
-        mLocation_3.setText(estate.getAddress().get(2));
-        mLocation_4.setText(estate.getAddress().get(3));
-        mLocation_5.setText(estate.getAddress().get(4));
+        if (estate != null) {
+            Log.d(TAG, "updateUI: estate.getID = "+estate.getEstate_Id());
+            mDescription.setText(estate.getDescription());
+            mSurface.setText(estate.getArea().toString());
+            mRoomsNumber.setText(estate.getNumberOfParts().toString());
+            mBathroomsNumber.setText(estate.getNumberOfBathrooms().toString());
+            mBedroomsNumber.setText(estate.getNumberOfBedrooms().toString());
+            mLocation_1.setText(estate.getAddress().get(0));
+            mLocation_2.setText(estate.getAddress().get(1));
+            mLocation_3.setText(estate.getAddress().get(2));
+            mLocation_4.setText(estate.getAddress().get(3));
+            mLocation_5.setText(estate.getAddress().get(4));
+        }
     }
 }

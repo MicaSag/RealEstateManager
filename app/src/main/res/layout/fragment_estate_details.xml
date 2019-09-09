@@ -56,7 +56,7 @@
             android:id="@+id/fragment_detail_text_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description text khkh kjkgh jh jk l jmlj lkj mlj klj mlkj ljl l mljggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
+            android:text="Description text"
             android:maxLines="10"
             android:textSize="@dimen/recycler_text_size"
             />

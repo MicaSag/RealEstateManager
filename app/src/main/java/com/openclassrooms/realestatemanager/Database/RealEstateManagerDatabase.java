@@ -71,45 +71,85 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
 
                 db.insert("RealEstateAgent", OnConflictStrategy.IGNORE, contentValuesAgent2);
 
-                ContentValues contentValuesRealEstateFlat = new ContentValues();
-                contentValuesRealEstateFlat.put("type", "Flat");
-                contentValuesRealEstateFlat.put("price", 10000000);
-                contentValuesRealEstateFlat.put("area", 750);
-                contentValuesRealEstateFlat.put("numberOfParts", 5);
-                contentValuesRealEstateFlat.put("numberOfBathrooms", 2);
-                contentValuesRealEstateFlat.put("numberOfBedrooms", 4);
-                contentValuesRealEstateFlat.put("description", "Beautifull FLAT in Paris");
-                contentValuesRealEstateFlat.put("photos", Arrays.asList("\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
+                ContentValues contentValuesRealEstateHouse1 = new ContentValues();
+                contentValuesRealEstateHouse1.put("type", "House 1");
+                contentValuesRealEstateHouse1.put("price", 9000000);
+                contentValuesRealEstateHouse1.put("area", 890);
+                contentValuesRealEstateHouse1.put("numberOfParts", 10);
+                contentValuesRealEstateHouse1.put("numberOfBathrooms", 3);
+                contentValuesRealEstateHouse1.put("numberOfBedrooms", 6);
+                contentValuesRealEstateHouse1.put("description", "Beautiful House in Paris");
+                contentValuesRealEstateHouse1.put("photos", Arrays.asList("\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"").toString());
-                contentValuesRealEstateFlat.put("address", Arrays.asList("\"3 way of the temple\"", "\"\"", "\"PARIS\"", "\"75001\"", "\"France\"", "\"1er arrond\"").toString());
-                contentValuesRealEstateFlat.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
-                contentValuesRealEstateFlat.put("status", false);
-                contentValuesRealEstateFlat.put("dateEntryOfTheMarket", LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8).toString());
-                contentValuesRealEstateFlat.put("dateOfSale", LocalDateTime.now().toString());
-                contentValuesRealEstateFlat.put("realEstateAgent_Id", 1);
+                contentValuesRealEstateHouse1.put("address", Arrays.asList("\"3 way of the temple\"", "\"\"", "\"PARIS\"", "\"75001\"", "\"France\"", "\"1er arrond\"").toString());
+                contentValuesRealEstateHouse1.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
+                contentValuesRealEstateHouse1.put("status", false);
+                contentValuesRealEstateHouse1.put("dateEntryOfTheMarket", LocalDateTime.now().withDayOfMonth(3).withYear(2018).withMonth(4).toString());
+                contentValuesRealEstateHouse1.put("dateOfSale", LocalDateTime.now().toString());
+                contentValuesRealEstateHouse1.put("realEstateAgent_Id", 1);
+                // INSERT HOUSE 1
+                db.insert("Estate", OnConflictStrategy.IGNORE, contentValuesRealEstateHouse1);
 
-                db.insert("Estate", OnConflictStrategy.IGNORE, contentValuesRealEstateFlat);
-
-                ContentValues contentValuesRealEstateHouse = new ContentValues();
-                contentValuesRealEstateHouse.put("type", "House");
-                contentValuesRealEstateHouse.put("price", 9000000);
-                contentValuesRealEstateHouse.put("area", 890);
-                contentValuesRealEstateHouse.put("numberOfParts", 10);
-                contentValuesRealEstateHouse.put("numberOfBathrooms", 3);
-                contentValuesRealEstateHouse.put("numberOfBedrooms", 6);
-                contentValuesRealEstateHouse.put("description", "Beautifull House in Paris");
-                contentValuesRealEstateHouse.put("photos", Arrays.asList("\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
+                ContentValues contentValuesRealEstateFlat1 = new ContentValues();
+                contentValuesRealEstateFlat1.put("type", "Flat 1");
+                contentValuesRealEstateFlat1.put("price", 10000000);
+                contentValuesRealEstateFlat1.put("area", 750);
+                contentValuesRealEstateFlat1.put("numberOfParts", 5);
+                contentValuesRealEstateFlat1.put("numberOfBathrooms", 2);
+                contentValuesRealEstateFlat1.put("numberOfBedrooms", 4);
+                contentValuesRealEstateFlat1.put("description", "Beautiful FLAT in Paris");
+                contentValuesRealEstateFlat1.put("photos", Arrays.asList("\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"").toString());
-                contentValuesRealEstateHouse.put("address", Arrays.asList("\"3 way of the temple\"", "\"\"", "\"PARIS\"", "\"75001\"", "\"France\"", "\"1er arrond\"").toString());
-                contentValuesRealEstateHouse.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
-                contentValuesRealEstateHouse.put("status", false);
-                contentValuesRealEstateHouse.put("dateEntryOfTheMarket", LocalDateTime.now().withDayOfMonth(3).withYear(2018).withMonth(4).toString());
-                contentValuesRealEstateHouse.put("dateOfSale", LocalDateTime.now().toString());
-                contentValuesRealEstateHouse.put("realEstateAgent_Id", 2);
+                contentValuesRealEstateFlat1.put("address", Arrays.asList("\"3 way of the temple\"", "\"\"", "\"PARIS\"", "\"75001\"", "\"France\"", "\"1er arrond\"").toString());
+                contentValuesRealEstateFlat1.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
+                contentValuesRealEstateFlat1.put("status", false);
+                contentValuesRealEstateFlat1.put("dateEntryOfTheMarket", LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8).toString());
+                contentValuesRealEstateFlat1.put("dateOfSale", LocalDateTime.now().toString());
+                contentValuesRealEstateFlat1.put("realEstateAgent_Id", 1);
+                // INSERT FLAT 1
+                db.insert("Estate", OnConflictStrategy.IGNORE, contentValuesRealEstateFlat1);
 
-                db.insert("Estate", OnConflictStrategy.IGNORE, contentValuesRealEstateHouse);
+                ContentValues contentValuesRealEstateFlat2 = new ContentValues();
+                contentValuesRealEstateFlat2.put("type", "Flat 2");
+                contentValuesRealEstateFlat2.put("price", 10000000);
+                contentValuesRealEstateFlat2.put("area", 750);
+                contentValuesRealEstateFlat2.put("numberOfParts", 5);
+                contentValuesRealEstateFlat2.put("numberOfBathrooms", 2);
+                contentValuesRealEstateFlat2.put("numberOfBedrooms", 4);
+                contentValuesRealEstateFlat2.put("description", "Beautiful FLAT in Paris");
+                contentValuesRealEstateFlat2.put("photos", Arrays.asList("\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
+                        "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
+                        "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"").toString());
+                contentValuesRealEstateFlat2.put("address", Arrays.asList("\"3 way of the temple\"", "\"\"", "\"PARIS\"", "\"75001\"", "\"France\"", "\"1er arrond\"").toString());
+                contentValuesRealEstateFlat2.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
+                contentValuesRealEstateFlat2.put("status", false);
+                contentValuesRealEstateFlat2.put("dateEntryOfTheMarket", LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8).toString());
+                contentValuesRealEstateFlat2.put("dateOfSale", LocalDateTime.now().toString());
+                contentValuesRealEstateFlat2.put("realEstateAgent_Id", 2);
+                // INSERT FLAT 2
+                db.insert("Estate", OnConflictStrategy.IGNORE, contentValuesRealEstateFlat2);
+
+                ContentValues contentValuesRealEstateHouse2 = new ContentValues();
+                contentValuesRealEstateHouse2.put("type", "House 2");
+                contentValuesRealEstateHouse2.put("price", 9000000);
+                contentValuesRealEstateHouse2.put("area", 890);
+                contentValuesRealEstateHouse2.put("numberOfParts", 10);
+                contentValuesRealEstateHouse2.put("numberOfBathrooms", 3);
+                contentValuesRealEstateHouse2.put("numberOfBedrooms", 6);
+                contentValuesRealEstateHouse2.put("description", "Beautiful House in Paris");
+                contentValuesRealEstateHouse2.put("photos", Arrays.asList("\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
+                        "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
+                        "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"").toString());
+                contentValuesRealEstateHouse2.put("address", Arrays.asList("\"3 way of the temple\"", "\"\"", "\"PARIS\"", "\"75001\"", "\"France\"", "\"1er arrond\"").toString());
+                contentValuesRealEstateHouse2.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
+                contentValuesRealEstateHouse2.put("status", false);
+                contentValuesRealEstateHouse2.put("dateEntryOfTheMarket", LocalDateTime.now().withDayOfMonth(3).withYear(2018).withMonth(4).toString());
+                contentValuesRealEstateHouse2.put("dateOfSale", LocalDateTime.now().toString());
+                contentValuesRealEstateHouse2.put("realEstateAgent_Id", 2);
+                // INSERT HOUSE 2
+                db.insert("Estate", OnConflictStrategy.IGNORE, contentValuesRealEstateHouse2);
             }
         };
     }

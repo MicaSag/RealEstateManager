@@ -9,28 +9,57 @@ import java.util.List;
 
 public class EstateDataRepository {
 
-    private final EstateDao estateDao;
+    private final EstateDao mEstateDao;
 
     public EstateDataRepository(EstateDao estateDao) {
-        this.estateDao = estateDao;
+        mEstateDao = estateDao;
     }
 
     // --- GET ---
+    // ===========
 
-    public LiveData<List<Estate>> getEstates(long realEstateAgent_Id){ return this.estateDao.getEstates(realEstateAgent_Id); }
-    public LiveData<List<Estate>> getEstates(){ return this.estateDao.getEstates(); }
+    // Return Estates managed by an Agent
+    public LiveData<List<Estate>> getEstates(long realEstateAgent_Id){
+        return mEstateDao.getEstates(realEstateAgent_Id);
+    }
 
-    public LiveData<Estate> getEstate(long estate_Id){ return this.estateDao.getEstate(estate_Id); }
+    // Return all Estates from database
+    public LiveData<List<Estate>> getEstates(){
+        return mEstateDao.getEstates();
+    }
+
+    // Returns a specific Estate
+    public LiveData<Estate> getEstate(long estate_Id){
+        return mEstateDao.getEstate(estate_Id);
+    }
 
     // --- CREATE ---
+    // ==============
 
-    public void createEstate(Estate estate){ estateDao.insertEstate(estate); }
+    // Create a new Estate
+    public void createEstate(Estate estate){
+        mEstateDao.insertEstate(estate);
+    }
 
     // --- DELETE/S ---
-    public void deleteEstate(long estate_Id){ estateDao.deleteEstate(estate_Id); }
-    public void deleteEstates(long realEstateAgent_Id){ estateDao.deleteEstates(realEstateAgent_Id); }
+    // ================
+
+    // Delete a specific Estate
+    public void deleteEstate(long estate_Id){
+        mEstateDao.deleteEstate(estate_Id);
+    }
+
+    // Delete Estates from an Agent
+    public void deleteEstates(long realEstateAgent_Id){
+        mEstateDao.deleteEstates(realEstateAgent_Id);
+    }
 
     // --- UPDATE ---
-    public void updateEstate(Estate estate){ estateDao.updateEstate(estate); }
+    // ==============
+
+    // Update a specific Estate
+    public void updateEstate(Estate estate){
+        mEstateDao.updateEstate(estate);
+    }
 
 }
