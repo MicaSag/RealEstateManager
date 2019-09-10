@@ -20,6 +20,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.RealEstateAgent.RealEstateAgentViewModel;
 import com.openclassrooms.realestatemanager.Repositories.CurrentEstateDataRepository;
 import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentDataRepository;
+import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import butterknife.BindView;
 
@@ -169,7 +170,8 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
                 CurrentRealEstateAgentDataRepository.getInstance().setCurrentRealEstateAgent_Id(agent_Id);
                 return true;
             case R.id.menu_activity_real_estate_manager_edit:
-                //Log.d(TAG, "onOptionsItemSelected: Edit Button Activated");
+                // Go to CreateEstateActivity
+                Utils.startActivity(this, CreateEstateActivity.class);
 
                 return true;
             case R.id.menu_activity_real_estate_manager_add:

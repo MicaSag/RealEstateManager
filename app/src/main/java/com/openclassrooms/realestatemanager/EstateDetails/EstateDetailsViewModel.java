@@ -54,8 +54,8 @@ public class EstateDetailsViewModel extends ViewModel {
                     @Override
                     public void onChanged(@Nullable List<Estate> estates) {
                         Log.d(TAG, "2:onChanged() called with: estates.size() = [" + estates.size() + "]");
-                        filterEstate(CurrentRealEstateAgentDataRepository.getInstance()
-                                .getCurrentRealEstateAgent_Id().getValue(), estates);
+                        filterEstate(CurrentEstateDataRepository.getInstance()
+                                .getCurrentEstate_Id().getValue(), estates);
                     }
                 });
         // When CurrentEstate_Id change

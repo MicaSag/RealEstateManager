@@ -29,6 +29,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     // For debugging Mode
     private static final String TAG = BaseActivity.class.getSimpleName();
 
+    // For toolBar configuration
+    protected ActionBar mActionBar;
+
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     @BindView(R.id.toolbar) Toolbar mToolBar;
 
@@ -46,25 +49,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         // Configuring Toolbar
         this.configureToolbar();
     }
-
-    // ---------------------------------------------------------------------------------------------
-    //                                     VIEW MODEL ACCESS
-    // ---------------------------------------------------------------------------------------------
-
     // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
-    private void configureToolbar(){
+    protected void configureToolbar(){
         Log.d(TAG, "configureToolbar: ");
         //Set the toolbar
         setSupportActionBar(mToolBar);
         // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
+        mActionBar = getSupportActionBar();
     }
     // Configure toolbar Menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //2 - Inflate the menu and add it to the Toolbar
+        //Inflate the menu and add it to the Toolbar
         getMenuInflater().inflate(this.getToolbarMenu(), menu);
         return true;
     }
@@ -74,7 +72,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         Snackbar.make(this.getCoordinatorLayout(), message, Snackbar.LENGTH_LONG).show();
     }
-
     // ---------------------------------------------------------------------------------------------
     //                                        PERMISSIONS
     // ---------------------------------------------------------------------------------------------

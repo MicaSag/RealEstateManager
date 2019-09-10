@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Toolbar Importation -->
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activity_create_estate_CL"
+        tools:context=".Controllers.Activities.CreateEstateActivity">
+
+        <EditText
+            android:id="@+id/activity_create_estate_ED_Type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Estate Type"
+            app:layout_constraintEnd_toStartOf="@+id/activity_create_estate_ACTV_Type"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="122dp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/activity_create_estate_ACTV_Type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:text="AutoCompleteTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintStart_toEndOf="@+id/activity_create_estate_ED_Type"
+            app:layout_constraintVertical_chainStyle="spread"
+            tools:layout_editor_absoluteY="122dp" />
+
+        <EditText
+            android:id="@+id/editText4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Description"
+            app:layout_constraintTop_toBottomOf="@+id/editText12"
+            tools:layout_editor_absoluteX="52dp" />
+
+        <EditText
+            android:id="@+id/editText5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Location"
+            app:layout_constraintTop_toBottomOf="@+id/editText4"
+            tools:layout_editor_absoluteX="52dp" />
+
+        <EditText
+            android:id="@+id/editText6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Surface"
+            app:layout_constraintTop_toBottomOf="@+id/editText5"
+            tools:layout_editor_absoluteX="52dp" />
+
+        <EditText
+            android:id="@+id/editText7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Number of Rooms"
+            app:layout_constraintTop_toBottomOf="@+id/editText6"
+            tools:layout_editor_absoluteX="52dp" />
+
+        <EditText
+            android:id="@+id/editText8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Number of bathrooms"
+            app:layout_constraintTop_toBottomOf="@+id/editText7"
+            tools:layout_editor_absoluteX="52dp" />
+
+        <EditText
+            android:id="@+id/editText9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Number of bedrooms"
+            app:layout_constraintTop_toBottomOf="@+id/editText8"
+            tools:layout_editor_absoluteX="52dp" />
+
+        <EditText
+            android:id="@+id/editText10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Date of entry of the Estate"
+            app:layout_constraintTop_toBottomOf="@+id/editText9"
+            tools:layout_editor_absoluteX="52dp" />
+
+        <EditText
+            android:id="@+id/editText11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Points of interest"
+            app:layout_constraintTop_toBottomOf="@+id/editText10"
+            tools:layout_editor_absoluteX="52dp" />
+
+        <EditText
+            android:id="@+id/editText12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Price"
+            app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_ED_Type"
+            tools:layout_editor_absoluteX="52dp" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
