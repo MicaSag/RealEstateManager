@@ -2,8 +2,8 @@ package com.openclassrooms.realestatemanager;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.openclassrooms.realestatemanager.Database.RealEstateManagerDatabase;
 import com.openclassrooms.realestatemanager.Models.Estate;
@@ -75,7 +75,7 @@ public class EstateDaoTest {
 
     @Before
     public void initDb() throws Exception {
-        this.database = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(),
+        this.database = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().getTargetContext(),
                 RealEstateManagerDatabase.class)
                 .allowMainThreadQueries()
                 .build();
