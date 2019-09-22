@@ -3,7 +3,17 @@
 
     <!-- List Estate RecyclerView -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="type_of_property">Type of Property</string>
-    <string name="location_of_the_property">Location of the Property</string>
-    <string name="prize_of_the_property">Prize of the Property</string>
+    <string name="type_of_estate">Type of Estate</string>
+    <string name="location_of_the_estate">Location of the Estate</string>
+    <string name="price_of_the_estate">Price of the Estate</string>
+    <string name="estate_type">Estate Type</string>
+    <string name="price">Price</string>
+    <string name="description">Description</string>
+    <string name="address">Address</string>
+    <string name="surface">Surface</string>
+    <string name="number_of_rooms">Number of Rooms</string>
+    <string name="number_of_bathrooms">Number of bathrooms</string>
+    <string name="number_of_bedrooms">Number of bedrooms</string>
+    <string name="date_of_entry_of_the_estate">Date of entry of the Estate</string>
+    <string name="points_of_interest">Points of interest</string>
 </resources>

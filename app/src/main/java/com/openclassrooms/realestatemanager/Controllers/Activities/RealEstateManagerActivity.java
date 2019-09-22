@@ -1,9 +1,9 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +17,7 @@ import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.RealEstateAgent.RealEstateAgentViewModel;
+import com.openclassrooms.realestatemanager.Models.views.RealEstateAgentViewModel;
 import com.openclassrooms.realestatemanager.Repositories.CurrentEstateDataRepository;
 import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentDataRepository;
 import com.openclassrooms.realestatemanager.Utils.Utils;

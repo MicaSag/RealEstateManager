@@ -25,7 +25,7 @@
             android:textStyle="bold"
             />
         <!-- List of photos -->
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_detail_recycler_view_photos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:id="@+id/fragment_detail_text_description_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description"
+            android:text="@string/description"
             android:maxLines="1"
             android:layout_marginTop="@dimen/margin"
             android:layout_marginBottom="@dimen/margin"
@@ -165,7 +165,7 @@
                     android:id="@+id/fragment_detail_tet_bathrooms_number_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Number of bathrooms"
+                    android:text="@string/number_of_bathrooms"
                     android:maxLines="1"
                     android:textStyle="bold"
                     android:textSize="@dimen/recycler_text_size"
@@ -200,7 +200,7 @@
                     android:id="@+id/fragment_detail_text_bedrooms_number_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Number of bedrooms"
+                    android:text="@string/number_of_bedrooms"
                     android:maxLines="1"
                     android:textStyle="bold"
                     android:textSize="@dimen/recycler_text_size"
@@ -244,7 +244,7 @@
                     android:id="@+id/fragment_detail_text_location_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Location"
+                    android:text="@string/location_of_the_estate"
                     android:maxLines="1"
                     android:textStyle="bold"
                     android:textSize="@dimen/recycler_text_size"
@@ -258,7 +258,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:layout_marginLeft="35dp"
-                android:text="location address"
+                android:text="@string/address"
                 android:textSize="@dimen/recycler_text_size" />
             <!-- line 2 -->
             <TextView
@@ -267,7 +267,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:layout_marginLeft="35dp"
-                android:text="location address"
+                android:text="@string/address"
                 android:textSize="@dimen/recycler_text_size" />
             <!-- line 3 -->
             <TextView
@@ -276,7 +276,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:layout_marginLeft="35dp"
-                android:text="location address"
+                android:text="@string/address"
                 android:textSize="@dimen/recycler_text_size" />
             <!-- line 4 -->
             <TextView
@@ -285,7 +285,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:layout_marginLeft="35dp"
-                android:text="location address"
+                android:text="@string/address"
                 android:textSize="@dimen/recycler_text_size" />
             <!-- line 5 -->
             <TextView
@@ -294,7 +294,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:layout_marginLeft="35dp"
-                android:text="location address"
+                android:text="@string/address"
                 android:textSize="@dimen/recycler_text_size" />
         </LinearLayout>
 

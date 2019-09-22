@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/recycler_padding">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fragment_list_estate_view_item_card"
         android:layout_gravity="center"
@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/type_of_property"
+                    android:hint="@string/type_of_estate"
                     android:textSize="@dimen/recycler_text_size"
                     android:textStyle="bold" />
 
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ellipsize="end"
-                    android:hint="@string/location_of_the_property"
+                    android:hint="@string/location_of_the_estate"
                     android:maxLines="1"
                     android:textSize="@dimen/recycler_text_size" />
 
@@ -74,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/prize_of_the_property"
+                    android:hint="@string/price_of_the_estate"
                     android:textSize="@dimen/recycler_text_size"
                     android:textStyle="italic" />
 
@@ -82,6 +82,6 @@
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

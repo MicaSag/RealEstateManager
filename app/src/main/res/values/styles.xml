@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <!-- NoActionBar disabled ActionBar -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -19,6 +19,12 @@
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">21sp</item>
         <item name="android:textStyle">normal</item>
+    </style>
+
+    <!-- TOOLBAR THEME -->
+    <style name="TextFieldTheme" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Color of the title text in the Toolbar -->
+        <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
 </resources>

@@ -1,11 +1,12 @@
 package com.openclassrooms.realestatemanager.Injections;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.openclassrooms.realestatemanager.EstateDetails.EstateDetailsViewModel;
-import com.openclassrooms.realestatemanager.EstateList.EstateListViewModel;
-import com.openclassrooms.realestatemanager.RealEstateAgent.RealEstateAgentViewModel;
+import com.openclassrooms.realestatemanager.Models.views.EstateCreateViewModel;
+import com.openclassrooms.realestatemanager.Models.views.EstateDetailsViewModel;
+import com.openclassrooms.realestatemanager.Models.views.EstateListViewModel;
+import com.openclassrooms.realestatemanager.Models.views.RealEstateAgentViewModel;
 import com.openclassrooms.realestatemanager.Repositories.EstateDataRepository;
 import com.openclassrooms.realestatemanager.Repositories.RealEstateAgentDataRepository;
 
@@ -33,6 +34,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(RealEstateAgentViewModel.class)) {
             return (T) new RealEstateAgentViewModel(realEstateAgentDataSource, executor);
+        }
+        if (modelClass.isAssignableFrom(EstateCreateViewModel.class)) {
+            return (T) new EstateCreateViewModel(estateDataSource, executor);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
