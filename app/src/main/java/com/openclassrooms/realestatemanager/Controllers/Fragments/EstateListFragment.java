@@ -94,6 +94,7 @@ public class EstateListFragment extends Fragment {
         // Attach the adapter to the recyclerView to populate items
         mRecyclerView.setAdapter(mEstateListAdapter);
         // Set layout manager to position the items
+        //mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
     // --------------------------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
+import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -10,16 +11,32 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.Models.Estate;
+import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
 import com.openclassrooms.realestatemanager.Models.views.EstateCreateViewModel;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentDataRepository;
 
+import org.threeten.bp.DateTimeUtils;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneId;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.EmptyStackException;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,8 +52,20 @@ public class CreateEstateActivity extends BaseActivity {
     @BindView(R.id.activity_create_estate_auto_type) AutoCompleteTextView mAutoCompleteTVType;
     @BindView(R.id.activity_create_estate_ed_price) EditText mPrice;
     @BindView(R.id.activity_create_estate_ed_description) EditText mDescription;
+    @BindView(R.id.activity_create_estate_ed_address) EditText mAddress;
+    @BindView(R.id.activity_create_estate_ed_surface) EditText mSurface;
+    @BindView(R.id.activity_create_estate_ed_numbers_rooms) EditText mNumbersRooms;
+    @BindView(R.id.activity_create_estate_ed_numbers_bathrooms) EditText mNumbersBathrooms;
+    @BindView(R.id.activity_create_estate_ed_numbers_bedrooms) EditText mNumbersBedrooms;
+    @BindView(R.id.activity_create_estate_ed_date_entry) EditText mEntryDate;
+    @BindView(R.id.activity_create_estate_bt_validate) Button mValidate;
 
     private EstateCreateViewModel mEstateCreateViewModel;
+
+    // Declarations for management of the date fields with a DatePickerDialog
+    private DatePickerDialog mEntryDatePickerDialog;
+    private SimpleDateFormat displayDateFormatter;
+    private Calendar newCalendar;
 
     // ---------------------------------------------------------------------------------------------
     //                                DECLARATION BASE METHODS
@@ -81,6 +110,8 @@ public class CreateEstateActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
+
         // Configuring Toolbar
         this.configureToolbar();
 
@@ -89,6 +120,12 @@ public class CreateEstateActivity extends BaseActivity {
 
         // Configure RealEstateViewModel
         this.configureEstateCreateViewModel();
+
+        // Management of Date Fields
+        this.manageDateFields();
+
+        // Update UI
+        this.updateUI();
 
         // Get current RealEstateAgent & Estates from Database
         //this.getCurrentRealEstateAgent();
@@ -100,26 +137,42 @@ public class CreateEstateActivity extends BaseActivity {
     private void configureEstateCreateViewModel(){
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
         mEstateCreateViewModel = ViewModelProviders.of(this, modelFactory).get(EstateCreateViewModel.class);
-
-        mPrice.setText(mEstateCreateViewModel.getEstate().getPrice().toString());
-        Log.d(TAG, "configureEstateCreateViewModel: price = " + mEstateCreateViewModel.getEstate().getPrice().toString());
-        Log.d(TAG, "configureEstateCreateViewModel: description = " + mEstateCreateViewModel.getEstate().getDescription());
-
     }
     // ---------------------------------------------------------------------------------------------
     //                                           ACTIONS
     // ---------------------------------------------------------------------------------------------
     @OnClick(R.id.activity_create_estate_ed_price)
     public void setPrice(View view) {
-
-        mEstateCreateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
-        Log.d(TAG, "setPrice : price = " + mEstateCreateViewModel.getEstate().getPrice().toString());
     }
     @OnClick(R.id.activity_create_estate_ed_description)
     public void setDescription(View view) {
-
-        mEstateCreateViewModel.getEstate().setDescription(mDescription.getText().toString());
-        Log.d(TAG, "setDescription : description = " + mEstateCreateViewModel.getEstate().getDescription());
+    }
+    // Click on EntryDate Field
+    @OnClick(R.id.activity_create_estate_ed_date_entry)
+    public void onClickEntryDate(View v) {
+        mEntryDatePickerDialog.show();
+    }
+    @OnClick(R.id.activity_create_estate_bt_validate)
+    public void validate(View view) {
+        Log.d(TAG, "validate: ");
+        if (validateRequiredData()) {
+            Estate newEstate = new Estate(mAutoCompleteTVType.getText().toString(),
+                    Integer.parseInt(mPrice.getText().toString()),
+                    Integer.parseInt(mSurface.getText().toString()),
+                    Integer.parseInt(mNumbersRooms.getText().toString()),
+                    Integer.parseInt(mNumbersBathrooms.getText().toString()),
+                    Integer.parseInt(mNumbersBedrooms.getText().toString()),
+                    "Hous House House",
+                    new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
+                            "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
+                            "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg")),
+                    new ArrayList<>(Arrays.asList("5 place of temple", "", "PARIS", "75016", "France", "second arrond")),
+                    new ArrayList<>(Arrays.asList("School Yves Eriose", "Super Market Franprix")),
+                    LocalDateTime.now(),
+                    null,
+                    CurrentRealEstateAgentDataRepository.getInstance().getCurrentRealEstateAgent_Id().getValue());
+            mEstateCreateViewModel.createEsate(newEstate);
+        }
     }
     // ---------------------------------------------------------------------------------------------
     //                              AUTOCOMPLETE TYPE CONFIGURATION
@@ -133,5 +186,61 @@ public class CreateEstateActivity extends BaseActivity {
         mAutoCompleteTVType.setThreshold(1);//will start working from first character
         mAutoCompleteTVType.setTextColor(Color.RED);
         mAutoCompleteTVType.setAdapter(adapter);
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                     MANAGE DATE FIELDS
+    // ---------------------------------------------------------------------------------------------
+    private void manageDateFields() {
+        newCalendar = Calendar.getInstance();
+        displayDateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        setEntryDateField();
+    }
+
+    // Manage Entry Date Field
+    private void setEntryDateField() {
+        // Create a DatePickerDialog and manage it
+        mEntryDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+
+                // Display date selected
+                mEntryDate.setText(displayDateFormatter.format(newDate.getTime()));
+
+                // Save date selected in the Model
+                mEstateCreateViewModel.getEstate()
+                        .setDateEntryOfTheMarket(DateTimeUtils.toInstant(newDate.getTime())
+                                .atZone(ZoneId.systemDefault()).toLocalDateTime());
+            }
+
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
+                newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                 VALIDATE REQUIRED DATA
+    // ---------------------------------------------------------------------------------------------
+    // Check if the required criteria are filled
+    protected boolean validateRequiredData() {
+        // > Required data <
+        // the list of keywords required for validate the estate creation
+        if (    mAutoCompleteTVType.getText().toString().equals("") ||
+                mPrice.getText().toString().equals("") ||
+                mDescription.getText().toString().equals("") ||
+                mAddress.getText().toString().equals("") ||
+                mSurface.getText().toString().equals("") ||
+                mNumbersRooms.getText().toString().equals("") ||
+                mNumbersBathrooms.getText().toString().equals("") ||
+                mNumbersBedrooms.getText().toString().equals("") ||
+                mEntryDate.getText().toString().equals("")
+        ){
+            showSnackBar("Required data");
+            return false;
+        } else return true;
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                            UI
+    // ---------------------------------------------------------------------------------------------
+    protected void updateUI() {
+        Log.d(TAG, "updateUI: ");
     }
 }
