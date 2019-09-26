@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.Models.views;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.Models.Estate;
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Repositories.EstateDataRepository;
 
 import java.util.concurrent.Executor;
@@ -34,8 +35,8 @@ public class EstateCreateViewModel extends ViewModel {
         this.mEstate = mEstate;
     }
 
-    public void createEsate(Estate estate) {
-        mExecutor.execute(() -> mEstateDataSource.createEstate(estate));
+    public void createEsate() {
+        mExecutor.execute(() -> mEstateDataSource.createEstate(mEstate));
     }
 }
 

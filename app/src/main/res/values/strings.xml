@@ -16,4 +16,13 @@
     <string name="number_of_bedrooms">Number of bedrooms</string>
     <string name="date_of_entry_of_the_estate">Date of entry of the Estate</string>
     <string name="points_of_interest">Points of interest</string>
+
+    // List of type of estate
+    <string-array name="estate_type">
+        <item>Flat</item>
+        <item>House</item>
+        <item>Penthouse</item>
+        <item>Loft</item>
+        <item>Duplex</item>
+    </string-array>
 </resources>

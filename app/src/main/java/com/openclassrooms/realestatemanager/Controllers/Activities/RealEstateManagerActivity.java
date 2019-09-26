@@ -128,7 +128,7 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
         // We only add DetailsFragment in Tablet mode (If found frame_layout_detail)
         if (mEstateDetailsFragment == null && findViewById(R.id.fragment_estate_details) != null) {
             // Create new main fragment
-            mEstateDetailsFragment = EstateDetailsFragment.newInstance(mCurrentRealEstateAgent_Id,10);
+            mEstateDetailsFragment = EstateDetailsFragment.newInstance();
             // Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_estate_details, mEstateDetailsFragment)
@@ -155,6 +155,13 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
         Log.d(TAG, "deleteRealEstateAgent: ");
         mRealEstateAgentViewModel.deleteRealEstateAgent(realEstateAgent_Id);
     }
+
+    // Update the RealEstateAgent Data
+    private void updateCurrentRealEstateAgent_Id(RealEstateAgent realEstateAgent){
+        Log.d(TAG, "updateRealEstateAgent: ");
+        this.showSnackBar("RealEstateAgent = "+realEstateAgent.getUserName());
+        mCurrentRealEstateAgent_Id = realEstateAgent.getRealEstateAgent_Id();
+    }
     // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
@@ -170,29 +177,27 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
                 CurrentRealEstateAgentDataRepository.getInstance().setCurrentRealEstateAgent_Id(agent_Id);
                 return true;
             case R.id.menu_activity_real_estate_manager_edit:
-                // Go to CreateEstateActivity
-                Utils.startActivity(this, CreateEstateActivity.class);
-
                 return true;
             case R.id.menu_activity_real_estate_manager_add:
-                Log.d(TAG, "onOptionsItemSelected: Add Button Activated");
+                // Go to CreateEstateActivity
+                Utils.startActivity(this, CreateEstateActivity.class);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+    // ---------------------------------------------------------------------------------------------
+    //                                         ACTIONS
+    // ---------------------------------------------------------------------------------------------
     @Override
     public void onEstateClick(Estate estate) {
         Log.d(TAG, "onEstateClick: ");
         CurrentEstateDataRepository.getInstance().setCurrentEstate_Id(estate.getEstate_Id());
 
         this.showSnackBar("Estate_Id = "+estate.getEstate_Id());
-    }
 
-    // Update the RealEstateAgent Data
-    private void updateCurrentRealEstateAgent_Id(RealEstateAgent realEstateAgent){
-        Log.d(TAG, "updateRealEstateAgent: ");
-        this.showSnackBar("RealEstateAgent = "+realEstateAgent.getUserName());
-        mCurrentRealEstateAgent_Id = realEstateAgent.getRealEstateAgent_Id();
+        // We only add DetailsFragment in Tablet mode (If found frame_layout_detail)
+        if (findViewById(R.id.fragment_estate_details) == null)
+            Utils.startActivity(this, DetailsEstateActivity.class);
     }
 }

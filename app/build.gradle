@@ -1,6 +1,11 @@
 apply plugin: 'com.android.application'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file("local.properties").newDataInputStream())
+def GOOGLE_STATIC_MAP_API_KEY = properties.getProperty("GoogleStaticMapApiKey")
+
 android {
+    buildToolsVersion "28.0.3"
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.openclassrooms.realestatemanager"
@@ -10,6 +15,12 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        // Google Static Map Api Key
+        // --> For source
+        buildConfigField ( "String", "google_static_map_api", '"'+GOOGLE_STATIC_MAP_API_KEY+'"' )
+        // --> For Manifest
+        //manifestPlaceholders = [googleStaticMapApiKey: properties.getProperty("GoogleStaticMapApiKey")]
     }
     buildTypes {
         release {

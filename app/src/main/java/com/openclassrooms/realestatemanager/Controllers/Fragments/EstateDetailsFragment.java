@@ -8,8 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.openclassrooms.realestatemanager.BuildConfig;
 import com.openclassrooms.realestatemanager.Models.views.EstateDetailsViewModel;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
@@ -30,13 +34,15 @@ public class EstateDetailsFragment extends Fragment {
     // Declare EstateDetailsViewModel
     private EstateDetailsViewModel mEstateDetailsViewModel;
 
-    // Static variables for intent parameters
-    public static final String BUNDLE_REAL_ESTATE_AGENT_ID = "AGENT_ID";
-    public static final String BUNDLE_PROPERTY_ID = "PROPERTY_ID";
+    // Declarations for Uri Static Map
+    private String mApiUri = "https://maps.googleapis.com/maps/api/staticmap?";
+    private String mApiSize="size=300x300";
+    private String mApiScale="&scale=2";
+    private String mApiZoom="&zoom=16";
+    private String mApiParameters="&markers=size:mid|color:blue|label:E|";
+    private String mApiKey = "&key=";
+    private String mGoogleStaticMapKey = BuildConfig.google_static_map_api;
 
-    //For Data
-    private Long mRealEstateAgent_Id;
-    private Long mProperty_Id;
 
     // For Design
     @BindView(R.id.fragment_detail_text_description) TextView mDescription;
@@ -49,6 +55,7 @@ public class EstateDetailsFragment extends Fragment {
     @BindView(R.id.fragment_detail_text_location_3) TextView mLocation_3;
     @BindView(R.id.fragment_detail_text_location_4) TextView mLocation_4;
     @BindView(R.id.fragment_detail_text_location_5) TextView mLocation_5;
+    @BindView(R.id.fragment_detail_static_map) ImageView mStaticMap;
 
     public EstateDetailsFragment() {
         // Required empty public constructor
@@ -56,18 +63,11 @@ public class EstateDetailsFragment extends Fragment {
     // ---------------------------------------------------------------------------------------------
     //                                  FRAGMENT INSTANTIATION
     // ---------------------------------------------------------------------------------------------
-    public static EstateDetailsFragment newInstance(long realEstateAgent_Id, long estate_Id) {
+    public static EstateDetailsFragment newInstance() {
         Log.d(TAG, "newInstance: ");
 
         // Create new fragment
         EstateDetailsFragment fragment = new EstateDetailsFragment();
-
-        // Create bundle and add it some data
-        Bundle args = new Bundle();
-        // Put data un Bundle
-        args.putLong(BUNDLE_REAL_ESTATE_AGENT_ID, realEstateAgent_Id);
-        args.putLong(BUNDLE_PROPERTY_ID, estate_Id);
-        fragment.setArguments(args);
 
         return fragment;
     }
@@ -81,10 +81,6 @@ public class EstateDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_estate_details, container, false);
         ButterKnife.bind(this, view);
-
-        // Get data from Bundle (created in method newInstance)
-        mRealEstateAgent_Id = getArguments().getLong(BUNDLE_REAL_ESTATE_AGENT_ID, 0);
-        mProperty_Id = getArguments().getLong(BUNDLE_PROPERTY_ID, 0);
 
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
         mEstateDetailsViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EstateDetailsViewModel.class);
@@ -103,6 +99,10 @@ public class EstateDetailsFragment extends Fragment {
         mEstateDetailsViewModel.getCurrentEstate().observe(this, this::updateUI);
     }
     // ---------------------------------------------------------------------------------------------
+    //                                 STATIC MAP CONFIGURATION
+    // ---------------------------------------------------------------------------------------------
+
+    // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
     public void updateUI(Estate estate){
@@ -115,11 +115,27 @@ public class EstateDetailsFragment extends Fragment {
             mRoomsNumber.setText(estate.getNumberOfParts().toString());
             mBathroomsNumber.setText(estate.getNumberOfBathrooms().toString());
             mBedroomsNumber.setText(estate.getNumberOfBedrooms().toString());
-            mLocation_1.setText(estate.getAddress().get(0));
+            //mLocation_1.setText(estate.getAddress().get(0));
+            mLocation_1.setText(mGoogleStaticMapKey);
             mLocation_2.setText(estate.getAddress().get(1));
             mLocation_3.setText(estate.getAddress().get(2));
             mLocation_4.setText(estate.getAddress().get(3));
             mLocation_5.setText(estate.getAddress().get(4));
+
+            Glide.with(this)
+                    .load(mApiUri+mApiSize+mApiScale+mApiZoom+mApiParameters
+                            + "3 rue de la chesnaie+hameau de cagneux+60140+bailleval+france"
+                            + mApiKey
+                            + mGoogleStaticMapKey)
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(mStaticMap);
+
+            /*Utils.formatAddress(
+                    realEstate.getAddress().line1,
+                    realEstate.getAddress().city,
+                    realEstate.getAddress().state,
+                    realEstate.getAddress().zip)
+                   + "%7C40.711614,-74.012318"*/
         }
     }
 }

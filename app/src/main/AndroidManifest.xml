@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.openclassrooms.realestatemanager">
+    <!-- Using for make internet requests (necessary for Glide) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:name=".MainApplication"
@@ -12,27 +15,43 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <!-- Google Static Map Api Key
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${googleStaticMapApiKey}"/>
+        -->
+        <!-- ENTRY Activity -->
         <activity android:name=".Controllers.Activities.RealEstateManagerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <!-- A child of the main activity -->
-        <activity
-            android:name=".Controllers.Activities.CreateEstateActivity"
-            android:label="Create Estate"
-            android:parentActivityName=".Controllers.Activities.RealEstateManagerActivity" >
+        <activity android:name=".Controllers.Activities.DetailsEstateActivity"
+            android:label="Details Estate"
+            android:parentActivityName=".Controllers.Activities.RealEstateManagerActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.Activities.RealEstateManagerActivity" />
         </activity>
-    </application> <!-- Using for make internet requests (necessary for Glide) -->
-    <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+        <!-- A child of the main activity -->
+        <activity
+            android:name=".Controllers.Activities.CreateEstateActivity"
+            android:label="Create Estate"
+            android:parentActivityName=".Controllers.Activities.RealEstateManagerActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.Activities.RealEstateManagerActivity" />
+        </activity>
+
+    </application>
 
 </manifest>

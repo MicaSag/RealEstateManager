@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.Injections.Injection;
@@ -152,26 +153,35 @@ public class CreateEstateActivity extends BaseActivity {
     public void onClickEntryDate(View v) {
         mEntryDatePickerDialog.show();
     }
+
+    // Click on Validate Button
     @OnClick(R.id.activity_create_estate_bt_validate)
     public void validate(View view) {
         Log.d(TAG, "validate: ");
         if (validateRequiredData()) {
-            Estate newEstate = new Estate(mAutoCompleteTVType.getText().toString(),
-                    Integer.parseInt(mPrice.getText().toString()),
-                    Integer.parseInt(mSurface.getText().toString()),
-                    Integer.parseInt(mNumbersRooms.getText().toString()),
-                    Integer.parseInt(mNumbersBathrooms.getText().toString()),
-                    Integer.parseInt(mNumbersBedrooms.getText().toString()),
-                    "Hous House House",
-                    new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                            "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                            "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg")),
-                    new ArrayList<>(Arrays.asList("5 place of temple", "", "PARIS", "75016", "France", "second arrond")),
-                    new ArrayList<>(Arrays.asList("School Yves Eriose", "Super Market Franprix")),
-                    LocalDateTime.now(),
-                    null,
-                    CurrentRealEstateAgentDataRepository.getInstance().getCurrentRealEstateAgent_Id().getValue());
-            mEstateCreateViewModel.createEsate(newEstate);
+            mEstateCreateViewModel.getEstate().setType(mAutoCompleteTVType.getText().toString());
+            mEstateCreateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
+            mEstateCreateViewModel.getEstate().setDescription(mDescription.getText().toString());
+            mEstateCreateViewModel.getEstate().setAddress(new ArrayList<>(Arrays
+                    .asList("5 place of temple", "", "PARIS", "75016", "France", "second arrond")));
+            mEstateCreateViewModel.getEstate().setArea(Integer.parseInt(mSurface.getText().toString()));
+            mEstateCreateViewModel.getEstate().setNumberOfParts(Integer.parseInt(mNumbersRooms.getText().toString()));
+            mEstateCreateViewModel.getEstate().setNumberOfBathrooms(Integer.parseInt(mNumbersBathrooms.getText().toString()));
+            mEstateCreateViewModel.getEstate().setNumberOfBedrooms(Integer.parseInt(mNumbersBedrooms.getText().toString()));
+            mEstateCreateViewModel.getEstate().setPhotos(new ArrayList<>(Arrays
+                    .asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
+                    "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
+                    "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg")));
+            mEstateCreateViewModel.getEstate().setPointOfInterest(new ArrayList<>(Arrays
+                    .asList("School Yves Eriose", "Super Market Franprix")));
+            mEstateCreateViewModel.getEstate().setRealEstateAgent_Id(CurrentRealEstateAgentDataRepository.
+                    getInstance().getCurrentRealEstateAgent_Id().getValue());
+
+            // Create Estate and save it in DataBase
+            mEstateCreateViewModel.createEsate();
+
+            // Close Activity and go back to previous activity
+            this.finish();
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -180,11 +190,12 @@ public class CreateEstateActivity extends BaseActivity {
     private void configureAutoCompleteType() {
         Log.d(TAG, "configureAutoCompleteType: ");
 
-        String[] countries = {"Flat" , "House" , "Duplex" , "Penthouse" };
-        // String[] countries = getResources().getStringArray(R.array.list_of_countries);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, countries);
-        mAutoCompleteTVType.setThreshold(1);//will start working from first character
-        mAutoCompleteTVType.setTextColor(Color.RED);
+        final String[] TYPES = getResources().getStringArray(R.array.estate_type);
+        Log.d(TAG, "configureAutoCompleteType: TYPES = "+ Arrays.toString(TYPES));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                R.layout.dropdown_type,
+                TYPES);
         mAutoCompleteTVType.setAdapter(adapter);
     }
     // ---------------------------------------------------------------------------------------------
