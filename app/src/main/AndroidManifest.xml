@@ -16,11 +16,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!-- Google Static Map Api Key
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${googleStaticMapApiKey}"/>
-        -->
         <!-- ENTRY Activity -->
         <activity android:name=".Controllers.Activities.RealEstateManagerActivity">
             <intent-filter>
