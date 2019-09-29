@@ -45,17 +45,17 @@ public class EstateDetailsFragment extends Fragment {
 
 
     // For Design
-    @BindView(R.id.fragment_detail_text_description) TextView mDescription;
-    @BindView(R.id.fragment_detail_text_surface) TextView mSurface;
-    @BindView(R.id.fragment_detail_text_rooms_number) TextView mRoomsNumber;
-    @BindView(R.id.fragment_detail_text_bathrooms_number) TextView mBathroomsNumber;
-    @BindView(R.id.fragment_detail_text_bedrooms_number) TextView mBedroomsNumber;
-    @BindView(R.id.fragment_detail_text_location_1) TextView mLocation_1;
-    @BindView(R.id.fragment_detail_text_location_2) TextView mLocation_2;
-    @BindView(R.id.fragment_detail_text_location_3) TextView mLocation_3;
-    @BindView(R.id.fragment_detail_text_location_4) TextView mLocation_4;
-    @BindView(R.id.fragment_detail_text_location_5) TextView mLocation_5;
-    @BindView(R.id.fragment_detail_static_map) ImageView mStaticMap;
+    @BindView(R.id.fragment_details_description_text) TextView mDescription;
+    @BindView(R.id.fragment_details_surface_value) TextView mSurface;
+    @BindView(R.id.fragment_details_rooms_value) TextView mRoomsNumber;
+    @BindView(R.id.fragment_details_bathrooms_value) TextView mBathroomsNumber;
+    @BindView(R.id.fragment_details_bedrooms_value) TextView mBedroomsNumber;
+    @BindView(R.id.fragment_details_location_address_line_1) TextView mLocation_1;
+    @BindView(R.id.fragment_details_location_address_line_2) TextView mLocation_2;
+    @BindView(R.id.fragment_details_location_address_line_3) TextView mLocation_3;
+    @BindView(R.id.fragment_details_location_address_line_4) TextView mLocation_4;
+    @BindView(R.id.fragment_details_location_address_line_5) TextView mLocation_5;
+    @BindView(R.id.fragment_details_static_map) ImageView mStaticMap;
 
     public EstateDetailsFragment() {
         // Required empty public constructor
@@ -106,7 +106,7 @@ public class EstateDetailsFragment extends Fragment {
     //                                             UI
     // ---------------------------------------------------------------------------------------------
     public void updateUI(Estate estate){
-        Log.d(TAG, "updateUI: ");
+        Log.d(TAG, "updateUI() called with: estate = [" + estate + "]");
 
         if (estate != null) {
             Log.d(TAG, "updateUI: estate.getID = "+estate.getEstate_Id());
@@ -115,8 +115,7 @@ public class EstateDetailsFragment extends Fragment {
             mRoomsNumber.setText(estate.getNumberOfParts().toString());
             mBathroomsNumber.setText(estate.getNumberOfBathrooms().toString());
             mBedroomsNumber.setText(estate.getNumberOfBedrooms().toString());
-            //mLocation_1.setText(estate.getAddress().get(0));
-            mLocation_1.setText(mGoogleStaticMapKey);
+            mLocation_1.setText(estate.getAddress().get(0));
             mLocation_2.setText(estate.getAddress().get(1));
             mLocation_3.setText(estate.getAddress().get(2));
             mLocation_4.setText(estate.getAddress().get(3));
@@ -124,18 +123,15 @@ public class EstateDetailsFragment extends Fragment {
 
             Glide.with(this)
                     .load(mApiUri+mApiSize+mApiScale+mApiZoom+mApiParameters
-                            + "3 rue de la chesnaie+hameau de cagneux+60140+bailleval+france"
+                            + estate.getAddress().get(0)+"+"
+                            + estate.getAddress().get(1)+"+"
+                            + estate.getAddress().get(2)+"+"
+                            + estate.getAddress().get(3)+"+"
+                            + estate.getAddress().get(4)
                             + mApiKey
                             + mGoogleStaticMapKey)
                     .apply(RequestOptions.centerCropTransform())
                     .into(mStaticMap);
-
-            /*Utils.formatAddress(
-                    realEstate.getAddress().line1,
-                    realEstate.getAddress().city,
-                    realEstate.getAddress().state,
-                    realEstate.getAddress().zip)
-                   + "%7C40.711614,-74.012318"*/
         }
     }
 }

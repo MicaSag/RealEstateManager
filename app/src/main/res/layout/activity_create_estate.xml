@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    tools:context=".Controllers.Activities.CreateEstateActivity">
 
     <!-- Toolbar Importation -->
     <include
@@ -20,31 +21,9 @@
         android:fillViewport="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/activity_create_estate_CL"
+            android:id="@+id/activity_create_estate_cl"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context=".Controllers.Activities.CreateEstateActivity">
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/activity_create_estate_gd_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.25" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/activity_create_estate_gd_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.4" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/activity_create_estate_gd_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.45" />
+            android:layout_height="wrap_content">
 
             <!-- ESTATE TYPE -->
             <com.google.android.material.textfield.TextInputLayout
@@ -57,10 +36,10 @@
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
                 android:layout_marginBottom="@dimen/activity_create_estate_marginTop"
                 android:hint="@string/type_of_estate"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:startIconDrawable="@drawable/baseline_store_black_24"
                 app:helperTextEnabled="true"
                 app:helperText="*Required">
@@ -70,7 +49,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"/>
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- PRICE -->
@@ -83,10 +61,10 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
                 android:hint="@string/price"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_description"
                 app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_type"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_description"
                 app:startIconDrawable="@drawable/baseline_attach_money_black_24"
                 app:helperTextEnabled="true"
                 app:helperText="*Required">
@@ -108,10 +86,10 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
                 android:hint="@string/description"
-                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_address"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_price"
+                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_include_address_card_view"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_price"
                 app:startIconDrawable="@drawable/baseline_description_black_24"
                 app:helperTextEnabled="true"
                 app:helperText="*Required">
@@ -124,29 +102,18 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- ADDRESS -->
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextFieldTheme"
-                android:id="@+id/activity_create_estate_tf_address"
+            <include
+                layout="@layout/address_card_view"
+                android:id="@+id/activity_create_estate_include_address_card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
-                android:hint="@string/address"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_description"
                 app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_surface"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_description"
-                app:startIconDrawable="@drawable/baseline_room_black_24"
-                app:helperTextEnabled="true"
-                app:helperText="*Required">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/activity_create_estate_ed_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <!-- SURFACE -->
             <com.google.android.material.textfield.TextInputLayout
@@ -158,10 +125,10 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
                 android:hint="@string/surface"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_include_address_card_view"
                 app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_numbers_rooms"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_address"
                 app:startIconDrawable="@drawable/baseline_settings_overscan_black_24"
                 app:helperTextEnabled="true"
                 app:helperText="*Required">
@@ -183,10 +150,10 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
                 android:hint="@string/number_of_rooms"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_surface"
                 app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_numbers_bathrooms"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_surface"
                 app:startIconDrawable="@drawable/baseline_home_black_24"
                 app:helperTextEnabled="true"
                 app:helperText="*Required">
@@ -208,10 +175,10 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
                 android:hint="@string/number_of_bathrooms"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_rooms"
                 app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_numbers_bedrooms"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_rooms"
                 app:startIconDrawable="@drawable/baseline_hot_tub_black_24"
                 app:helperTextEnabled="true"
                 app:helperText="*Required">
@@ -234,10 +201,10 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
                 android:hint="@string/number_of_bedrooms"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_bathrooms"
                 app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_date_entry"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_bathrooms"
                 app:startIconDrawable="@drawable/baseline_hotel_black_24"
                 app:helperTextEnabled="true"
                 app:helperText="*Required">
@@ -259,10 +226,9 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
                 android:hint="@string/date_of_entry_of_the_estate"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_bedrooms"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_bedrooms"
                 app:startIconDrawable="@drawable/baseline_date_range_24"
                 app:helperTextEnabled="true"
                 app:helperText="*Required">
@@ -286,9 +252,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:text="Validate"
-                android:onClick="Validate"
-                />
+                android:text="Validate"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

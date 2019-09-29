@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.Injections.Injection;
@@ -49,11 +51,16 @@ public class CreateEstateActivity extends BaseActivity {
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     // - Get Coordinator Layout
-    @BindView(R.id.activity_create_estate_CL) ConstraintLayout mCoordinatorLayout;
+    @BindView(R.id.activity_create_estate_cl) ConstraintLayout mCoordinatorLayout;
     @BindView(R.id.activity_create_estate_auto_type) AutoCompleteTextView mAutoCompleteTVType;
     @BindView(R.id.activity_create_estate_ed_price) EditText mPrice;
     @BindView(R.id.activity_create_estate_ed_description) EditText mDescription;
-    @BindView(R.id.activity_create_estate_ed_address) EditText mAddress;
+    @BindView(R.id.activity_create_estate_include_address_card_view) CardView mAddress;
+    @BindView(R.id.address_card_view_way) EditText mAddressWay;
+    @BindView(R.id.address_card_view_complement) EditText mAddressComplement;
+    @BindView(R.id.address_card_view_postal_code) EditText mAddressPostalCode;
+    @BindView(R.id.address_card_view_city) EditText mAddressCity;
+    @BindView(R.id.address_card_view_state) EditText mAddressState;
     @BindView(R.id.activity_create_estate_ed_surface) EditText mSurface;
     @BindView(R.id.activity_create_estate_ed_numbers_rooms) EditText mNumbersRooms;
     @BindView(R.id.activity_create_estate_ed_numbers_bathrooms) EditText mNumbersBathrooms;
@@ -162,8 +169,13 @@ public class CreateEstateActivity extends BaseActivity {
             mEstateCreateViewModel.getEstate().setType(mAutoCompleteTVType.getText().toString());
             mEstateCreateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
             mEstateCreateViewModel.getEstate().setDescription(mDescription.getText().toString());
-            mEstateCreateViewModel.getEstate().setAddress(new ArrayList<>(Arrays
-                    .asList("5 place of temple", "", "PARIS", "75016", "France", "second arrond")));
+            ArrayList<String> address = new ArrayList<>();
+            address.add(mAddressWay.getText().toString());
+            address.add(mAddressComplement.getText().toString());
+            address.add(mAddressPostalCode.getText().toString());
+            address.add(mAddressCity.getText().toString());
+            address.add(mAddressState.getText().toString());
+            mEstateCreateViewModel.getEstate().setAddress(address);
             mEstateCreateViewModel.getEstate().setArea(Integer.parseInt(mSurface.getText().toString()));
             mEstateCreateViewModel.getEstate().setNumberOfParts(Integer.parseInt(mNumbersRooms.getText().toString()));
             mEstateCreateViewModel.getEstate().setNumberOfBathrooms(Integer.parseInt(mNumbersBathrooms.getText().toString()));
@@ -237,7 +249,7 @@ public class CreateEstateActivity extends BaseActivity {
         if (    mAutoCompleteTVType.getText().toString().equals("") ||
                 mPrice.getText().toString().equals("") ||
                 mDescription.getText().toString().equals("") ||
-                mAddress.getText().toString().equals("") ||
+                //mAddress.getText().toString().equals("") ||
                 mSurface.getText().toString().equals("") ||
                 mNumbersRooms.getText().toString().equals("") ||
                 mNumbersBathrooms.getText().toString().equals("") ||

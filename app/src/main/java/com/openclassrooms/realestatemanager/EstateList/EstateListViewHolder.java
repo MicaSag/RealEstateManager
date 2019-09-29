@@ -44,7 +44,7 @@ public class EstateListViewHolder extends RecyclerView.ViewHolder implements Vie
         mType.setText(estate.getType());
 
         // Display Estate location
-        mLocation.setText(estate.getAddress().get(5));
+        mLocation.setText(estate.getAddress().get(4));
 
         // Display Estate Price
         mPrize.setText("$"+Integer.toString(estate.getPrice()));

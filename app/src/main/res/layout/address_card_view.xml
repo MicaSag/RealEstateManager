@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.MaterialComponents.CardView"
+    android:id="@+id/activity_create_estate_mcv_address"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="32dp"
+    android:layout_marginEnd="32dp"
+    android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+    android:minHeight="200dp"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="5dp"
+    app:cardMaxElevation="8dp"
+    app:contentPadding="10dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="false">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/address_card_view_cl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/address_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/baseline_room_black_24"
+            />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/address_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/address_image"
+            app:layout_constraintStart_toEndOf="@+id/address_image"
+            android:text="Address"
+            />
+
+        <!-- Label and way number -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextFieldTheme"
+            android:id="@+id/address_card_view_tf_way"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+            android:layout_marginBottom="@dimen/activity_create_estate_marginTop"
+            app:layout_constraintTop_toBottomOf="@+id/address_title"
+            app:layout_constraintBottom_toTopOf="@+id/address_card_view_tf_complement"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="Label and way number"
+            app:helperTextEnabled="true"
+            app:helperText="*Required">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/address_card_view_way"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Complement -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextFieldTheme"
+            android:id="@+id/address_card_view_tf_complement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+            android:layout_marginBottom="@dimen/activity_create_estate_marginTop"
+            app:layout_constraintBottom_toTopOf="@id/address_card_view_tf_postal_code"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="Complement"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/address_card_view_complement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Postal code -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextFieldTheme"
+            android:id="@+id/address_card_view_tf_postal_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+            android:layout_marginBottom="@dimen/activity_create_estate_marginTop"
+            app:layout_constraintBottom_toTopOf="@id/address_card_view_tf_city"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="Postal code"
+            app:helperTextEnabled="true"
+            app:helperText="*Required">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/address_card_view_postal_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="number"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- City -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextFieldTheme"
+            android:id="@+id/address_card_view_tf_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+            android:layout_marginBottom="@dimen/activity_create_estate_marginTop"
+            app:layout_constraintBottom_toTopOf="@id/address_card_view_tf_state"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="City"
+            app:helperTextEnabled="true"
+            app:helperText="*Required">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/address_card_view_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- State -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextFieldTheme"
+            android:id="@+id/address_card_view_tf_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+            android:layout_marginBottom="@dimen/activity_create_estate_marginTop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="State"
+            app:helperTextEnabled="true"
+            app:helperText="*Required">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/address_card_view_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+
