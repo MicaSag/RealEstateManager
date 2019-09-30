@@ -55,6 +55,14 @@ public class DetailsEstateActivity extends BaseActivity {
         // Enable the Up button
         super.mActionBar.setDisplayHomeAsUpEnabled(true);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (getResources().getBoolean(R.bool.is_tablet)) finish();
+    }
+
     // ---------------------------------------------------------------------------------------------
     //                                        ENTRY POINT
     // ---------------------------------------------------------------------------------------------

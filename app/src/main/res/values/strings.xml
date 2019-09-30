@@ -25,4 +25,6 @@
         <item>Loft</item>
         <item>Duplex</item>
     </string-array>
+
+    <bool name="is_tablet">false</bool>
 </resources>

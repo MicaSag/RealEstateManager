@@ -126,7 +126,7 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
         mEstateDetailsFragment = (EstateDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_estate_details);
 
         // We only add DetailsFragment in Tablet mode (If found frame_layout_detail)
-        if (mEstateDetailsFragment == null && findViewById(R.id.fragment_estate_details) != null) {
+        if (mEstateDetailsFragment == null && getResources().getBoolean(R.bool.is_tablet)) {
             // Create new main fragment
             mEstateDetailsFragment = EstateDetailsFragment.newInstance();
             // Add it to FrameLayout container

@@ -22,7 +22,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.60" />
 
-    <!--  <<<<<<<<  FIRST SECTION    >>>>>>>>  -->
+    <!--region  <<<<<<<<  FIRST SECTION    >>>>>>>>  -->
 
     <!-- MEDIA -->
     <!-- MEDIA : Title -->
@@ -47,6 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
+    <!--endregion-->
     <!--  <<<<<<<<  SECOND SECTION    >>>>>>>>  -->
 
     <!-- DESCRIPTION -->
