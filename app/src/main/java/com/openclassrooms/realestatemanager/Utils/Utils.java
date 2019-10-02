@@ -2,6 +2,9 @@ package com.openclassrooms.realestatemanager.Utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 
 import java.text.DateFormat;
@@ -21,7 +24,17 @@ public class Utils {
      * @return
      */
     public static int convertDollarToEuro(int dollars){
-        return (int) Math.round(dollars * 0.812);
+        return (int) Math.round(dollars * 0.91);
+    }
+
+    /**
+     * Conversion d'un prix d'un bien immobilier (Euros vers Dollars)
+     *
+     * @param euros
+     * @return
+     */
+    public static int convertEuroToDollar(int euros){
+        return (int) Math.round(euros * 1.09);
     }
 
     /**
@@ -30,7 +43,7 @@ public class Utils {
      * @return
      */
     public static String getTodayDate(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(new Date());
     }
 
@@ -41,8 +54,25 @@ public class Utils {
      * @return
      */
     public static Boolean isInternetAvailable(Context context){
-        WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-        return wifi.isWifiEnabled();
+        int[] networkTypes = {  ConnectivityManager.TYPE_MOBILE,
+                                ConnectivityManager.TYPE_WIFI};
+        try {
+            // Get ConnectivityManager
+            ConnectivityManager connectivityManager =
+                    (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            // // Look if the connection is a Wifi or Mobile connection
+            for (int networkType : networkTypes) {
+                // Get ActiveNetworkInfo
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                // see if a network connection is established and Wifi or Mobile connection
+                if (activeNetworkInfo != null &&
+                        activeNetworkInfo.getType() == networkType)
+                    return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 
     /**

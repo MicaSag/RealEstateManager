@@ -1,12 +1,8 @@
 package com.openclassrooms.realestatemanager.Controllers.Fragments;
 
 
-import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.BuildConfig;
-import com.openclassrooms.realestatemanager.Models.views.EstateDetailsViewModel;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.Estate;
+import com.openclassrooms.realestatemanager.Models.views.EstateDetailsViewModel;
 import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
@@ -36,17 +35,6 @@ public class EstateDetailsFragment extends Fragment {
 
     // Declare EstateDetailsViewModel
     private EstateDetailsViewModel mEstateDetailsViewModel;
-
-    // Declarations for Uri Static
-    private Uri.Builder mUriStaticMap
-            = Uri.parse("https://maps.googleapis.com/maps/api/staticmap").buildUpon();
-    private String mApiSize="size=300x300";
-    private String mApiScale="&scale=2";
-    private String mApiZoom="&zoom=16";
-    private String mApiParameters="&markers=size:mid|color:blue|label:E|";
-    private String mApiKey = "&key=";
-    private String mGoogleStaticMapKey = BuildConfig.google_static_map_api;
-
 
     // For Design
     @BindView(R.id.fragment_details_description_text) TextView mDescription;
@@ -79,16 +67,6 @@ public class EstateDetailsFragment extends Fragment {
     //                                    ENTRY POINT
     // ---------------------------------------------------------------------------------------------
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Create Uri
-        mUriStaticMap.appendQueryParameter("size","300x300")
-                    .appendQueryParameter("scale","2")
-                    .appendQueryParameter("zoom","16")
-                    .appendQueryParameter("key",BuildConfig.google_static_map_api);
-    }
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
@@ -113,17 +91,12 @@ public class EstateDetailsFragment extends Fragment {
         mEstateDetailsViewModel.getCurrentEstate().observe(this, this::updateUI);
     }
     // ---------------------------------------------------------------------------------------------
-    //                                 STATIC MAP CONFIGURATION
-    // ---------------------------------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
     public void updateUI(Estate estate){
         Log.d(TAG, "updateUI() called with: estate = [" + estate + "]");
 
         if (estate != null) {
-            Log.d(TAG, "updateUI: estate.getID = "+estate.getEstate_Id());
             mDescription.setText(estate.getDescription());
             mSurface.setText(estate.getArea().toString());
             mRoomsNumber.setText(estate.getNumberOfParts().toString());
@@ -135,10 +108,12 @@ public class EstateDetailsFragment extends Fragment {
             mLocation_4.setText(estate.getAddress().get(3));
             mLocation_5.setText(estate.getAddress().get(4));
 
+            // Created Uri to recover the static map
             Uri.Builder uriStaticMap
                     = Uri.parse("https://maps.googleapis.com/maps/api/staticmap").buildUpon();
-            // Create Uri
-            uriStaticMap.appendQueryParameter("size","300x300")
+            // Add options
+            uriStaticMap
+                    .appendQueryParameter("size","300x300")
                     .appendQueryParameter("scale","2")
                     .appendQueryParameter("zoom","16")
                     .appendQueryParameter("key",BuildConfig.google_static_map_api);
@@ -149,9 +124,7 @@ public class EstateDetailsFragment extends Fragment {
                     + estate.getAddress().get(3)+"+"
                     + estate.getAddress().get(4);
             uriStaticMap.appendQueryParameter("markers",markers);
-
-            Log.d(TAG, "updateUI: uriStaticMap = "+uriStaticMap.toString());
-
+            // Display static Map depending on the address of the property
             Glide.with(this)
                     .load(uriStaticMap.build())
                     .apply(RequestOptions.centerCropTransform())
