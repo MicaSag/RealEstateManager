@@ -12,15 +12,21 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.BuildConfig;
+import com.openclassrooms.realestatemanager.EstateList.EstateListAdapter;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.Models.views.EstateDetailsViewModel;
+import com.openclassrooms.realestatemanager.PhotoList.PhotoListAdapter;
 import com.openclassrooms.realestatemanager.R;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +43,7 @@ public class EstateDetailsFragment extends Fragment {
     private EstateDetailsViewModel mEstateDetailsViewModel;
 
     // For Design
+    @BindView(R.id.fragment_details_photos_recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.fragment_details_description_text) TextView mDescription;
     @BindView(R.id.fragment_details_surface_value) TextView mSurface;
     @BindView(R.id.fragment_details_rooms_value) TextView mRoomsNumber;
@@ -48,6 +55,10 @@ public class EstateDetailsFragment extends Fragment {
     @BindView(R.id.fragment_details_location_address_line_4) TextView mLocation_4;
     @BindView(R.id.fragment_details_location_address_line_5) TextView mLocation_5;
     @BindView(R.id.fragment_details_static_map) ImageView mStaticMap;
+
+    // For Display list of photos
+    PhotoListAdapter mPhotoListAdapter;
+    ArrayList<String> mPhotos;
 
     public EstateDetailsFragment() {
         // Required empty public constructor
@@ -77,10 +88,27 @@ public class EstateDetailsFragment extends Fragment {
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
         mEstateDetailsViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EstateDetailsViewModel.class);
 
+        // Configuration Photo RecyclerView
+        this.configureRecyclerView();
+
         // Get and Observe Current Estate
         this.getCurrentEstate();
 
         return view;
+    }
+    // --------------------------------------------------------------------------------------------
+    //                                    CONFIGURATION
+    // --------------------------------------------------------------------------------------------
+    // Configure RecyclerView, Adapter, LayoutManager & glue it together
+    private void configureRecyclerView(){
+        // Reset list
+        mPhotos = new ArrayList<>();
+        // Create adapter passing the list of users
+        mPhotoListAdapter = new PhotoListAdapter(mPhotos, Glide.with(this));
+        // Attach the adapter to the recyclerView to populate items
+        mRecyclerView.setAdapter(mPhotoListAdapter);
+        // Set layout manager to position the items
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
     }
     // ---------------------------------------------------------------------------------------------
     //                                           DATA
@@ -94,7 +122,7 @@ public class EstateDetailsFragment extends Fragment {
     //                                             UI
     // ---------------------------------------------------------------------------------------------
     public void updateUI(Estate estate){
-        Log.d(TAG, "updateUI() called with: estate = [" + estate + "]");
+        Log.d(TAG, "updateUI()");
 
         if (estate != null) {
             mDescription.setText(estate.getDescription());
@@ -129,6 +157,10 @@ public class EstateDetailsFragment extends Fragment {
                     .load(uriStaticMap.build())
                     .apply(RequestOptions.centerCropTransform())
                     .into(mStaticMap);
+
+            // Display Photos List
+            mPhotos = estate.getPhotos();
+            mPhotoListAdapter.updateData(mPhotos);
         }
     }
 }

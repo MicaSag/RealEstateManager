@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.Database.Dao;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -10,6 +12,10 @@ import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
 
 @Dao
 public interface RealEstateAgentDao {
+
+    // For ContentProvider
+    @Query("SELECT * FROM RealEstateAgent WHERE realEstateAgent_Id = :realEstateAgent_Id")
+    Cursor getRealEstateAgentWithCursor(long realEstateAgent_Id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void createRealEstateAgent(RealEstateAgent realEstateAgent);

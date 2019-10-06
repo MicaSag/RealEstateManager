@@ -38,13 +38,13 @@ public class EstateListViewHolder extends RecyclerView.ViewHolder implements Vie
         mOnEstateClick = callback;
 
         // Display Estate Photo
-        if (estate.getPhotos().get(0) != null) glide.load(estate.getPhotos().get(0)).into(mImage);
+        if (estate.getPhotos() !=null) if (estate.getPhotos().get(0) != null) glide.load(estate.getPhotos().get(0)).into(mImage);
 
         // Display Estate Type
         mType.setText(estate.getType());
 
         // Display Estate location
-        mLocation.setText(estate.getAddress().get(4));
+        if (estate.getAddress() != null) mLocation.setText(estate.getAddress().get(4));
 
         // Display Estate Price
         mPrize.setText("$"+Integer.toString(estate.getPrice()));
@@ -52,7 +52,7 @@ public class EstateListViewHolder extends RecyclerView.ViewHolder implements Vie
         // For Debug
         Log.d(TAG, "updateWithProperty: RealEstateAgent_Id  = "+ estate.getRealEstateAgent_Id());
         Log.d(TAG, "updateWithProperty: Estate_Id           = "+ estate.getEstate_Id());
-        Log.d(TAG, "updateWithProperty: Estate PhotoURL     = "+ estate.getPhotos().get(0));
+        if (estate.getPhotos() != null ) Log.d(TAG, "updateWithProperty: Estate PhotoURL     = "+ estate.getPhotos().get(0));
         Log.d(TAG, "updateWithProperty: -------- END --------");
     }
 

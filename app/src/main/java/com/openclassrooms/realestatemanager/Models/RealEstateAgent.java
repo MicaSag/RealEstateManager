@@ -1,7 +1,13 @@
 package com.openclassrooms.realestatemanager.Models;
 
+import android.content.ContentValues;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import org.threeten.bp.LocalDateTime;
+
+import java.util.ArrayList;
 
 @Entity
 public class RealEstateAgent {
@@ -10,6 +16,9 @@ public class RealEstateAgent {
     private long realEstateAgent_Id;
     private String userName;
     private String urlPicture;
+
+    public RealEstateAgent() {
+    }
 
     public RealEstateAgent(long realEstateAgent_Id, String userName, String urlPicture) {
         this.realEstateAgent_Id = realEstateAgent_Id;
@@ -28,4 +37,14 @@ public class RealEstateAgent {
     public void setRealEstateAgent_Id(long realEstateAgent_Id) { this.realEstateAgent_Id = realEstateAgent_Id; }
     public void setUserName(String userName) { this.userName = userName; }
     public void setUrlPicture(String urlPicture) { this.urlPicture = urlPicture; }
+
+    // --- UTILS ---
+
+    public static RealEstateAgent fromContentValues(ContentValues values) {
+        final RealEstateAgent realEstateAgent = new RealEstateAgent();
+        if (values.containsKey("realEstateAgentId")) realEstateAgent.setRealEstateAgent_Id(values.getAsLong("realEstateAgentId"));
+        if (values.containsKey("userName")) realEstateAgent.setUserName(values.getAsString("userName"));
+        if (values.containsKey("urlPicture")) realEstateAgent.setUrlPicture(values.getAsString("urlPicture"));
+        return realEstateAgent;
+    }
 }

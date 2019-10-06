@@ -48,6 +48,11 @@
                 android:value=".Controllers.Activities.RealEstateManagerActivity" />
         </activity>
 
+        <provider
+            android:name=".provider.EstateContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.provider.EstateContentProvider"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

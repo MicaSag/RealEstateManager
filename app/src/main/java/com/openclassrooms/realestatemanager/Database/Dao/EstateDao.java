@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.Database.Dao;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -12,6 +14,10 @@ import java.util.List;
 
 @Dao
 public interface EstateDao {
+
+    // For ContentProvider
+    @Query("SELECT * FROM Estate WHERE realEstateAgent_Id = :realEstateAgent_Id")
+    Cursor getEstatesWithCursor(long realEstateAgent_Id);
 
     @Query("SELECT * FROM Estate WHERE realEstateAgent_Id = :realEstateAgent_Id")
     LiveData<List<Estate>> getEstates(long realEstateAgent_Id);

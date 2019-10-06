@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
 import androidx.lifecycle.ViewModelProviders;
+
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -39,6 +41,9 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
     // Declare fragments
     private EstateDetailsFragment mEstateDetailsFragment;
     private EstateListFragment mEstateListFragment;
+
+    // For call Activities
+    private static final int CREATE_ACTIVITY_REQUEST_CODE = 10;
 
     // Data
     private long mCurrentRealEstateAgent_Id;
@@ -159,15 +164,27 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
     // Update the RealEstateAgent Data
     private void updateCurrentRealEstateAgent_Id(RealEstateAgent realEstateAgent){
         Log.d(TAG, "updateRealEstateAgent: ");
-        this.showSnackBar("RealEstateAgent = "+realEstateAgent.getUserName());
         mCurrentRealEstateAgent_Id = realEstateAgent.getRealEstateAgent_Id();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // If the return result comes from the create activity
+        if (CREATE_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
+            // Fetch the result from the Intent
+           if(data.getBooleanExtra(CreateEstateActivity.BUNDLE_CREATE_OK, false))
+               showSnackBar("The creation of the estate was carried out");
+        }
+    }
+
     // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //3 - Handle actions on menu items
+        //Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.menu_activity_real_estate_manager_search:
                 //Log.d(TAG, "onOptionsItemSelected: Search Button Activated");
@@ -179,9 +196,11 @@ public class RealEstateManagerActivity extends BaseActivity implements EstateLis
             case R.id.menu_activity_real_estate_manager_edit:
                 return true;
             case R.id.menu_activity_real_estate_manager_add:
+                // Create a intent for call Activity
+                Intent intent = new Intent(this, CreateEstateActivity.class);
+
                 // Go to CreateEstateActivity
-                Utils.startActivity(this, CreateEstateActivity.class);
-                return true;
+                startActivityForResult(intent, CREATE_ACTIVITY_REQUEST_CODE);
             default:
                 return super.onOptionsItemSelected(item);
         }

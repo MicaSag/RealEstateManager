@@ -18,7 +18,7 @@ android {
 
         // Google Static Map Api Key
         // --> For source
-        buildConfigField ( "String", "google_static_map_api", '"'+GOOGLE_STATIC_MAP_API_KEY+'"' )
+        buildConfigField("String", "google_static_map_api", '"' + GOOGLE_STATIC_MAP_API_KEY + '"')
     }
     buildTypes {
         release {

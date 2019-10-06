@@ -1,13 +1,19 @@
 package com.openclassrooms.realestatemanager.Models;
 
+import android.content.ContentValues;
+
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 
+import com.openclassrooms.realestatemanager.Utils.Converters;
+
 import org.threeten.bp.LocalDateTime;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity(foreignKeys = @ForeignKey(entity = RealEstateAgent.class,
         parentColumns = "realEstateAgent_Id",
@@ -96,5 +102,27 @@ public class Estate {
     public void setDateEntryOfTheMarket(LocalDateTime dateEntryOfTheMarket) {  this.dateEntryOfTheMarket = dateEntryOfTheMarket;  }
     public void setDateOfSale(LocalDateTime dateOfSale) {  this.dateOfSale = dateOfSale;  }
     public void setRealEstateAgent_Id(long realEstateAgent) {  this.realEstateAgent_Id = realEstateAgent;  }
+
+    // --- UTILS ---
+
+    public static Estate fromContentValues(ContentValues values) {
+        final Estate estate = new Estate();
+        if (values.containsKey("estate_id")) estate.setEstate_Id(values.getAsLong("estate_id"));
+        if (values.containsKey("type")) estate.setType(values.getAsString("type"));
+        if (values.containsKey("price")) estate.setPrice(values.getAsInteger("price"));
+        if (values.containsKey("area")) estate.setArea(values.getAsInteger("area"));
+        if (values.containsKey("parts")) estate.setNumberOfParts(values.getAsInteger("parts"));
+        if (values.containsKey("bathrooms")) estate.setNumberOfBathrooms(values.getAsInteger("bathrooms"));
+        if (values.containsKey("bedrooms")) estate.setNumberOfBedrooms(values.getAsInteger("bedrooms"));
+        if (values.containsKey("description")) estate.setDescription(values.getAsString("description"));
+        if (values.containsKey("photos")) estate.setPhotos(Converters.fromString(values.getAsString("photos")));
+        if (values.containsKey("address")) estate.setAddress(Converters.fromString(values.getAsString("address")));
+        if (values.containsKey("interests")) estate.setPointOfInterest(Converters.fromString(values.getAsString("interests")));
+        if (values.containsKey("status")) estate.setStatus(values.getAsBoolean("status"));
+        if (values.containsKey("dateEntryOfTheMarket")) estate.setDateEntryOfTheMarket(Converters.fromTimestamp(values.getAsLong("dateEntryOfTheMarket")));
+        if (values.containsKey("dateOfSale")) estate.setDateOfSale(Converters.fromTimestamp(values.getAsLong("dateOfSale")));
+        if (values.containsKey("realEstateAgentId")) estate.setRealEstateAgent_Id(values.getAsLong("realEstateAgentId"));
+        return estate;
+    }
 }
 

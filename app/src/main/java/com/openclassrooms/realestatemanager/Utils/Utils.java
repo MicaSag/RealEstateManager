@@ -87,9 +87,10 @@ public class Utils {
         // Create a intent for call Activity
         Intent intent = new Intent(context, className);
 
-        // Call RestaurantCardActivity with 3 parameters
+        // Call RestaurantCardActivity
         context.startActivity(intent);
     }
+
     /**
      * Start an Activity with Key
      *
@@ -107,7 +108,7 @@ public class Utils {
         // ==> Sends the Restaurant details
         if (!(key == null)) intent.putExtra(key,keyValue);
 
-        // Call RestaurantCardActivity with 3 parameters
+        // Call RestaurantCardActivity with 1 parameter
         context.startActivity(intent);
     }
 }

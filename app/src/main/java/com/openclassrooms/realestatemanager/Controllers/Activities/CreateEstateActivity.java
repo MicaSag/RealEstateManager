@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -74,6 +75,9 @@ public class CreateEstateActivity extends BaseActivity {
     private DatePickerDialog mEntryDatePickerDialog;
     private SimpleDateFormat displayDateFormatter;
     private Calendar newCalendar;
+
+    // To return the result to the parent activity
+    public static final String BUNDLE_CREATE_OK = "BUNDLE_CREATE_OK";
 
     // ---------------------------------------------------------------------------------------------
     //                                DECLARATION BASE METHODS
@@ -192,6 +196,11 @@ public class CreateEstateActivity extends BaseActivity {
             // Create Estate and save it in DataBase
             mEstateCreateViewModel.createEsate();
 
+            // Notify the agent that the creative went well
+            // Create a intent for call Activity
+            Intent intent = new Intent();
+            intent.putExtra(BUNDLE_CREATE_OK,true);
+            setResult(RESULT_OK,intent);
             // Close Activity and go back to previous activity
             this.finish();
         }
