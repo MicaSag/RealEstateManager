@@ -24,11 +24,17 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     // For Data
     private List<String> mListPhoto;
 
+    // For CALLBACK
+    public interface OnPhotoClick{
+        void onPhotoClick(String photo,int position);
+    }
+    private final OnPhotoClick mCallback;
+
     // CONSTRUCTOR
-    public PhotoListAdapter(List<String> listPhoto, RequestManager glide) {
+    public PhotoListAdapter(List<String> listPhoto, RequestManager glide, OnPhotoClick callback) {
         mListPhoto = listPhoto;
         mGlide = glide;
-
+        mCallback = callback;
     }
 
     @Override
@@ -43,7 +49,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     // For update View Holder with Estate
     @Override
     public void onBindViewHolder(PhotoListViewHolder viewHolder, int position) {
-        viewHolder.updateWithPhoto(mListPhoto.get(position), mGlide);
+        viewHolder.updateWithPhoto(mListPhoto.get(position), mGlide, mCallback);
     }
 
     // Return the size of the recycler view

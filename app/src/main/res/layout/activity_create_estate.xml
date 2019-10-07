@@ -241,6 +241,16 @@
                     android:focusable="false"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- MEDIA : List of photos -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/activity_create_estate_rv_photos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_date_entry"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
             <Button
                 android:id="@+id/activity_create_estate_bt_validate"
                 android:layout_width="wrap_content"
@@ -248,7 +258,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_date_entry"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_rv_photos"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

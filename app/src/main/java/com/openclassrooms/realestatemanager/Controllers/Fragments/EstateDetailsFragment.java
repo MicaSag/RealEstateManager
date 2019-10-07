@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.BuildConfig;
-import com.openclassrooms.realestatemanager.EstateList.EstateListAdapter;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.Estate;
@@ -34,7 +33,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Michaël SAGOT on 23/07/2019.
  */
-public class EstateDetailsFragment extends Fragment {
+public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.OnPhotoClick {
 
     // For debugging Mode
     private static final String TAG = EstateDetailsFragment.class.getSimpleName();
@@ -104,7 +103,7 @@ public class EstateDetailsFragment extends Fragment {
         // Reset list
         mPhotos = new ArrayList<>();
         // Create adapter passing the list of users
-        mPhotoListAdapter = new PhotoListAdapter(mPhotos, Glide.with(this));
+        mPhotoListAdapter = new PhotoListAdapter(mPhotos, Glide.with(this), this );
         // Attach the adapter to the recyclerView to populate items
         mRecyclerView.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items
@@ -122,7 +121,7 @@ public class EstateDetailsFragment extends Fragment {
     //                                             UI
     // ---------------------------------------------------------------------------------------------
     public void updateUI(Estate estate){
-        Log.d(TAG, "updateUI()");
+        Log.d(TAG, "updateUI() ");
 
         if (estate != null) {
             mDescription.setText(estate.getDescription());
@@ -162,5 +161,10 @@ public class EstateDetailsFragment extends Fragment {
             mPhotos = estate.getPhotos();
             mPhotoListAdapter.updateData(mPhotos);
         }
+    }
+
+    @Override
+    public void onPhotoClick(String photo, int position) {
+        Log.d(TAG, "onPhotoClick() called with: photo = [" + photo + "], position = [" + position + "]");
     }
 }

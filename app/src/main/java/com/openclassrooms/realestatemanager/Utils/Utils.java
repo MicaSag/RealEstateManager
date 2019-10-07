@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,12 +30,15 @@ public class Utils {
 
     /**
      * Conversion d'un prix d'un bien immobilier (Euros vers Dollars)
+     * arrondi à 2 chiffres après la virgules
      *
      * @param euros
      * @return
      */
-    public static int convertEuroToDollar(int euros){
-        return (int) Math.round(euros * 1.09);
+    public static BigDecimal convertEuroToDollar(BigDecimal euros)
+    {
+        BigDecimal result = euros.multiply(new BigDecimal(1.09));
+        return result.setScale(2,BigDecimal.ROUND_HALF_UP);
     }
 
     /**

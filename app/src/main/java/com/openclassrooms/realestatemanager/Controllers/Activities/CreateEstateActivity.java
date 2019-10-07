@@ -1,14 +1,12 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.ViewModelProviders;
-
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,36 +14,40 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.Models.Estate;
-import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
 import com.openclassrooms.realestatemanager.Models.views.EstateCreateViewModel;
+import com.openclassrooms.realestatemanager.PhotoList.PhotoListAdapter;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentDataRepository;
 
 import org.threeten.bp.DateTimeUtils;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
 
-import java.sql.Date;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.EmptyStackException;
-import java.util.LinkedHashMap;
+import java.util.Date;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class CreateEstateActivity extends BaseActivity {
+public class CreateEstateActivity extends BaseActivity implements PhotoListAdapter.OnPhotoClick  {
 
     // For debugging Mode
     private static final String TAG = CreateEstateActivity.class.getSimpleName();
@@ -67,6 +69,7 @@ public class CreateEstateActivity extends BaseActivity {
     @BindView(R.id.activity_create_estate_ed_numbers_bathrooms) EditText mNumbersBathrooms;
     @BindView(R.id.activity_create_estate_ed_numbers_bedrooms) EditText mNumbersBedrooms;
     @BindView(R.id.activity_create_estate_ed_date_entry) EditText mEntryDate;
+    @BindView(R.id.activity_create_estate_rv_photos) RecyclerView mRecyclerViewPhotos;
     @BindView(R.id.activity_create_estate_bt_validate) Button mValidate;
 
     private EstateCreateViewModel mEstateCreateViewModel;
@@ -75,6 +78,10 @@ public class CreateEstateActivity extends BaseActivity {
     private DatePickerDialog mEntryDatePickerDialog;
     private SimpleDateFormat displayDateFormatter;
     private Calendar newCalendar;
+
+    // For Display list of photos
+    PhotoListAdapter mPhotoListAdapter;
+    ArrayList<String> mPhotos;
 
     // To return the result to the parent activity
     public static final String BUNDLE_CREATE_OK = "BUNDLE_CREATE_OK";
@@ -136,6 +143,9 @@ public class CreateEstateActivity extends BaseActivity {
         // Management of Date Fields
         this.manageDateFields();
 
+        // Configure RecyclerView
+        configureRecyclerView();
+
         // Update UI
         this.updateUI();
 
@@ -149,6 +159,21 @@ public class CreateEstateActivity extends BaseActivity {
     private void configureEstateCreateViewModel(){
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
         mEstateCreateViewModel = ViewModelProviders.of(this, modelFactory).get(EstateCreateViewModel.class);
+    }
+    // --------------------------------------------------------------------------------------------
+    //                                    CONFIGURATION
+    // --------------------------------------------------------------------------------------------
+    // Configure RecyclerView, Adapter, LayoutManager & glue it together
+    private void configureRecyclerView(){
+        // Reset list
+        mPhotos = new ArrayList<>();
+        mPhotos.add("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg");
+        // Create adapter passing the list of users
+        mPhotoListAdapter = new PhotoListAdapter(mPhotos, Glide.with(this),this);
+        // Attach the adapter to the recyclerView to populate items
+        mRecyclerViewPhotos.setAdapter(mPhotoListAdapter);
+        // Set layout manager to position the items
+        mRecyclerViewPhotos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
     }
     // ---------------------------------------------------------------------------------------------
     //                                           ACTIONS
@@ -169,6 +194,7 @@ public class CreateEstateActivity extends BaseActivity {
     @OnClick(R.id.activity_create_estate_bt_validate)
     public void validate(View view) {
         Log.d(TAG, "validate: ");
+
         if (validateRequiredData()) {
             mEstateCreateViewModel.getEstate().setType(mAutoCompleteTVType.getText().toString());
             mEstateCreateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
@@ -184,10 +210,6 @@ public class CreateEstateActivity extends BaseActivity {
             mEstateCreateViewModel.getEstate().setNumberOfParts(Integer.parseInt(mNumbersRooms.getText().toString()));
             mEstateCreateViewModel.getEstate().setNumberOfBathrooms(Integer.parseInt(mNumbersBathrooms.getText().toString()));
             mEstateCreateViewModel.getEstate().setNumberOfBedrooms(Integer.parseInt(mNumbersBedrooms.getText().toString()));
-            mEstateCreateViewModel.getEstate().setPhotos(new ArrayList<>(Arrays
-                    .asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                    "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                    "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg")));
             mEstateCreateViewModel.getEstate().setPointOfInterest(new ArrayList<>(Arrays
                     .asList("School Yves Eriose", "Super Market Franprix")));
             mEstateCreateViewModel.getEstate().setRealEstateAgent_Id(CurrentRealEstateAgentDataRepository.
@@ -204,6 +226,58 @@ public class CreateEstateActivity extends BaseActivity {
             // Close Activity and go back to previous activity
             this.finish();
         }
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                                     MANAGE PHOTO LIST
+    // ---------------------------------------------------------------------------------------------
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.openclassrooms.realestatemanager.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+                // Save a file: path for use with ACTION_VIEW intents
+                String currentPhotoPath = photoFile.getAbsolutePath();
+
+                if (mEstateCreateViewModel.getEstate().getPhotos() == null){
+                    ArrayList<String> listPhoto = new ArrayList<>();
+                    listPhoto.add(currentPhotoPath);
+                    mEstateCreateViewModel.getEstate().setPhotos(listPhoto);
+                }else{
+                    mEstateCreateViewModel.getEstate().getPhotos().add(currentPhotoPath);
+                }
+
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    // Create à image File name
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "estate_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",    /* suffix */
+                storageDir      /* directory */
+        );
+        return image;
     }
     // ---------------------------------------------------------------------------------------------
     //                              AUTOCOMPLETE TYPE CONFIGURATION
@@ -268,6 +342,14 @@ public class CreateEstateActivity extends BaseActivity {
             showSnackBar("Required data");
             return false;
         } else return true;
+    }
+    // --------------------------------------------------------------------------------------------
+    //                                        ACTIONS
+    // --------------------------------------------------------------------------------------------
+    @Override
+    public void onPhotoClick(String photo,int position) {
+        Log.d(TAG, "onPhotoClick() called with: photo = [" + photo + "], position = [" + position + "]");
+        dispatchTakePictureIntent();
     }
     // ---------------------------------------------------------------------------------------------
     //                                            UI

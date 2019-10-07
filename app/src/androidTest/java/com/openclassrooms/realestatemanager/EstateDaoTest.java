@@ -120,7 +120,7 @@ public class EstateDaoTest {
     }
 
     @Test
-    public void insertAndUpdateProperty() throws InterruptedException {
+    public void insertAndUpdateEstate() throws InterruptedException {
         // BEFORE : Adding demo realEstateAgent & demo estates. Next, update property added & re-save it.
         this.database.realEstateAgentDao().createRealEstateAgent(REAL_ESTATE_AGENT_DEMO);
         this.database.estateDao().insertEstate(newEstateFlat);
