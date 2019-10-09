@@ -2,6 +2,8 @@ package com.openclassrooms.realestatemanager.PhotoList;
 
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,7 @@ import java.util.List;
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> {
 
     // For Debug
-    private static final String TAG = EstateListAdapter.class.getSimpleName();
+    private static final String TAG = PhotoListAdapter.class.getSimpleName();
 
     // Declaring a Glide object
     private RequestManager mGlide;

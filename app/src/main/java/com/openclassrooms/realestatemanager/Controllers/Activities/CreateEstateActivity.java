@@ -3,7 +3,9 @@ package com.openclassrooms.realestatemanager.Controllers.Activities;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -80,8 +82,13 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     private Calendar newCalendar;
 
     // For Display list of photos
-    PhotoListAdapter mPhotoListAdapter;
-    ArrayList<String> mPhotos;
+    private PhotoListAdapter mPhotoListAdapter;
+    private ArrayList<String> mPhotos;
+    private String currentPhotoPath;
+
+    // For use intents to retrieve photos
+    static final int REQUEST_TAKE_PHOTO = 1;
+    static final int REQUEST_IMAGE_GET = 2;
 
     // To return the result to the parent activity
     public static final String BUNDLE_CREATE_OK = "BUNDLE_CREATE_OK";
@@ -148,9 +155,6 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
 
         // Update UI
         this.updateUI();
-
-        // Get current RealEstateAgent & Estates from Database
-        //this.getCurrentRealEstateAgent();
     }
     // ---------------------------------------------------------------------------------------------
     //                                        VIEW MODEL
@@ -167,13 +171,22 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     private void configureRecyclerView(){
         // Reset list
         mPhotos = new ArrayList<>();
-        mPhotos.add("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg");
         // Create adapter passing the list of users
         mPhotoListAdapter = new PhotoListAdapter(mPhotos, Glide.with(this),this);
         // Attach the adapter to the recyclerView to populate items
         mRecyclerViewPhotos.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items
         mRecyclerViewPhotos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+
+        // Positions an observable on the list of photos displayed in the RecyclerView
+        mEstateCreateViewModel.getPhotos().observe(this,this::notifyRecyclerView);
+    }
+    // Refreshes the RecyclerView with the new photo list
+    private void notifyRecyclerView(ArrayList<String> photos) {
+        Log.d(TAG, "notifyRecyclerView() called with: photos = [" + photos + "]");
+        mPhotos.clear();
+        mPhotos.addAll(photos);
+        mPhotoListAdapter.notifyDataSetChanged();
     }
     // ---------------------------------------------------------------------------------------------
     //                                           ACTIONS
@@ -186,10 +199,23 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     }
     // Click on EntryDate Field
     @OnClick(R.id.activity_create_estate_ed_date_entry)
-    public void onClickEntryDate(View v) {
+    public void onClickEntryDate(View view) {
         mEntryDatePickerDialog.show();
     }
-
+    // Click on Take Photo
+    @OnClick(R.id.activity_create_estate_iv_take_photo)
+    public void onTakePhotoClick(View view) {
+        this.dispatchTakePictureIntent();
+    }
+    // Click on Validate Button
+    @OnClick(R.id.activity_create_estate_iv_select_photo)
+    public void onSelectPhotoClick(View view) {
+        this.selectImage();
+    }
+    // Click photo of the recycler view
+    @Override
+    public void onPhotoClick(String photo, int position) {
+    }
     // Click on Validate Button
     @OnClick(R.id.activity_create_estate_bt_validate)
     public void validate(View view) {
@@ -199,6 +225,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
             mEstateCreateViewModel.getEstate().setType(mAutoCompleteTVType.getText().toString());
             mEstateCreateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
             mEstateCreateViewModel.getEstate().setDescription(mDescription.getText().toString());
+            mEstateCreateViewModel.getEstate().setPhotos(mPhotos);
             ArrayList<String> address = new ArrayList<>();
             address.add(mAddressWay.getText().toString());
             address.add(mAddressComplement.getText().toString());
@@ -216,7 +243,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                     getInstance().getCurrentRealEstateAgent_Id().getValue());
 
             // Create Estate and save it in DataBase
-            mEstateCreateViewModel.createEsate();
+            mEstateCreateViewModel.createEstate();
 
             // Notify the agent that the creative went well
             // Create a intent for call Activity
@@ -230,8 +257,6 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     // ---------------------------------------------------------------------------------------------
     //                                     MANAGE PHOTO LIST
     // ---------------------------------------------------------------------------------------------
-    static final int REQUEST_TAKE_PHOTO = 1;
-
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -251,21 +276,12 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
                 // Save a file: path for use with ACTION_VIEW intents
-                String currentPhotoPath = photoFile.getAbsolutePath();
-
-                if (mEstateCreateViewModel.getEstate().getPhotos() == null){
-                    ArrayList<String> listPhoto = new ArrayList<>();
-                    listPhoto.add(currentPhotoPath);
-                    mEstateCreateViewModel.getEstate().setPhotos(listPhoto);
-                }else{
-                    mEstateCreateViewModel.getEstate().getPhotos().add(currentPhotoPath);
-                }
+                currentPhotoPath = photoFile.getAbsolutePath();
 
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
     }
-
     // Create à image File name
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -278,6 +294,40 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                 storageDir      /* directory */
         );
         return image;
+    }
+    // Selects a photo in a device location
+    public void selectImage() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_IMAGE_GET);
+        }
+    }
+    // For Manage Intents Return
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Manage Photo Take
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            // Save photo in List
+            ArrayList<String> photos = new ArrayList<>();
+            photos.addAll(mEstateCreateViewModel.getPhotos().getValue());
+            photos.add(currentPhotoPath);
+            mEstateCreateViewModel.setPhotos(photos);
+        }
+
+        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
+            //Bitmap thumbnail = data.getParcelableExtra("data");
+            Uri fullPhotoUri = data.getData();
+            // Save photo in List
+            ArrayList<String> photos = new ArrayList<>();
+            photos.addAll(mEstateCreateViewModel.getPhotos().getValue());
+            photos.add(fullPhotoUri.toString());
+            mEstateCreateViewModel.setPhotos(photos);
+        }
     }
     // ---------------------------------------------------------------------------------------------
     //                              AUTOCOMPLETE TYPE CONFIGURATION
@@ -301,7 +351,6 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         displayDateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         setEntryDateField();
     }
-
     // Manage Entry Date Field
     private void setEntryDateField() {
         // Create a DatePickerDialog and manage it
@@ -342,14 +391,6 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
             showSnackBar("Required data");
             return false;
         } else return true;
-    }
-    // --------------------------------------------------------------------------------------------
-    //                                        ACTIONS
-    // --------------------------------------------------------------------------------------------
-    @Override
-    public void onPhotoClick(String photo,int position) {
-        Log.d(TAG, "onPhotoClick() called with: photo = [" + photo + "], position = [" + position + "]");
-        dispatchTakePictureIntent();
     }
     // ---------------------------------------------------------------------------------------------
     //                                            UI

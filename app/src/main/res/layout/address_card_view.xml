@@ -64,7 +64,7 @@
                 android:id="@+id/address_card_view_way"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
+                android:inputType="text"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -89,7 +89,7 @@
                 android:id="@+id/address_card_view_complement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
+                android:inputType="text"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -115,7 +115,6 @@
                 android:id="@+id/address_card_view_postal_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
                 android:inputType="number"
                 />
 
@@ -142,7 +141,7 @@
                 android:id="@+id/address_card_view_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
+                android:inputType="text"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -168,7 +167,7 @@
                 android:id="@+id/address_card_view_state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
+                android:inputType="text"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>

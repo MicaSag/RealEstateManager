@@ -27,242 +27,291 @@
 
             <!-- ESTATE TYPE -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:id="@+id/activity_create_estate_tf_type"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+                android:layout_marginEnd="32dp"
                 android:layout_marginBottom="@dimen/activity_create_estate_marginTop"
                 android:hint="@string/type_of_estate"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_price"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:startIconDrawable="@drawable/baseline_store_black_24"
+                app:helperText="*Required"
                 app:helperTextEnabled="true"
-                app:helperText="*Required">
+                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_price"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:startIconDrawable="@drawable/baseline_store_black_24">
 
                 <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                     android:id="@+id/activity_create_estate_auto_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="false"/>
+                    android:focusable="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- PRICE -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextFieldTheme"
                 android:id="@+id/activity_create_estate_tf_price"
+                style="@style/TextFieldTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+                android:layout_marginEnd="32dp"
                 android:hint="@string/price"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_type"
-                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_description"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:startIconDrawable="@drawable/baseline_attach_money_black_24"
+                app:helperText="*Required"
                 app:helperTextEnabled="true"
-                app:helperText="*Required">
+                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_type"
+                app:startIconDrawable="@drawable/baseline_attach_money_black_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_create_estate_ed_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- DESCRIPTION -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextFieldTheme"
                 android:id="@+id/activity_create_estate_tf_description"
+                style="@style/TextFieldTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+                android:layout_marginEnd="32dp"
                 android:hint="@string/description"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_price"
-                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_include_address_card_view"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:startIconDrawable="@drawable/baseline_description_black_24"
+                app:helperText="*Required"
                 app:helperTextEnabled="true"
-                app:helperText="*Required">
+                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_include_address_card_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_price"
+                app:startIconDrawable="@drawable/baseline_description_black_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_create_estate_ed_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"/>
+                    android:inputType="textMultiLine" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- ADDRESS -->
             <include
-                layout="@layout/address_card_view"
                 android:id="@+id/activity_create_estate_include_address_card_view"
+                layout="@layout/address_card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_description"
+                android:layout_marginEnd="32dp"
                 app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_surface"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_description" />
 
             <!-- SURFACE -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextFieldTheme"
                 android:id="@+id/activity_create_estate_tf_surface"
+                style="@style/TextFieldTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+                android:layout_marginEnd="32dp"
                 android:hint="@string/surface"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_include_address_card_view"
-                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_numbers_rooms"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:startIconDrawable="@drawable/baseline_settings_overscan_black_24"
+                app:helperText="*Required"
                 app:helperTextEnabled="true"
-                app:helperText="*Required">
+                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_numbers_rooms"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_include_address_card_view"
+                app:startIconDrawable="@drawable/baseline_settings_overscan_black_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_create_estate_ed_surface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- NUMBER OF ROOMS -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextFieldTheme"
                 android:id="@+id/activity_create_estate_tf_numbers_rooms"
+                style="@style/TextFieldTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+                android:layout_marginEnd="32dp"
                 android:hint="@string/number_of_rooms"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_surface"
-                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_numbers_bathrooms"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:startIconDrawable="@drawable/baseline_home_black_24"
+                app:helperText="*Required"
                 app:helperTextEnabled="true"
-                app:helperText="*Required">
+                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_numbers_bathrooms"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_surface"
+                app:startIconDrawable="@drawable/baseline_home_black_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_create_estate_ed_numbers_rooms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- NUMBER OF BATHROOMS -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextFieldTheme"
                 android:id="@+id/activity_create_estate_tf_numbers_bathrooms"
+                style="@style/TextFieldTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+                android:layout_marginEnd="32dp"
                 android:hint="@string/number_of_bathrooms"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_rooms"
-                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_numbers_bedrooms"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:startIconDrawable="@drawable/baseline_hot_tub_black_24"
+                app:helperText="*Required"
                 app:helperTextEnabled="true"
-                app:helperText="*Required">
+                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_numbers_bedrooms"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_rooms"
+                app:startIconDrawable="@drawable/baseline_hot_tub_black_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_create_estate_ed_numbers_bathrooms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <!-- NUMBER OF BEDROOMS -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextFieldTheme"
                 android:id="@+id/activity_create_estate_tf_numbers_bedrooms"
+                style="@style/TextFieldTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+                android:layout_marginEnd="32dp"
                 android:hint="@string/number_of_bedrooms"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_bathrooms"
-                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_date_entry"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:startIconDrawable="@drawable/baseline_hotel_black_24"
+                app:helperText="*Required"
                 app:helperTextEnabled="true"
-                app:helperText="*Required">
+                app:layout_constraintBottom_toTopOf="@+id/activity_create_estate_tf_date_entry"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_bathrooms"
+                app:startIconDrawable="@drawable/baseline_hotel_black_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_create_estate_ed_numbers_bedrooms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- DATE OF ENTRY OF THE ESTATE -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextFieldTheme"
                 android:id="@+id/activity_create_estate_tf_date_entry"
+                style="@style/TextFieldTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
+                android:layout_marginEnd="32dp"
                 android:hint="@string/date_of_entry_of_the_estate"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_bedrooms"
+                app:helperText="*Required"
+                app:helperTextEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:startIconDrawable="@drawable/baseline_date_range_24"
-                app:helperTextEnabled="true"
-                app:helperText="*Required">
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_numbers_bedrooms"
+                app:startIconDrawable="@drawable/baseline_date_range_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_create_estate_ed_date_entry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:focusable="false"/>
+                    android:focusable="false"
+                    android:inputType="date" />
             </com.google.android.material.textfield.TextInputLayout>
-
+            <!-- MEDIA -->
+            <!-- MEDIA : ADD PHOTOS -->
+            <!-- MEDIA : ADD PHOTOS : With Camera -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.MaterialComponents.CardView"
+                android:id="@+id/activity_create_estate_mcv_take_photo"
+                android:layout_width="100dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardElevation="0.7dp"
+                android:layout_marginStart="32dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_date_entry"
+                android:maxHeight="150dp">
+                <ImageView
+                    android:id="@+id/activity_create_estate_iv_take_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:src="@drawable/baseline_add_a_photo_black_48"/>
+            </com.google.android.material.card.MaterialCardView>
+            <!-- MEDIA : ADD PHOTOS -->
+            <!-- MEDIA : ADD PHOTOS : Selects in a device location -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.MaterialComponents.CardView"
+                android:id="@+id/activity_create_estate_mcv_select_photo"
+                android:layout_width="100dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardElevation="0.7dp"
+                app:layout_constraintTop_toTopOf="@+id/activity_create_estate_mcv_take_photo"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_create_estate_mcv_take_photo"
+                app:layout_constraintStart_toEndOf="@+id/activity_create_estate_mcv_take_photo"
+                android:maxHeight="150dp">
+                <ImageView
+                    android:id="@+id/activity_create_estate_iv_select_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:src="@drawable/baseline_folder_black_48"/>
+            </com.google.android.material.card.MaterialCardView>
             <!-- MEDIA : List of photos -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/activity_create_estate_rv_photos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_tf_date_entry"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_marginStart="2dp"
+                app:layout_constraintTop_toTopOf="@+id/activity_create_estate_mcv_select_photo"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_create_estate_mcv_select_photo"
+                app:layout_constraintStart_toEndOf="@+id/activity_create_estate_mcv_select_photo"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <Button
                 android:id="@+id/activity_create_estate_bt_validate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="@dimen/activity_create_estate_marginTop"
-                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_rv_photos"
+                android:layout_marginEnd="32dp"
+                android:text="Validate"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:text="Validate"/>
+                app:layout_constraintTop_toBottomOf="@+id/activity_create_estate_rv_photos" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
