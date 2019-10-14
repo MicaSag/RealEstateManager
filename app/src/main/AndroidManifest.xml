@@ -2,11 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.openclassrooms.realestatemanager">
+    <!-- Using by Network Provider Wifi or Data phone -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Using By Network Provider and Gps Provider -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- Using for make internet requests (necessary for Glide) -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Used to store files -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Used to store files -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -19,16 +22,24 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <!-- GOOGLE Maps APi Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${googleMapsApiKey}" />
+
         <!-- ENTRY Activity -->
-        <activity android:name=".Controllers.Activities.RealEstateManagerActivity">
+        <activity
+            android:name=".Controllers.Activities.RealEstateManagerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <!-- A child of the main activity -->
-        <activity android:name=".Controllers.Activities.DetailsEstateActivity"
+        <!-- DETAILS ESTATE Activity -->
+        <activity
+            android:name=".Controllers.Activities.DetailsEstateActivity"
             android:label="Details Estate"
             android:parentActivityName=".Controllers.Activities.RealEstateManagerActivity">
 
@@ -37,8 +48,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.Activities.RealEstateManagerActivity" />
         </activity>
-
         <!-- A child of the main activity -->
+        <!-- MAP Activity -->
+        <activity
+            android:name=".Controllers.Activities.MapActivity"
+            android:label="Map"
+            android:parentActivityName=".Controllers.Activities.RealEstateManagerActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.Activities.RealEstateManagerActivity" />
+        </activity>
+        <!-- A child of the main activity -->
+        <!-- CREATE ESTATE Activity -->
         <activity
             android:name=".Controllers.Activities.CreateEstateActivity"
             android:label="Create Estate"
@@ -53,8 +76,7 @@
         <provider
             android:name=".provider.EstateContentProvider"
             android:authorities="com.openclassrooms.realestatemanager.provider.EstateContentProvider"
-            android:exported="true"/>
-
+            android:exported="true" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.openclassrooms.realestatemanager.fileprovider"
@@ -64,7 +86,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

@@ -23,7 +23,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     // Force developer implement those methods
     protected abstract int getActivityLayout(); // Layout of the Child Activity
-    protected abstract View getCoordinatorLayout(); // Layout of the CoordinatorLayout of the Child Activity
+    protected abstract View getConstraintLayout(); // Layout of the ConstraintLayout of the Child Activity
     protected abstract int getToolbarMenu(); // Layout of the ToolbarMenu of the Child Activity
 
     // For debugging Mode
@@ -33,7 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected ActionBar mActionBar;
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
-    @BindView(R.id.toolbar) Toolbar mToolBar;
+    public @BindView(R.id.toolbar) Toolbar mToolBar;
 
     // ---------------------------------------------------------------------------------------------
     //                                        ENTRY POINT
@@ -70,7 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void showSnackBar(String message){
         Log.d(TAG, "showSnackBar: ");
 
-        Snackbar.make(this.getCoordinatorLayout(), message, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(this.getConstraintLayout(), message, Snackbar.LENGTH_LONG).show();
     }
     // ---------------------------------------------------------------------------------------------
     //                                        PERMISSIONS

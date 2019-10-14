@@ -56,7 +56,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     // - Get Coordinator Layout
-    @BindView(R.id.activity_create_estate_cl) ConstraintLayout mCoordinatorLayout;
+    @BindView(R.id.activity_create_estate_cl) ConstraintLayout mConstraintLayout;
     @BindView(R.id.activity_create_estate_auto_type) AutoCompleteTextView mAutoCompleteTVType;
     @BindView(R.id.activity_create_estate_ed_price) EditText mPrice;
     @BindView(R.id.activity_create_estate_ed_description) EditText mDescription;
@@ -105,11 +105,11 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     }
 
     // BASE METHOD Implementation
-    // Get the coordinator layout
+    // Get the constraint layout
     // CALLED BY BASE METHOD
     @Override
-    protected View getCoordinatorLayout() {
-        return mCoordinatorLayout;
+    protected View getConstraintLayout() {
+        return mConstraintLayout;
     }
 
     // BASE METHOD Implementation
@@ -121,8 +121,9 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     }
 
     // ---------------------------------------------------------------------------------------------
-    //                                OVERLOAD BASE METHODS
+    //                                OVERRIDE BASE METHODS
     // ---------------------------------------------------------------------------------------------
+    @Override
     protected void configureToolbar(){
         super.configureToolbar();
         Log.d(TAG, "configureToolbar: ");
@@ -137,9 +138,6 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
-
-        // Configuring Toolbar
-        this.configureToolbar();
 
         // Configure AutoComplete Type
         this.configureAutoCompleteType();

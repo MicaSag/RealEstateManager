@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 Properties properties = new Properties()
 properties.load(project.rootProject.file("local.properties").newDataInputStream())
 def GOOGLE_STATIC_MAP_API_KEY = properties.getProperty("GoogleStaticMapApiKey")
+def GOOGLE_MAPS_API_KEY = properties.getProperty("GoogleMapsApiKey")
 
 android {
     buildToolsVersion "28.0.3"
@@ -19,11 +20,16 @@ android {
         // Google Static Map Api Key
         // --> For source
         buildConfigField("String", "google_static_map_api", '"' + GOOGLE_STATIC_MAP_API_KEY + '"')
+        // Google Maps Api Key
+        // --> For source
+        buildConfigField ( "String", "google_maps_api", '"'+GOOGLE_MAPS_API_KEY+'"' )
+        // --> For Manifest
+        manifestPlaceholders = [googleMapsApiKey: properties.getProperty("GoogleMapsApiKey")]
     }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -48,6 +54,8 @@ dependencies {
 
     // Material
     implementation 'com.google.android.material:material:1.1.0-alpha10'
+    // Material Design : DrawerLayout
+    implementation "androidx.drawerlayout:drawerlayout:1.0.0"
 
     //Add easy permissions
     implementation 'pub.devrel:easypermissions:2.0.0'
@@ -74,6 +82,12 @@ dependencies {
 
     // Add RecyclerView
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    // Google Maps Utils
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    // Google Maps Location
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
     // TESTING
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'

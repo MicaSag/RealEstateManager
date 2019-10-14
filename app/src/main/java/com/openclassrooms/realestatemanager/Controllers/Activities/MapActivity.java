@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -7,19 +9,27 @@ import android.view.View;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.google.gson.Gson;
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
-import com.openclassrooms.realestatemanager.Controllers.Fragments.EstateDetailsFragment;
+import com.openclassrooms.realestatemanager.Controllers.Fragments.MapFragment;
 import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
 
-public class DetailsEstateActivity extends BaseActivity {
+public class MapActivity extends BaseActivity {
 
-    private static final String TAG = DetailsEstateActivity.class.getSimpleName();
+    // For Debug
+    private static final String TAG = MapActivity.class.getSimpleName();
+
+    // Location
+    private Location mLocation;
+
+    // Fragments Declarations
+    private MapFragment mMapFragment;
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     // - Get Coordinator Layout
-    @BindView(R.id.activity_details_constraint_layout) ConstraintLayout mConstraintLayout;
+    @BindView(R.id.activity_map_constraint_layout) ConstraintLayout mConstraintLayout;
 
     // ---------------------------------------------------------------------------------------------
     //                                DECLARATION BASE METHODS
@@ -29,7 +39,7 @@ public class DetailsEstateActivity extends BaseActivity {
     // CALLED BY BASE METHOD 'onCreate(...)'
     @Override
     protected int getActivityLayout() {
-        return R.layout.activity_details_estate;
+        return R.layout.activity_map;
     }
 
     // BASE METHOD Implementation
@@ -45,51 +55,56 @@ public class DetailsEstateActivity extends BaseActivity {
     // CALLED BY BASE METHOD
     @Override
     protected int getToolbarMenu() {
-        return R.menu.menu_activity_details_estate;
+        return R.menu.menu_activity_map;
     }
+
     // ---------------------------------------------------------------------------------------------
-    //                                OVERLOAD BASE METHODS
+    //                                OVERRIDE BASE METHODS
     // ---------------------------------------------------------------------------------------------
+    @Override
     protected void configureToolbar(){
         super.configureToolbar();
         Log.d(TAG, "configureToolbar: ");
         // Enable the Up button
         super.mActionBar.setDisplayHomeAsUpEnabled(true);
+
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (getResources().getBoolean(R.bool.is_tablet)) finish();
-    }
-
     // ---------------------------------------------------------------------------------------------
     //                                        ENTRY POINT
     // ---------------------------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
+        setContentView(R.layout.activity_map);
 
-        // Configuring Toolbar
-        this.configureToolbar();
+        // Recover intent of the Caller
+        Intent intent = getIntent();
+        Log.d(TAG, "onCreate: intent.getStringExtra(RealEstateManagerActivity.KEY_LOCATION) ="+intent.getStringExtra(RealEstateManagerActivity.KEY_LOCATION));
+        // Restoring the Date with a Gson Object
+        Gson gson = new Gson();
+        mLocation = gson.fromJson(intent.getStringExtra(RealEstateManagerActivity.KEY_LOCATION),
+                    Location.class);
 
-        // Configure EstateDetailsFragment
-        this.configureAndShowEstateDetailsFragment();
+        Log.d(TAG, "onCreate: mLocation = "+mLocation);
+        // Configuring Estate DetailsMap Fragment (accessible in the navigation drawer)
+        this.configureMapFragment(mLocation);
     }
     // ---------------------------------------------------------------------------------------------
-    //                                        FRAGMENT
+    //                                        FRAGMENTS
     // ---------------------------------------------------------------------------------------------
-    private void configureAndShowEstateDetailsFragment() {
+    private void configureMapFragment(Location location) {
+        Log.d(TAG, "configureMapFragment: ");
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        // Declare fragment
-        EstateDetailsFragment mEstateDetailsFragment = (EstateDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_estate_details);
+        mMapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
 
-        // Create new Estate Details fragment
-        mEstateDetailsFragment = EstateDetailsFragment.newInstance();
-        // Add it to FrameLayout container
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_estate_details, mEstateDetailsFragment)
-                .commit();
+        if (mMapFragment == null) {
+            // Create new main fragment
+            mMapFragment = MapFragment.newInstance(location);
+            // Add it to FrameLayout container
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_map, mMapFragment)
+                    .commit();
+        }
     }
 }
