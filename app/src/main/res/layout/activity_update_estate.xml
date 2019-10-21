@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:focusableInTouchMode="true"
-    tools:context=".Controllers.Activities.CreateEstateActivity">
+    tools:context=".Controllers.Activities.UpdateEstateActivity">
 
     <!-- Toolbar Importation -->
     <include
@@ -21,20 +21,20 @@
         android:fillViewport="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/activity_create_estate_cl"
+            android:id="@+id/activity_update_estate_cl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <include layout="@layout/estate_details" />
 
             <Button
-                android:id="@+id/activity_create_estate_bt_validate"
+                android:id="@+id/activity_update_estate_bt_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="@dimen/estate_marginTop"
                 android:layout_marginEnd="32dp"
-                android:text="CREATE"
+                android:text="UPDATE"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

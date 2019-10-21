@@ -1,11 +1,11 @@
 package com.openclassrooms.realestatemanager.Models.views;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentDataRepository;
@@ -81,47 +81,5 @@ public class EstateListViewModel extends ViewModel {
 
         return mCurrentEstates;
     }
-
-    public LiveData<Estate> getEstate(long estate_Id) {
-        return mEstateDataSource.getEstate(estate_Id);
-    }
-
-    public LiveData<List<Estate>> getEstates() {
-        return mEstateDataSource.getEstates();
-    }
-/*
-    public void createEstate(Estate estate) {
-        mExecutor.execute(() -> {
-            mEstateDataSource.createEstate(estate);
-        });
-    }
-
-    public void deleteEstate(long estate_Id) {
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                mEstateDataSource.deleteEstate(estate_Id);
-            }
-        });
-    }
-
-    public void deleteEstates(long realEstateAgent_Id) {
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                mEstateDataSource.deleteEstates(realEstateAgent_Id);
-            }
-        });
-    }
-
-    public void updateEstate(Estate estate) {
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                mEstateDataSource.updateEstate(estate);
-            }
-        });
-    }
-    */
 }
 

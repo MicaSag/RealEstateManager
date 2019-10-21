@@ -76,19 +76,18 @@ public class MapActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
-        setContentView(R.layout.activity_map);
 
         // Recover intent of the Caller
         Intent intent = getIntent();
-        Log.d(TAG, "onCreate: intent.getStringExtra(RealEstateManagerActivity.KEY_LOCATION) ="+intent.getStringExtra(RealEstateManagerActivity.KEY_LOCATION));
-        // Restoring the Date with a Gson Object
-        Gson gson = new Gson();
-        mLocation = gson.fromJson(intent.getStringExtra(RealEstateManagerActivity.KEY_LOCATION),
-                    Location.class);
-
-        Log.d(TAG, "onCreate: mLocation = "+mLocation);
-        // Configuring Estate DetailsMap Fragment (accessible in the navigation drawer)
-        this.configureMapFragment(mLocation);
+        if (intent != null) {
+            Location mLocation = intent.getParcelableExtra(RealEstateManagerActivity.KEY_LOCATION);
+            if (mLocation != null) {
+                Log.d(TAG, "onCreate: mLocation.getLatitude()  = " + mLocation.getLatitude());
+                Log.d(TAG, "onCreate: mLocation.getLongitude() = " + mLocation.getLongitude());
+                // Configuring Estate DetailsMap Fragment (accessible in the navigation drawer)
+                this.configureMapFragment(mLocation);
+            }
+        }
     }
     // ---------------------------------------------------------------------------------------------
     //                                        FRAGMENTS

@@ -83,7 +83,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"").toString());
                 contentValuesRealEstateHouse1.put("address", Arrays.asList("\"3 way of the temple\"", "\"\"", "\"PARIS\"", "\"75001\"", "\"France\"", "\"1er arrond\"").toString());
-                contentValuesRealEstateHouse1.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
+                //contentValuesRealEstateHouse1.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
                 contentValuesRealEstateHouse1.put("status", false);
                 contentValuesRealEstateHouse1.put("dateEntryOfTheMarket", LocalDateTime.now().withDayOfMonth(3).withYear(2018).withMonth(4).toString());
                 contentValuesRealEstateHouse1.put("dateOfSale", LocalDateTime.now().toString());
@@ -103,7 +103,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"").toString());
                 contentValuesRealEstateFlat1.put("address", Arrays.asList("\"3 way of the temple\"", "\"\"", "\"PARIS\"", "\"75001\"", "\"France\"", "\"1er arrond\"").toString());
-                contentValuesRealEstateFlat1.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
+                //contentValuesRealEstateFlat1.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
                 contentValuesRealEstateFlat1.put("status", false);
                 contentValuesRealEstateFlat1.put("dateEntryOfTheMarket", LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8).toString());
                 contentValuesRealEstateFlat1.put("dateOfSale", LocalDateTime.now().toString());
@@ -123,7 +123,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"").toString());
                 contentValuesRealEstateFlat2.put("address", Arrays.asList("\"3 way of the temple\"", "\"\"", "\"PARIS\"", "\"75001\"", "\"France\"", "\"1er arrond\"").toString());
-                contentValuesRealEstateFlat2.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
+                //contentValuesRealEstateFlat2.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
                 contentValuesRealEstateFlat2.put("status", false);
                 contentValuesRealEstateFlat2.put("dateEntryOfTheMarket", LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8).toString());
                 contentValuesRealEstateFlat2.put("dateOfSale", LocalDateTime.now().toString());
@@ -143,7 +143,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"",
                         "\"https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg\"").toString());
                 contentValuesRealEstateHouse2.put("address", Arrays.asList("\"3 way of the temple\"", "\"\"", "\"PARIS\"", "\"75001\"", "\"France\"", "\"1er arrond\"").toString());
-                contentValuesRealEstateHouse2.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
+                //contentValuesRealEstateHouse2.put("pointOfInterest", Arrays.asList("\"School Jean Baptiste\"", "\"Super Market Lidl\"").toString());
                 contentValuesRealEstateHouse2.put("status", false);
                 contentValuesRealEstateHouse2.put("dateEntryOfTheMarket", LocalDateTime.now().withDayOfMonth(3).withYear(2018).withMonth(4).toString());
                 contentValuesRealEstateHouse2.put("dateOfSale", LocalDateTime.now().toString());

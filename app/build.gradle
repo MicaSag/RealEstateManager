@@ -22,7 +22,7 @@ android {
         buildConfigField("String", "google_static_map_api", '"' + GOOGLE_STATIC_MAP_API_KEY + '"')
         // Google Maps Api Key
         // --> For source
-        buildConfigField ( "String", "google_maps_api", '"'+GOOGLE_MAPS_API_KEY+'"' )
+        buildConfigField("String", "google_maps_api", '"' + GOOGLE_MAPS_API_KEY + '"')
         // --> For Manifest
         manifestPlaceholders = [googleMapsApiKey: properties.getProperty("GoogleMapsApiKey")]
     }
@@ -61,7 +61,7 @@ dependencies {
     implementation 'pub.devrel:easypermissions:2.0.0'
 
     // Added of the Gson library
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     // New library to manage dates and times more easily (java 8 time)
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
@@ -75,8 +75,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
 
     //Add ROOM
-    implementation 'androidx.room:room-runtime:2.1.0'
-    annotationProcessor 'androidx.room:room-compiler:2.1.0'
+    implementation 'androidx.room:room-runtime:2.2.0'
+    annotationProcessor 'androidx.room:room-compiler:2.2.0'
     //VIEW MODEL & LIVE DATA
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 

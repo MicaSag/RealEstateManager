@@ -20,5 +20,5 @@
     <dimen name="recycler_text_size">20sp</dimen>
 
     <!-- Create Estate Activity & Update Estate Activity -->
-    <dimen name="activity_create_estate_marginTop">10dp</dimen>
+    <dimen name="estate_marginTop">10dp</dimen>
 </resources>

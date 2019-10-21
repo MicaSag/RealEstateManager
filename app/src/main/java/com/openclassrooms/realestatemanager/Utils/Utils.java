@@ -6,6 +6,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.util.Log;
+
+import androidx.room.TypeConverter;
+
+import org.threeten.bp.LocalDateTime;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -17,6 +22,9 @@ import java.util.Date;
  */
 
 public class Utils {
+    
+    // For Debug
+    private static final String TAG = Utils.class.getSimpleName();
 
     /**
      * Conversion d'un prix d'un bien immobilier (Dollars vers Euros)
@@ -114,5 +122,17 @@ public class Utils {
 
         // Call RestaurantCardActivity with 1 parameter
         context.startActivity(intent);
+    }
+
+    /**
+     * Converter a LocalDateTime in String format
+     *
+     * @param  localDateTime   : date in LocalDateTime format
+     * @return date at format jj/mm/ssaa
+     */
+    public static String fromLocalDateTime(LocalDateTime localDateTime) {
+        Log.d(TAG, "fromLocalDateTime() called with: localDateTime = [" + localDateTime.toString() + "]");
+        String date = localDateTime.toString();
+        return date.substring(8,10) + "/" + date.substring(5,7) + "/" + date.substring(0,4);
     }
 }

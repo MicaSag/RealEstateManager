@@ -3,14 +3,11 @@ package com.openclassrooms.realestatemanager.PhotoList;
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.RequestManager;
-import com.openclassrooms.realestatemanager.EstateList.EstateListAdapter;
-import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.R;
 
 import java.util.List;
@@ -24,17 +21,21 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     private RequestManager mGlide;
 
     // For Data
-    private List<String> mListPhoto;
+    private List<String> mPhotos;
+
+    // For Caller
+    Class mCaller;
 
     // For CALLBACK
     public interface OnPhotoClick{
-        void onPhotoClick(String photo,int position);
+        void onPhotoClick(int position,View view);
     }
     private final OnPhotoClick mCallback;
 
     // CONSTRUCTOR
-    public PhotoListAdapter(List<String> listPhoto, RequestManager glide, OnPhotoClick callback) {
-        mListPhoto = listPhoto;
+    public PhotoListAdapter(Class caller, List<String> photos, RequestManager glide, OnPhotoClick callback) {
+        mCaller = caller;
+        mPhotos = photos;
         mGlide = glide;
         mCallback = callback;
     }
@@ -43,7 +44,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     public PhotoListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.fragment_photo_list_view_holder, parent, false);
+        View view = inflater.inflate(R.layout.photo_list_view_holder, parent, false);
 
         return new PhotoListViewHolder(view);
     }
@@ -51,23 +52,23 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     // For update View Holder with Estate
     @Override
     public void onBindViewHolder(PhotoListViewHolder viewHolder, int position) {
-        viewHolder.updateWithPhoto(mListPhoto.get(position), mGlide, mCallback);
+        viewHolder.updateWithPhoto(mCaller, mPhotos.get(position), mGlide, mCallback);
     }
 
     // Return the size of the recycler view
     @Override
     public int getItemCount() {
-        return mListPhoto.size();
+        return mPhotos.size();
     }
 
     // Returns the Estate Identifier of the current position
     public String getPhoto(int position){
-        return mListPhoto.get(position);
+        return mPhotos.get(position);
     }
 
     // Update le recycler view data
     public void updateData(List<String> photo){
-        this.mListPhoto = photo;
+        this.mPhotos = photo;
         this.notifyDataSetChanged();
     }
 }

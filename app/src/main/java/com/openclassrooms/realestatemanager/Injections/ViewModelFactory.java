@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.openclassrooms.realestatemanager.Models.views.EstateCreateViewModel;
 import com.openclassrooms.realestatemanager.Models.views.EstateDetailsViewModel;
 import com.openclassrooms.realestatemanager.Models.views.EstateListViewModel;
+import com.openclassrooms.realestatemanager.Models.views.EstateUpdateViewModel;
 import com.openclassrooms.realestatemanager.Models.views.RealEstateAgentViewModel;
 import com.openclassrooms.realestatemanager.Repositories.EstateDataRepository;
 import com.openclassrooms.realestatemanager.Repositories.RealEstateAgentDataRepository;
@@ -37,6 +38,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(EstateCreateViewModel.class)) {
             return (T) new EstateCreateViewModel(estateDataSource, executor);
+        }
+        if (modelClass.isAssignableFrom(EstateUpdateViewModel.class)) {
+            return (T) new EstateUpdateViewModel(estateDataSource, executor);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

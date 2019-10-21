@@ -1,11 +1,8 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -13,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -30,10 +26,14 @@ import com.google.android.material.chip.Chip;
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.Models.views.EstateCreateViewModel;
+import com.openclassrooms.realestatemanager.Models.Estate;
+import com.openclassrooms.realestatemanager.Models.views.EstateUpdateViewModel;
 import com.openclassrooms.realestatemanager.PhotoList.PhotoListAdapter;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Repositories.CurrentEstateDataRepository;
 import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentDataRepository;
+import com.openclassrooms.realestatemanager.Utils.Converters;
+import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneId;
@@ -48,19 +48,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class CreateEstateActivity extends BaseActivity implements PhotoListAdapter.OnPhotoClick  {
+public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapter.OnPhotoClick  {
 
     // For debugging Mode
-    private static final String TAG = CreateEstateActivity.class.getSimpleName();
+    private static final String TAG = UpdateEstateActivity.class.getSimpleName();
 
     // Adding @BindView in order to indicate to ButterKnife to get & serialise it
     // - Get Coordinator Layout
-    @BindView(R.id.activity_create_estate_cl) ConstraintLayout mConstraintLayout;
+    @BindView(R.id.activity_update_estate_cl) ConstraintLayout mConstraintLayout;
     @BindView(R.id.estate_auto_type) AutoCompleteTextView mAutoCompleteTVType;
     @BindView(R.id.estate_ed_price) EditText mPrice;
     @BindView(R.id.estate_ed_description) EditText mDescription;
@@ -83,7 +82,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     @BindView(R.id.estate_chip_town_hall) Chip mChipTownHall;
     @BindView(R.id.estate_chip_swimming_pool) Chip mChipSwimmingPool;
 
-    private EstateCreateViewModel mEstateCreateViewModel;
+    private EstateUpdateViewModel mEstateUpdateViewModel;
 
     // Declarations for management of the date fields with a DatePickerDialog
     private DatePickerDialog mEntryDatePickerDialog;
@@ -100,7 +99,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     static final int REQUEST_IMAGE_GET = 2;
 
     // To return the result to the parent activity
-    public static final String BUNDLE_CREATE_OK = "BUNDLE_CREATE_OK";
+    public static final String BUNDLE_UPDATE_OK = "BUNDLE_UPDATE_OK";
 
     // ---------------------------------------------------------------------------------------------
     //                                DECLARATION BASE METHODS
@@ -110,7 +109,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     // CALLED BY BASE METHOD 'onCreate(...)'
     @Override
     protected int getActivityLayout() {
-        return R.layout.activity_create_estate;
+        return R.layout.activity_update_estate;
     }
 
     // BASE METHOD Implementation
@@ -126,7 +125,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     // CALLED BY BASE METHOD
     @Override
     protected int getToolbarMenu() {
-        return R.menu.menu_activity_create_estate;
+        return R.menu.menu_activity_update_estate;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -151,25 +150,27 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         // Configure AutoComplete Type
         this.configureAutoCompleteType();
 
-        // Configure RealEstateViewModel
-        this.configureEstateCreateViewModel();
+        // Configure RealEstateUpdateViewModel
+        this.configureEstateUpdateViewModel();
 
         // Management of Date Fields
         this.manageDateFields();
 
-        // Configure RecyclerView
+        // Configure Photos RecyclerView
         configureRecyclerView();
 
-        // Update UI
-        this.updateUI();
+        // Restore Estate on the View
+        mEstateUpdateViewModel
+                .getEstate(CurrentEstateDataRepository.getInstance().getCurrentEstate_Id().getValue())
+                .observe(this,this::restoreData);
     }
     // ---------------------------------------------------------------------------------------------
     //                                        VIEW MODEL
     // ---------------------------------------------------------------------------------------------
     // Configure RealEstateViewModel
-    private void configureEstateCreateViewModel(){
+    private void configureEstateUpdateViewModel(){
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
-        mEstateCreateViewModel = ViewModelProviders.of(this, modelFactory).get(EstateCreateViewModel.class);
+        mEstateUpdateViewModel = ViewModelProviders.of(this, modelFactory).get(EstateUpdateViewModel.class);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -186,7 +187,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         mRecyclerViewPhotos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
 
         // Positions an observable on the list of photos displayed in the RecyclerView
-        mEstateCreateViewModel.getPhotos().observe(this,this::notifyRecyclerView);
+        mEstateUpdateViewModel.getPhotos().observe(this,this::notifyRecyclerView);
     }
     // Refreshes the RecyclerView with the new photo list
     private void notifyRecyclerView(ArrayList<String> photos) {
@@ -216,51 +217,54 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     // Click photo of the recycler view
     @Override
     public void onPhotoClick(int position,View view) {
-        Log.d(TAG, "onPhotoClick: ");
-        if (view.getId() == R.id.photo_list_image) Log.d(TAG, "onClick: image");
-        if (view.getId() == R.id.photo_list_bt_delete) Log.d(TAG, "onClick: button delete");
     }
     // Click on Validate Button
-    @OnClick(R.id.activity_create_estate_bt_validate)
+    @OnClick(R.id.activity_update_estate_bt_update)
     public void validate(View view) {
         Log.d(TAG, "validate: ");
 
         if (validateRequiredData()) {
-            mEstateCreateViewModel.getEstate().setType(mAutoCompleteTVType.getText().toString());
-            mEstateCreateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
-            mEstateCreateViewModel.getEstate().setDescription(mDescription.getText().toString());
-            mEstateCreateViewModel.getEstate().setPhotos(mPhotos);
+            mEstateUpdateViewModel.getEstate().setType(mAutoCompleteTVType.getText().toString());
+            mEstateUpdateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
+            mEstateUpdateViewModel.getEstate().setDescription(mDescription.getText().toString());
+            mEstateUpdateViewModel.getEstate().setPhotos(mPhotos);
             ArrayList<String> address = new ArrayList<>();
             address.add(mAddressWay.getText().toString());
             address.add(mAddressComplement.getText().toString());
             address.add(mAddressPostalCode.getText().toString());
             address.add(mAddressCity.getText().toString());
             address.add(mAddressState.getText().toString());
-            mEstateCreateViewModel.getEstate().setAddress(address);
-            mEstateCreateViewModel.getEstate().setArea(Integer.parseInt(mSurface.getText().toString()));
-            mEstateCreateViewModel.getEstate().setNumberOfParts(Integer.parseInt(mNumbersRooms.getText().toString()));
-            mEstateCreateViewModel.getEstate().setNumberOfBathrooms(Integer.parseInt(mNumbersBathrooms.getText().toString()));
-            mEstateCreateViewModel.getEstate().setNumberOfBedrooms(Integer.parseInt(mNumbersBedrooms.getText().toString()));
-            // Chips
-            HashMap<String,String> pointsOfInterest = new HashMap<>();
-            mEstateCreateViewModel.getEstate().setPointOfInterest(pointsOfInterest);
-            if (mChipGarden.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("Garden","Garden");
-            if (mChipLibrary.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("Library","Library");
-            if (mChipRestaurant.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("Restaurant","Restaurant");
-            if (mChipSchool.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("School","School");
-            if (mChipSwimmingPool.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("Swimming Pool","Swimming Pool");
-            if (mChipTownHall.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("Town Hall","Town Hall");
+            mEstateUpdateViewModel.getEstate().setAddress(address);
+            mEstateUpdateViewModel.getEstate().setArea(Integer.parseInt(mSurface.getText().toString()));
+            mEstateUpdateViewModel.getEstate().setNumberOfParts(Integer.parseInt(mNumbersRooms.getText().toString()));
+            mEstateUpdateViewModel.getEstate().setNumberOfBathrooms(Integer.parseInt(mNumbersBathrooms.getText().toString()));
+            mEstateUpdateViewModel.getEstate().setNumberOfBedrooms(Integer.parseInt(mNumbersBedrooms.getText().toString()));
+            // Chips (overrides the value if the key already exists)
+            if (mEstateUpdateViewModel.getEstate().getPointOfInterest() == null)
+                mEstateUpdateViewModel.getEstate().setPointOfInterest(new HashMap<>());
+            if (mChipGarden.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("Garden","Garden");
+            else  mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("Garden");
+            if (mChipLibrary.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("Library","Library");
+            else mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("Library");
+            if (mChipRestaurant.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("Restaurant","Restaurant");
+            else mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("Restaurant");
+            if (mChipSchool.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("School","School");
+            else mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("School");
+            if (mChipSwimmingPool.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("Swimming Pool","Swimming Pool");
+            else mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("Swimming Pool");
+            if (mChipTownHall.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("Town Hall","Town Hall");
+            else mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("Town Hall");
             // Current Agent Id
-            mEstateCreateViewModel.getEstate().setRealEstateAgent_Id(CurrentRealEstateAgentDataRepository.
+            mEstateUpdateViewModel.getEstate().setRealEstateAgent_Id(CurrentRealEstateAgentDataRepository.
                     getInstance().getCurrentRealEstateAgent_Id().getValue());
 
-            // Create Estate and save it in DataBase
-            mEstateCreateViewModel.createEstate();
+            // Update Estate and save it in DataBase
+            mEstateUpdateViewModel.updateEstate();
 
             // Notify the agent that the creative went well
             // Create a intent for call Activity
             Intent intent = new Intent();
-            intent.putExtra(BUNDLE_CREATE_OK,true);
+            intent.putExtra(BUNDLE_UPDATE_OK,true);
             setResult(RESULT_OK,intent);
             // Close Activity and go back to previous activity
             this.finish();
@@ -326,9 +330,9 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             // Save photo in List
             ArrayList<String> photos = new ArrayList<>();
-            photos.addAll(mEstateCreateViewModel.getPhotos().getValue());
+            photos.addAll(mEstateUpdateViewModel.getPhotos().getValue());
             photos.add(currentPhotoPath);
-            mEstateCreateViewModel.setPhotos(photos);
+            mEstateUpdateViewModel.setPhotos(photos);
         }
 
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
@@ -336,9 +340,9 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
             Uri fullPhotoUri = data.getData();
             // Save photo in List
             ArrayList<String> photos = new ArrayList<>();
-            photos.addAll(mEstateCreateViewModel.getPhotos().getValue());
+            photos.addAll(mEstateUpdateViewModel.getPhotos().getValue());
             photos.add(fullPhotoUri.toString());
-            mEstateCreateViewModel.setPhotos(photos);
+            mEstateUpdateViewModel.setPhotos(photos);
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -365,6 +369,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     }
     // Manage Entry Date Field
     private void setEntryDateField() {
+        Log.d(TAG, "setEntryDateField: ");
         // Create a DatePickerDialog and manage it
         mEntryDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -375,7 +380,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                 mEntryDate.setText(displayDateFormatter.format(newDate.getTime()));
 
                 // Save date selected in the Model
-                mEstateCreateViewModel.getEstate()
+                mEstateUpdateViewModel.getEstate()
                         .setDateEntryOfTheMarket(DateTimeUtils.toInstant(newDate.getTime())
                                 .atZone(ZoneId.systemDefault()).toLocalDateTime());
             }
@@ -405,9 +410,54 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         } else return true;
     }
     // ---------------------------------------------------------------------------------------------
+    //                                         RESTORE DATA
+    // ---------------------------------------------------------------------------------------------
+    protected void restoreData(Estate estate) {
+
+        // Save Estate in ViewModel
+        mEstateUpdateViewModel.setEstate(estate);
+
+        // Save Photos in ViewModel
+        mEstateUpdateViewModel.setPhotos(estate.getPhotos());
+
+        // Display Data
+        updateUI(estate);
+    }
+    // ---------------------------------------------------------------------------------------------
     //                                            UI
     // ---------------------------------------------------------------------------------------------
-    protected void updateUI() {
+    // Restore Points Of Interest
+    private void restorePointsOfInterest(){
+        Log.d(TAG, "restorePointsOfInterest: ");
+        Map<String,String> pointsOfInterest = mEstateUpdateViewModel.getEstate().getPointOfInterest();
+        if (pointsOfInterest != null)
+            for (Map.Entry<String, String> pointOfInterest : pointsOfInterest.entrySet()){
+                if (pointOfInterest.getKey().equals("Restaurant")) mChipRestaurant.setChecked(true);
+                if (pointOfInterest.getKey().equals("School")) mChipSchool.setChecked(true);
+                if (pointOfInterest.getKey().equals("Town Hall")) mChipTownHall.setChecked(true);
+                if (pointOfInterest.getKey().equals("Swimming Pool")) mChipSwimmingPool.setChecked(true);
+                if (pointOfInterest.getKey().equals("Library")) mChipLibrary.setChecked(true);
+                if (pointOfInterest.getKey().equals("Garden")) mChipGarden.setChecked(true);
+            }
+    }
+    protected void updateUI(Estate estate) {
         Log.d(TAG, "updateUI: ");
+
+        mAutoCompleteTVType.setText(estate.getType());
+        mPrice.setText(String.valueOf(estate.getPrice()));
+        mDescription.setText(estate.getDescription());
+        mAddressWay.setText(estate.getAddress().get(0));
+        mAddressComplement.setText(estate.getAddress().get(1));
+        mAddressPostalCode.setText(estate.getAddress().get(2));
+        mAddressCity.setText(estate.getAddress().get(3));
+        mAddressState.setText(estate.getAddress().get(4));
+        mSurface.setText(String.valueOf(estate.getArea()));
+        mNumbersRooms.setText(String.valueOf(estate.getNumberOfParts()));
+        mNumbersBathrooms.setText(String.valueOf(estate.getNumberOfBathrooms()));
+        mNumbersBedrooms.setText(String.valueOf(estate.getNumberOfBedrooms()));
+        mEntryDate.setText(Utils.fromLocalDateTime(estate.getDateEntryOfTheMarket()));
+
+        // Restore Points of Interest
+        this.restorePointsOfInterest();
     }
 }

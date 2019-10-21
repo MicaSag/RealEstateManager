@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!-- INTEREST POINT -->
+<com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.MaterialComponents.CardView"
+    android:id="@+id/estate_mcv_chips"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="32dp"
+    android:layout_marginEnd="32dp"
+    android:layout_marginTop="@dimen/estate_marginTop"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/estate_tf_date_entry"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="5dp"
+    app:cardMaxElevation="8dp"
+    app:contentPadding="10dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="false"
+    tools:showIn="@layout/estate_details">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chips_card_view_cl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/estate_chip_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="Interest Points" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/estate_chip_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/estate_chip_title">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/estate_chip_school"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:text="School" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/estate_chip_swimming_pool"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="Swimming pool" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/estate_chip_town_hall"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="Town hall" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/estate_chip_library"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="Library" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/estate_chip_garden"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="garden" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/estate_chip_restaurant"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="Restauarant" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -8,6 +8,7 @@ import com.openclassrooms.realestatemanager.Models.Estate;
 import java.util.List;
 
 public class EstateDataRepository {
+    private static final String TAG = EstateDataRepository.class.getSimpleName();
 
     private final EstateDao mEstateDao;
 

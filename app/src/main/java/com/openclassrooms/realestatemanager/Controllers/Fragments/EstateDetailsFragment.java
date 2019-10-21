@@ -103,7 +103,7 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
         // Reset list
         mPhotos = new ArrayList<>();
         // Create adapter passing the list of users
-        mPhotoListAdapter = new PhotoListAdapter(mPhotos, Glide.with(this), this );
+        mPhotoListAdapter = new PhotoListAdapter(this.getClass(), mPhotos, Glide.with(this), this );
         // Attach the adapter to the recyclerView to populate items
         mRecyclerView.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items
@@ -164,7 +164,7 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
     }
 
     @Override
-    public void onPhotoClick(String photo, int position) {
-        Log.d(TAG, "onPhotoClick() called with: photo = [" + photo + "], position = [" + position + "]");
+    public void onPhotoClick(int position, View view) {
+        Log.d(TAG, "onPhotoClick() called with: photo = [" + view.toString() + "], position = [" + position + "]");
     }
 }

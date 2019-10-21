@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.Controllers.Fragments;
 
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.openclassrooms.realestatemanager.Controllers.Activities.MapActivity;
 import com.openclassrooms.realestatemanager.R;
 
 /**
@@ -58,12 +60,7 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
 
         // Create bundle and add it some data
         Bundle args = new Bundle();
-        final Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .disableHtmlEscaping()
-                .create();
-        String json = gson.toJson(location);
-        args.putString(KEY_LOCATION, json);
+        args.putParcelable(KEY_LOCATION, location);
 
         mapFragment.setArguments(args);
 
@@ -78,9 +75,7 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
         Log.d(TAG, "onCreateView: ");
 
         // Get data from Bundle (created in method newInstance)
-        // Restoring the Date with a Gson Object
-        Gson gson = new Gson();
-        mLocation = gson.fromJson(getArguments().getString(KEY_LOCATION, ""),Location.class);
+        mLocation = getArguments().getParcelable(KEY_LOCATION);
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);

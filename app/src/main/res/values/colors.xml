@@ -7,4 +7,8 @@
     <!-- colors of the Navigation Drawer -->
     <color name="navigationDrawerBackground">#B2B9E1</color>
 
+    <!-- colors of the Photo List Delete Button -->
+    <!-- E6 is for alpha and others pairs zero's are for R G B -->
+    <color name="photo_list_delete_button">#E6616161</color>
+
 </resources>

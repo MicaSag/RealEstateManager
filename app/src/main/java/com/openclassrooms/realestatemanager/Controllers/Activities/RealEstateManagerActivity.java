@@ -7,6 +7,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.Manifest;
@@ -66,6 +68,7 @@ public class RealEstateManagerActivity  extends BaseActivity
 
     // For call Activities
     public static final int CREATE_ACTIVITY_REQUEST_CODE = 10;
+    public static final int UPDATE_ACTIVITY_REQUEST_CODE = 20;
     // For transmission data to activity
     public static final String KEY_LOCATION = "KEY_LOCATION";
 
@@ -76,8 +79,6 @@ public class RealEstateManagerActivity  extends BaseActivity
     // ---------------------------
     // 1 _ Request Code
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    // 2 _ For save the status of the location permission granted
-    private boolean mLocationPermissionGranted;
 
     // For determinate Location
     // -------------------------
@@ -86,7 +87,7 @@ public class RealEstateManagerActivity  extends BaseActivity
     // The geographical location where the device is currently located.
     // That is, the last-known location retrieved by the Fused Location Provider.
     // OR the default Location if permission not Granted
-    private Location mLastKnownLocation;
+    private MutableLiveData<Location> mLastKnownLocation = new MutableLiveData<>();
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
@@ -131,6 +132,10 @@ public class RealEstateManagerActivity  extends BaseActivity
         super.onCreate(savedInstanceState);
 
         mCurrentRealEstateAgent_Id = REAL_ESTATE_AGENT_ID_1;
+
+        // Observer which launches the map activity
+        // if we search for the current position or the last known position
+        mLastKnownLocation.observe(this,this::startMapActivity);
 
         // Configure the Navigation Drawer
         this.configureDrawerLayout();
@@ -226,6 +231,12 @@ public class RealEstateManagerActivity  extends BaseActivity
            if(data.getBooleanExtra(CreateEstateActivity.BUNDLE_CREATE_OK, false))
                showSnackBar("The creation of the estate was carried out");
         }
+        // If the return result comes from the update activity
+        if (UPDATE_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
+            // Fetch the result from the Intent
+            if(data.getBooleanExtra(UpdateEstateActivity.BUNDLE_UPDATE_OK, false))
+                showSnackBar("The update of the estate was carried out");
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -243,13 +254,18 @@ public class RealEstateManagerActivity  extends BaseActivity
                 CurrentRealEstateAgentDataRepository.getInstance().setCurrentRealEstateAgent_Id(agent_Id);
                 return true;
             case R.id.menu_activity_real_estate_manager_edit:
+                // Create a intent for call Activity
+                Intent updateIntent = new Intent(this, UpdateEstateActivity.class);
+
+                // Go to CreateEstateActivity
+                startActivityForResult(updateIntent, UPDATE_ACTIVITY_REQUEST_CODE);
                 return true;
             case R.id.menu_activity_real_estate_manager_add:
                 // Create a intent for call Activity
-                Intent intent = new Intent(this, CreateEstateActivity.class);
+                Intent createIntent = new Intent(this, CreateEstateActivity.class);
 
                 // Go to CreateEstateActivity
-                startActivityForResult(intent, CREATE_ACTIVITY_REQUEST_CODE);
+                startActivityForResult(createIntent, CREATE_ACTIVITY_REQUEST_CODE);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -317,24 +333,17 @@ public class RealEstateManagerActivity  extends BaseActivity
             super.onBackPressed();
         }
     }
-    public void startMapActivity(){
+    public void startMapActivity(Location lastKnowLocation){
         Log.d(TAG, "startMapActivity: ");
-        // Get Current Location
-        final Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .disableHtmlEscaping()
-                .create();
-        String json = gson.toJson(mLastKnownLocation);
-        if (mLastKnownLocation != null) {
-            Log.d(TAG, "startMapActivity: getLastKnownCurrentLocationDevice: mLastKnownLocation.getLatitude()  = " + mLastKnownLocation.getLatitude());
-            Log.d(TAG, "startMapActivity: getLastKnownCurrentLocationDevice: mLastKnownLocation.getLongitude() = " + mLastKnownLocation.getLongitude());
+
+        if (lastKnowLocation != null) {
+            Log.d(TAG, "startMapActivity: getLastKnownCurrentLocationDevice: lastKnownLocation.getLatitude()  = " + lastKnowLocation.getLatitude());
+            Log.d(TAG, "startMapActivity: getLastKnownCurrentLocationDevice: lastKnownLocation.getLongitude() = " + lastKnowLocation.getLongitude());
+            // Call Map Activity
+            Intent intent = new Intent(this, MapActivity.class);
+            intent.putExtra(KEY_LOCATION, lastKnowLocation);
+            startActivity(intent);
         }
-        Log.d(TAG, "startMapActivity: json = "+json);
-        // Call Map
-        Utils.startActivity( this,
-                                    MapActivity.class,
-                                    KEY_LOCATION,
-                                    json);
     }
     // ---------------------------------------------------------------------------------------------
     //                                      LOCATION
@@ -356,7 +365,6 @@ public class RealEstateManagerActivity  extends BaseActivity
             // Permissions Granted
             // Get the last know location of the phone
             Log.d(TAG, "getLocationPermission: Permission already granted by User");
-            mLocationPermissionGranted = true;
             getLastKnownCurrentLocationDevice();
         } else {
             Log.d(TAG, "getLocationPermission: Build.VERSION.SDK_INT = "+ Build.VERSION.SDK_INT);
@@ -386,18 +394,16 @@ public class RealEstateManagerActivity  extends BaseActivity
                     // Permissions Granted
                     // Get the last know location of the phone
                     Log.d(TAG, "onRequestPermissionsResult: Permission Granted by User :-)");
-                    mLocationPermissionGranted = true;
                     getLastKnownCurrentLocationDevice();
                 } else {
                     Log.d(TAG, "onRequestPermissionsResult: Permission not Granted by User :-(");
-                    mLocationPermissionGranted = false;
                     // The last know location will be the default position
-                    mLastKnownLocation = new Location("");
-                    mLastKnownLocation.setLatitude(mDefaultLocation.latitude);
-                    mLastKnownLocation.setLongitude(mDefaultLocation.longitude);
+                    Location lastKnownLocation = new Location("");
+                    lastKnownLocation.setLatitude(mDefaultLocation.latitude);
+                    lastKnownLocation.setLongitude(mDefaultLocation.longitude);
 
-                    // Start MAP Activity
-                    this.startMapActivity();
+                    // Set last Know Location
+                    mLastKnownLocation.setValue(lastKnownLocation);
                 }
             }
         }
@@ -415,20 +421,21 @@ public class RealEstateManagerActivity  extends BaseActivity
             locationResult.addOnCompleteListener(this, task -> {
                 if (task.isSuccessful()) {
                     // Set the map's camera position to the current location of the device.
-                    mLastKnownLocation = task.getResult();
-                    if (mLastKnownLocation != null) {
+                    Location lastKnownLocation;
+                    lastKnownLocation = task.getResult();
+                    if (lastKnownLocation != null) {
                         Log.d(TAG, "getLastKnownCurrentLocationDevice: getLastLocation EXIST");
-                        Log.d(TAG, "getLastKnownCurrentLocationDevice: mLastKnownLocation.getLatitude()  = " + mLastKnownLocation.getLatitude());
-                        Log.d(TAG, "getLastKnownCurrentLocationDevice: mLastKnownLocation.getLongitude() = " + mLastKnownLocation.getLongitude());
+                        Log.d(TAG, "getLastKnownCurrentLocationDevice: lastKnownLocation.getLatitude()  = " + lastKnownLocation.getLatitude());
+                        Log.d(TAG, "getLastKnownCurrentLocationDevice: lastKnownLocation.getLongitude() = " + lastKnownLocation.getLongitude());
                     } else {
                         Log.d(TAG, "getLastKnownCurrentLocationDevice: getLastLocation NO EXIST");
                         // The last know location will be the default position
-                        mLastKnownLocation = new Location("");
-                        mLastKnownLocation.setLatitude(mDefaultLocation.latitude);
-                        mLastKnownLocation.setLongitude(mDefaultLocation.longitude);
+                        lastKnownLocation = new Location("");
+                        lastKnownLocation.setLatitude(mDefaultLocation.latitude);
+                        lastKnownLocation.setLongitude(mDefaultLocation.longitude);
                     }
-                    // Start MAP Activity
-                    this.startMapActivity();
+                    // Set last Know Location
+                    mLastKnownLocation.setValue(lastKnownLocation);
                 }
             });
         } catch (SecurityException e) {
