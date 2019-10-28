@@ -1,11 +1,8 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -13,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -21,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,8 +45,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -170,6 +165,25 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     private void configureEstateCreateViewModel(){
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
         mEstateCreateViewModel = ViewModelProviders.of(this, modelFactory).get(EstateCreateViewModel.class);
+
+        mEstateCreateViewModel.getViewActionLiveData().observe(this, new Observer<EstateCreateViewModel.ViewAction>() {
+            @Override
+            public void onChanged(EstateCreateViewModel.ViewAction viewAction) {
+                if (viewAction == null)  {
+                    return;
+                }
+
+                switch (viewAction) {
+                    case INVALID_INPUT:
+                        showSnackBar("Required data");
+                        break;
+
+                    case FINISH_ACTIVITY:
+                        finish();
+                        break;
+                }
+            }
+        });
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -223,16 +237,28 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     public void validate(View view) {
         Log.d(TAG, "validate: ");
 
+        // TODO Ne pas construire d'ArrayList
+        ArrayList<String> address = new ArrayList<>();
+        address.add(mAddressWay.getText().toString());
+        address.add(mAddressComplement.getText().toString());
+        address.add(mAddressPostalCode.getText().toString());
+        address.add(mAddressCity.getText().toString());
+        address.add(mAddressState.getText().toString());
+
+
+
+        mEstateCreateViewModel.createEstate(
+                mAutoCompleteTVType.getText().toString(),
+                mPrice.getText().toString(), // TODO Faire le parsing dans le ViewModel
+                Integer.parseInt(mSurface.getText().toString())
+        );
+
+        /*
         if (validateRequiredData()) {
-            mEstateCreateViewModel.getEstate().setType(mAutoCompleteTVType.getText().toString());
+            mEstateCreateViewModel.getEstate().setType();
             mEstateCreateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
             mEstateCreateViewModel.getEstate().setDescription(mDescription.getText().toString());
-            ArrayList<String> address = new ArrayList<>();
-            address.add(mAddressWay.getText().toString());
-            address.add(mAddressComplement.getText().toString());
-            address.add(mAddressPostalCode.getText().toString());
-            address.add(mAddressCity.getText().toString());
-            address.add(mAddressState.getText().toString());
+
             mEstateCreateViewModel.getEstate().setAddress(address);
             mEstateCreateViewModel.getEstate().setArea(Integer.parseInt(mSurface.getText().toString()));
             mEstateCreateViewModel.getEstate().setNumberOfParts(Integer.parseInt(mNumbersRooms.getText().toString()));
@@ -256,12 +282,13 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
 
             // Notify the agent that the creative went well
             // Create a intent for call Activity
+            // TODO NO MORE NEEDED IIRC
             Intent intent = new Intent();
             intent.putExtra(BUNDLE_CREATE_OK,true);
             setResult(RESULT_OK,intent);
             // Close Activity and go back to previous activity
             this.finish();
-        }
+        }*/
     }
     // ---------------------------------------------------------------------------------------------
     //                                     MANAGE PHOTO LIST
@@ -363,10 +390,10 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                 // Display date selected
                 mEntryDate.setText(displayDateFormatter.format(newDate.getTime()));
 
-                // Save date selected in the Model
-                mEstateCreateViewModel.getEstate()
+                // TODO Save date selected in the !!View!!Model
+                /*mEstateCreateViewModel.getEstate()
                         .setDateEntryOfTheMarket(DateTimeUtils.toInstant(newDate.getTime())
-                                .atZone(ZoneId.systemDefault()).toLocalDateTime());
+                                .atZone(ZoneId.systemDefault()).toLocalDateTime());*/
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
@@ -376,7 +403,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     //                                 VALIDATE REQUIRED DATA
     // ---------------------------------------------------------------------------------------------
     // Check if the required criteria are filled
-    protected boolean validateRequiredData() {
+   /* protected boolean validateRequiredData() {
         // > Required data <
         // the list of keywords required for validate the estate creation
         if (    mAutoCompleteTVType.getText().toString().equals("") ||
@@ -389,10 +416,11 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                 mNumbersBedrooms.getText().toString().equals("") ||
                 mEntryDate.getText().toString().equals("")
         ){
-            showSnackBar("Required data");
+                    showSnackBar("Required data");
+
             return false;
         } else return true;
-    }
+    }*/
     // ---------------------------------------------------------------------------------------------
     //                                            UI
     // ---------------------------------------------------------------------------------------------

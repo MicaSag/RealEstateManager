@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.Models.views;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,8 +9,11 @@ import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Repositories.EstateDataRepository;
 
+import org.threeten.bp.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 public class EstateCreateViewModel extends ViewModel {
@@ -22,7 +26,7 @@ public class EstateCreateViewModel extends ViewModel {
     private final Executor mExecutor;
 
     // DATA
-    private Estate mEstate = new Estate();
+    private MutableLiveData<ViewAction> mViewActionLiveData = new MutableLiveData<>();
     private MutableLiveData<List<String>> mPhotos;
 
     public EstateCreateViewModel(EstateDataRepository estateDataSource,
@@ -33,16 +37,60 @@ public class EstateCreateViewModel extends ViewModel {
         mPhotos.setValue(new ArrayList<>());
     }
 
-    public Estate getEstate() {
-        return mEstate;
+    public void createEstate(
+           @NonNull String type,
+            String price,
+            Integer area//,
+//            Integer numberOfParts,
+//            Integer numberOfBathrooms,
+//            Integer numberOfBedrooms,
+//            String description,
+//            ArrayList<String> photos,
+//            ArrayList<String> photosDescription,
+//            ArrayList<String> address,
+//            Map<String,String> pointOfInterest,
+//            LocalDateTime dateEntryOfTheMarket,
+//            LocalDateTime dateOfSale,
+//            long realEstateAgent_Id
+    ) {
+        Estate estate = validateData(type, price, area);
+
+        if (estate != null) {
+
+            mExecutor.execute(() -> {
+                mEstateDataSource.createEstate(estate);
+
+                mViewActionLiveData.postValue(ViewAction.FINISH_ACTIVITY);
+            });
+        } else {
+            mViewActionLiveData.setValue(ViewAction.INVALID_INPUT);
+        }
     }
 
-    public void setEstate(Estate mEstate) {
-        this.mEstate = mEstate;
+    private Estate validateData(
+            @NonNull   String type,
+            String price,
+            Integer area
+    ) {
+        if(type.isEmpty()) {
+            return null;
+        }
+
+        int priceAsNumber;
+
+        try {
+            priceAsNumber = Integer.parseInt(price);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+
+       return new Estate(type, priceAsNumber, area /* BLABLA*/  );
     }
 
-    public void createEstate() {
-        mExecutor.execute(() -> mEstateDataSource.createEstate(mEstate));
+    public LiveData<ViewAction> getViewActionLiveData() {
+        return mViewActionLiveData;
     }
 
     public LiveData<List<String>> getPhotos() {
@@ -53,6 +101,11 @@ public class EstateCreateViewModel extends ViewModel {
         List<String> l = mPhotos.getValue();
         l.add(photo);
         this.mPhotos.setValue(l);
+    }
+
+    public enum ViewAction {
+        INVALID_INPUT,
+        FINISH_ACTIVITY
     }
 }
 
