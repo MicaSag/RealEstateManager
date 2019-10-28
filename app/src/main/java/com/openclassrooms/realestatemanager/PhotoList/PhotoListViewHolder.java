@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.Controllers.Activities.CreateEstateActivity;
 import com.openclassrooms.realestatemanager.Controllers.Activities.UpdateEstateActivity;
-import com.openclassrooms.realestatemanager.EstateList.EstateListAdapter;
 import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
@@ -55,17 +54,14 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
             mRoomType.setVisibility(View.VISIBLE);
             mDeleteButton.setVisibility(View.VISIBLE);
         }
-
-
     }
 
     @Override
     public void onClick(View view) {
         Log.d(TAG, "onClick: ");
         Log.d(TAG, "onClick: getAdapterPosition = "+getAdapterPosition());
-        mOnPhotoClick.onPhotoClick(getAdapterPosition(),mDeleteButton);
+        mOnPhotoClick.onPhotoClick(getAdapterPosition(),view);
         if (view == mImage) Log.d(TAG, "onClick: image");
         if (view == mDeleteButton) Log.d(TAG, "onClick: button delete");
     }
-
 }

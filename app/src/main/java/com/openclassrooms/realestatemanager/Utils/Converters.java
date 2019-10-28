@@ -30,19 +30,21 @@ public class Converters {
     @TypeConverter
     public static Long dateToTimestamp(LocalDateTime date) {
         Log.d(TAG, "dateToTimestamp() called with: date = [" + date + "]");
-        Long dateLong = (date == null ? null : date.atZone(ZoneId.systemDefault()).toEpochSecond());
+        Long dateLong = (date == null ? null : date.atZone(ZoneId.systemDefault()).toEpochSecond()*1000);
         Log.d(TAG, "dateToTimestamp: dateLong = "+dateLong);
         return dateLong;
     }
 
     @TypeConverter
     public static ArrayList<String> fromString(String value) {
+        Log.d(TAG, "fromString() called with: value = [" + value + "]");
         Type listType = new TypeToken<ArrayList<String>>() {}.getType();
         return new Gson().fromJson(value, listType);
     }
 
     @TypeConverter
     public static String fromArrayList(ArrayList<String> list) {
+        Log.d(TAG, "fromArrayList() called with: list = [" + list + "]");
         Gson gson = new Gson();
         String json = gson.toJson(list);
         return json;

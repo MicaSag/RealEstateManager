@@ -1,27 +1,38 @@
 package com.openclassrooms.realestatemanager.Controllers.Fragments;
 
 
-import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.Controllers.Activities.MapActivity;
+import com.openclassrooms.realestatemanager.Injections.Injection;
+import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.Models.Estate;
+import com.openclassrooms.realestatemanager.Models.views.MapViewModel;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Repositories.CurrentEstateDataRepository;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +42,9 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
 
     // For Debug
     private static final String TAG = MapFragment.class.getSimpleName();
+
+    // Declare EstateListViewModel
+    private MapViewModel mMapViewModel;
 
     // For add Google Map in Fragment
     private SupportMapFragment mMapFragment;
@@ -74,6 +88,10 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
 
+
+        ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
+        mMapViewModel = ViewModelProviders.of(this, mViewModelFactory).get(MapViewModel.class);
+
         // Get data from Bundle (created in method newInstance)
         mLocation = getArguments().getParcelable(KEY_LOCATION);
 
@@ -115,8 +133,8 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
         // Show current Location
         showCurrentLocation();
 
-        // Display Restaurants Markers and activate Listen on the participants number
-        //displayAndListensMarkers();
+        // Display Estates Markers and activate Listen
+        mMapViewModel.getCurrentEstates().observe(this, this::displayAndListensMarkers);
     }
     // ---------------------------------------------------------------------------------------------
     //                                       METHODS
@@ -130,16 +148,46 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
             Log.d(TAG, "showCurrentLocation: mLocation.getLatitude()  = " + mLocation.getLatitude());
             Log.d(TAG, "showCurrentLocation: mLocation.getLongitude() = " + mLocation.getLongitude());
         }
-        //LatLng mDefaultLocation = new LatLng(48.844304, 2.374377);
-        //mLocation = new Location("");
-        //mLocation.setLatitude(mDefaultLocation.latitude);
-        //mLocation.setLongitude(mDefaultLocation.longitude);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng( mLocation.getLatitude(),
                             mLocation.getLongitude()), DEFAULT_ZOOM));
-
-        // Update Location UI
-        //updateLocationUI();
+        // Declare a Marker for current position
+        Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(mLocation.getLatitude(),
+                        mLocation.getLongitude()))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                .title("Current Position")
+        );
+    }
+    /**
+     * Creating estate markers on the map and activating for each of them a listener
+     */
+    public void displayAndListensMarkers(List<Estate> estates) {
+        Log.d(TAG, "displayAndListensMarkers: ");
+        //mGoogleMap.clear();
+        Geocoder geocoder = new Geocoder(getActivity().getApplicationContext(), Locale.getDefault());
+        List<Address> list = new ArrayList<>();
+        try {
+            for (Estate estate : estates){
+                // Get the coordinates of the address
+                list = geocoder.getFromLocationName(estate.getAddress().get(0)+","+
+                                                                estate.getAddress().get(1)+","+
+                                                                estate.getAddress().get(2)+","+
+                                                                estate.getAddress().get(3)+","+
+                                                                estate.getAddress().get(4)
+                                                    , 1);
+                // Declare a Marker for current Estate
+                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(list.get(0).getLatitude(), list.get(0).getLongitude()))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
+                        .title(estate.getAddress().get(0))
+                );
+                marker.setTag(estate.getEstate_Id());
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
+            ((MapActivity)getActivity()).showSnackBar("geoLocate: IOException: " + e.getMessage());
+        }
     }
     // ---------------------------------------------------------------------------------------------
     //                                       ACTIONS
@@ -149,9 +197,14 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
     public void onInfoWindowClick(Marker marker) {
         Log.d(TAG, "onMarkerClick: ");
 
-        //Launch Restaurant Card Activity with restaurantIdentifier
-        //Toolbox.startActivity(getActivity(),RestaurantCardActivity.class,
-        //        RestaurantCardActivity.KEY_DETAILS_RESTAURANT_CARD,
-        //        marker.getTag().toString());
+        Integer i = (Integer.parseInt(marker.getTag().toString()));
+        Long estate_Id = i.longValue();
+        Log.d(TAG, "onInfoWindowClick: estate_Id = "+estate_Id);
+
+        // Change current Estate Id
+        CurrentEstateDataRepository.getInstance().setCurrentEstate_Id(estate_Id);
+
+        // Close Activity and go back to previous activity
+        getActivity().finish();
     }
 }

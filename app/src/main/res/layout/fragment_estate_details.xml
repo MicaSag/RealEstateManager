@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.60" />
+        app:layout_constraintGuide_percent="0.6" />
 
     <!--region  <<<<<<<<  FIRST SECTION    >>>>>>>>  -->
 
@@ -57,7 +57,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/fragment_details_guideline_horizontal_30"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_details_description_text"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/description"
         android:textSize="20sp"
@@ -65,17 +64,23 @@
         android:textStyle="bold"
         />
     <!-- DESCRIPTION : Text -->
-    <TextView
-        android:id="@+id/fragment_details_description_text"
+    <ScrollView
+        android:id="@+id/fragment_details_description_text_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintTop_toBottomOf="@+id/fragment_details_description_title"
-        app:layout_constraintStart_toStartOf="parent"
-        android:hint="Description text"
-        android:textSize="16sp"
-        android:maxLines="10"
-        />
-
+        app:layout_constraintBottom_toTopOf="@+id/fragment_details_guideline_horizontal_60"
+        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/fragment_details_description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description text"
+            android:textSize="16sp"
+            />
+    </ScrollView>
     <!--  <<<<<<<<  THIRD SECTION    >>>>>>>>  -->
 
     <androidx.constraintlayout.widget.Guideline

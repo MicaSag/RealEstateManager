@@ -204,23 +204,11 @@ public class RealEstateManagerActivity  extends BaseActivity
         Log.d(TAG, "getCurrentRealEstateAgent: ");
         mRealEstateAgentViewModel.getCurrentRealEstateAgent().observe(this, this::updateCurrentRealEstateAgent_Id);
     }
-    // Create a new RealEstateAgent
-    private void createRealEstateAgent(RealEstateAgent realEstateAgent){
-        Log.d(TAG, "createRealestateAgent: ");
-        mRealEstateAgentViewModel.createRealEstateAgent(realEstateAgent);
-    }
-    // Delete a RealEstateAgent
-    private void deleteRealEstateAgent(long realEstateAgent_Id){
-        Log.d(TAG, "deleteRealEstateAgent: ");
-        mRealEstateAgentViewModel.deleteRealEstateAgent(realEstateAgent_Id);
-    }
-
     // Update the RealEstateAgent Data
     private void updateCurrentRealEstateAgent_Id(RealEstateAgent realEstateAgent){
         Log.d(TAG, "updateRealEstateAgent: ");
         mCurrentRealEstateAgent_Id = realEstateAgent.getRealEstateAgent_Id();
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -238,7 +226,6 @@ public class RealEstateManagerActivity  extends BaseActivity
                 showSnackBar("The update of the estate was carried out");
         }
     }
-
     // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------

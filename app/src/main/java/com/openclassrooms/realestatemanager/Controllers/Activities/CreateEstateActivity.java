@@ -46,6 +46,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -92,7 +93,6 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
 
     // For Display list of photos
     private PhotoListAdapter mPhotoListAdapter;
-    private ArrayList<String> mPhotos;
     private String currentPhotoPath;
 
     // For use intents to retrieve photos
@@ -175,25 +175,23 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     //                                    CONFIGURATION
     // --------------------------------------------------------------------------------------------
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
-    private void configureRecyclerView(){
-        // Reset list
-        mPhotos = new ArrayList<>();
+    private void configureRecyclerView() {
         // Create adapter passing the list of users
-        mPhotoListAdapter = new PhotoListAdapter(this.getClass(), mPhotos, Glide.with(this),this);
+        mPhotoListAdapter = new PhotoListAdapter(this.getClass(),
+                Glide.with(this),
+                this);
         // Attach the adapter to the recyclerView to populate items
         mRecyclerViewPhotos.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items
-        mRecyclerViewPhotos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        mRecyclerViewPhotos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         // Positions an observable on the list of photos displayed in the RecyclerView
         mEstateCreateViewModel.getPhotos().observe(this,this::notifyRecyclerView);
     }
     // Refreshes the RecyclerView with the new photo list
-    private void notifyRecyclerView(ArrayList<String> photos) {
+    private void notifyRecyclerView(List<String> photos) {
         Log.d(TAG, "notifyRecyclerView() called with: photos = [" + photos + "]");
-        mPhotos.clear();
-        mPhotos.addAll(photos);
-        mPhotoListAdapter.notifyDataSetChanged();
+        mPhotoListAdapter.setNewData(photos);
     }
     // ---------------------------------------------------------------------------------------------
     //                                           ACTIONS
@@ -229,7 +227,6 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
             mEstateCreateViewModel.getEstate().setType(mAutoCompleteTVType.getText().toString());
             mEstateCreateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
             mEstateCreateViewModel.getEstate().setDescription(mDescription.getText().toString());
-            mEstateCreateViewModel.getEstate().setPhotos(mPhotos);
             ArrayList<String> address = new ArrayList<>();
             address.add(mAddressWay.getText().toString());
             address.add(mAddressComplement.getText().toString());
@@ -324,22 +321,14 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
 
         // Manage Photo Take
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            // Save photo in List
-            ArrayList<String> photos = new ArrayList<>();
-            photos.addAll(mEstateCreateViewModel.getPhotos().getValue());
-            photos.add(currentPhotoPath);
-            mEstateCreateViewModel.setPhotos(photos);
+            mEstateCreateViewModel.getPhotos().getValue().add(currentPhotoPath);
         }
 
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
-            //Bitmap thumbnail = data.getParcelableExtra("data");
             Uri fullPhotoUri = data.getData();
-            // Save photo in List
-            ArrayList<String> photos = new ArrayList<>();
-            photos.addAll(mEstateCreateViewModel.getPhotos().getValue());
-            photos.add(fullPhotoUri.toString());
-            mEstateCreateViewModel.setPhotos(photos);
+            mEstateCreateViewModel.getPhotos().getValue().add(fullPhotoUri.toString());
         }
+        mPhotoListAdapter.notifyDataSetChanged();
     }
     // ---------------------------------------------------------------------------------------------
     //                              AUTOCOMPLETE TYPE CONFIGURATION

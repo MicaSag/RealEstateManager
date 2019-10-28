@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.Controllers.Fragments.MapFragment;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Repositories.CurrentEstateDataRepository;
 
 import butterknife.BindView;
 

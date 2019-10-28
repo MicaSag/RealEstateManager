@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".Controllers.Activities.SearchEstateActivity"></activity>
         <!-- GOOGLE Maps APi Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -63,8 +63,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.Activities.RealEstateManagerActivity" />
-        </activity>
-        <!-- UPDATE ESTATE Activity -->
+        </activity> <!-- UPDATE ESTATE Activity -->
         <activity
             android:name=".Controllers.Activities.UpdateEstateActivity"
             android:label="Update Estate"

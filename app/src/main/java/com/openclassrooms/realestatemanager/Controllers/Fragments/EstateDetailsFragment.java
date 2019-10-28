@@ -26,6 +26,7 @@ import com.openclassrooms.realestatemanager.PhotoList.PhotoListAdapter;
 import com.openclassrooms.realestatemanager.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,14 +101,21 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
     // --------------------------------------------------------------------------------------------
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
     private void configureRecyclerView(){
-        // Reset list
-        mPhotos = new ArrayList<>();
-        // Create adapter passing the list of users
-        mPhotoListAdapter = new PhotoListAdapter(this.getClass(), mPhotos, Glide.with(this), this );
+        // Create adapter
+        mPhotoListAdapter = new PhotoListAdapter(this.getClass(), Glide.with(this), this );
         // Attach the adapter to the recyclerView to populate items
         mRecyclerView.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+
+        // Positions an observable on the list of photos displayed in the RecyclerView
+        mEstateDetailsViewModel.getCurrentEstate().observe(this,this::notifyRecyclerView);
+    }
+
+    // Refreshes the RecyclerView with the new photo list
+    private void notifyRecyclerView(Estate estate) {
+        Log.d(TAG, "notifyRecyclerView() called with: photos = [" + estate + "]");
+        mPhotoListAdapter.setNewData(estate.getPhotos());
     }
     // ---------------------------------------------------------------------------------------------
     //                                           DATA
@@ -156,10 +164,6 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
                     .load(uriStaticMap.build())
                     .apply(RequestOptions.centerCropTransform())
                     .into(mStaticMap);
-
-            // Display Photos List
-            mPhotos = estate.getPhotos();
-            mPhotoListAdapter.updateData(mPhotos);
         }
     }
 

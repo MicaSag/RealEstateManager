@@ -23,7 +23,7 @@ public class EstateCreateViewModel extends ViewModel {
 
     // DATA
     private Estate mEstate = new Estate();
-    private MutableLiveData<ArrayList<String>> mPhotos;
+    private MutableLiveData<List<String>> mPhotos;
 
     public EstateCreateViewModel(EstateDataRepository estateDataSource,
                                  Executor executor) {
@@ -45,12 +45,14 @@ public class EstateCreateViewModel extends ViewModel {
         mExecutor.execute(() -> mEstateDataSource.createEstate(mEstate));
     }
 
-    public LiveData<ArrayList<String>> getPhotos() {
+    public LiveData<List<String>> getPhotos() {
         return mPhotos;
     }
 
-    public void setPhotos(ArrayList<String> photos) {
-        this.mPhotos.setValue(photos);
+    public void addPhoto(String photo) {
+        List<String> l = mPhotos.getValue();
+        l.add(photo);
+        this.mPhotos.setValue(l);
     }
 }
 

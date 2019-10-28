@@ -91,7 +91,6 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
 
     // For Display list of photos
     private PhotoListAdapter mPhotoListAdapter;
-    private ArrayList<String> mPhotos;
     private String currentPhotoPath;
 
     // For use intents to retrieve photos
@@ -177,24 +176,22 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
     // --------------------------------------------------------------------------------------------
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
     private void configureRecyclerView(){
-        // Reset list
-        mPhotos = new ArrayList<>();
         // Create adapter passing the list of users
-        mPhotoListAdapter = new PhotoListAdapter(this.getClass(), mPhotos, Glide.with(this),this);
+        mPhotoListAdapter = new PhotoListAdapter(this.getClass(),
+                Glide.with(this),
+                this);
         // Attach the adapter to the recyclerView to populate items
         mRecyclerViewPhotos.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items
         mRecyclerViewPhotos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
 
-        // Positions an observable on the list of photos displayed in the RecyclerView
+    // Positions an observable on the list of photos displayed in the RecyclerView
         mEstateUpdateViewModel.getPhotos().observe(this,this::notifyRecyclerView);
-    }
+}
     // Refreshes the RecyclerView with the new photo list
     private void notifyRecyclerView(ArrayList<String> photos) {
         Log.d(TAG, "notifyRecyclerView() called with: photos = [" + photos + "]");
-        mPhotos.clear();
-        mPhotos.addAll(photos);
-        mPhotoListAdapter.notifyDataSetChanged();
+        mPhotoListAdapter.setNewData(photos);
     }
     // ---------------------------------------------------------------------------------------------
     //                                           ACTIONS
@@ -217,6 +214,9 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
     // Click photo of the recycler view
     @Override
     public void onPhotoClick(int position,View view) {
+        Log.d(TAG, "onPhotoClick: ");
+        if (view.getId() == R.id.photo_list_image) Log.d(TAG, "onPhotoClick: image");
+        if (view.getId() == R.id.photo_list_bt_delete) Log.d(TAG, "onPhotoClick: button delete");
     }
     // Click on Validate Button
     @OnClick(R.id.activity_update_estate_bt_update)
@@ -227,7 +227,7 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
             mEstateUpdateViewModel.getEstate().setType(mAutoCompleteTVType.getText().toString());
             mEstateUpdateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
             mEstateUpdateViewModel.getEstate().setDescription(mDescription.getText().toString());
-            mEstateUpdateViewModel.getEstate().setPhotos(mPhotos);
+            mEstateUpdateViewModel.getEstate().setPhotos(mEstateUpdateViewModel.getPhotos().getValue());
             ArrayList<String> address = new ArrayList<>();
             address.add(mAddressWay.getText().toString());
             address.add(mAddressComplement.getText().toString());

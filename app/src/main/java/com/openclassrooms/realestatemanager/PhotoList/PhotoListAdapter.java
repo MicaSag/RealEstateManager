@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> {
@@ -21,7 +22,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     private RequestManager mGlide;
 
     // For Data
-    private List<String> mPhotos;
+    private final List<String> mPhotos = new ArrayList<>();
 
     // For Caller
     Class mCaller;
@@ -33,11 +34,17 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     private final OnPhotoClick mCallback;
 
     // CONSTRUCTOR
-    public PhotoListAdapter(Class caller, List<String> photos, RequestManager glide, OnPhotoClick callback) {
+    public PhotoListAdapter(Class caller, RequestManager glide, OnPhotoClick callback) {
         mCaller = caller;
-        mPhotos = photos;
         mGlide = glide;
         mCallback = callback;
+    }
+
+    // Update le recycler view data
+    public void setNewData(List<String> photos){
+        mPhotos.clear();
+        mPhotos.addAll(photos);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -64,11 +71,5 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     // Returns the Estate Identifier of the current position
     public String getPhoto(int position){
         return mPhotos.get(position);
-    }
-
-    // Update le recycler view data
-    public void updateData(List<String> photo){
-        this.mPhotos = photo;
-        this.notifyDataSetChanged();
     }
 }
