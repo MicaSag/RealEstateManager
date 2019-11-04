@@ -24,9 +24,7 @@ import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.Models.views.EstateDetailsViewModel;
 import com.openclassrooms.realestatemanager.PhotoList.PhotoListAdapter;
 import com.openclassrooms.realestatemanager.R;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.openclassrooms.realestatemanager.Repositories.CurrentEstateDataRepository;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +56,6 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
 
     // For Display list of photos
     PhotoListAdapter mPhotoListAdapter;
-    ArrayList<String> mPhotos;
 
     public EstateDetailsFragment() {
         // Required empty public constructor
@@ -107,31 +104,29 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
         mRecyclerView.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-        // Positions an observable on the list of photos displayed in the RecyclerView
-        mEstateDetailsViewModel.getCurrentEstate().observe(this,this::notifyRecyclerView);
-    }
-
-    // Refreshes the RecyclerView with the new photo list
-    private void notifyRecyclerView(Estate estate) {
-        Log.d(TAG, "notifyRecyclerView() called with: photos = [" + estate + "]");
-        mPhotoListAdapter.setNewData(estate.getPhotos());
     }
     // ---------------------------------------------------------------------------------------------
     //                                           DATA
     // ---------------------------------------------------------------------------------------------
-    // Get Estate selected in EstateList
+    // Get Current Estate_Id
     private void getCurrentEstate() {
         Log.d(TAG, "getCurrentEstate: ");
-        mEstateDetailsViewModel.getCurrentEstate().observe(this, this::updateUI);
+        CurrentEstateDataRepository.getInstance().getCurrentEstate_Id().observe(this, this::getEstate);
+    }
+    // Get Estate
+    public void getEstate(Long estate_Id) {
+        Log.d(TAG, "getEstate() called with: estate_Id = [" + estate_Id + "]");
+
+        //this.updateUI(mEstateDetailsViewModel.getEstate(estate_Id).getValue());
+        mEstateDetailsViewModel.getEstate(estate_Id).observe(this, this::updateUI);
     }
     // ---------------------------------------------------------------------------------------------
     //                                             UI
     // ---------------------------------------------------------------------------------------------
     public void updateUI(Estate estate){
-        Log.d(TAG, "updateUI() ");
-
+        Log.d(TAG, "updateUI: ");
         if (estate != null) {
+            Log.d(TAG, "updateUI: estate = "+estate.getEstate_Id());
             mDescription.setText(estate.getDescription());
             mSurface.setText(estate.getArea().toString());
             mRoomsNumber.setText(estate.getNumberOfParts().toString());
@@ -142,6 +137,7 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
             mLocation_3.setText(estate.getAddress().get(2));
             mLocation_4.setText(estate.getAddress().get(3));
             mLocation_5.setText(estate.getAddress().get(4));
+            mPhotoListAdapter.setNewData(estate.getPhotos());
 
             // Created Uri to recover the static map
             Uri.Builder uriStaticMap

@@ -1,24 +1,26 @@
 package com.openclassrooms.realestatemanager.Controllers.Fragments;
 
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.EstateList.EstateListAdapter;
-import com.openclassrooms.realestatemanager.Models.views.EstateListViewModel;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.Estate;
+import com.openclassrooms.realestatemanager.Models.views.EstateListViewModel;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Repositories.CurrentEstateListDataRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +79,7 @@ public class EstateListFragment extends Fragment {
         // Call during UI creation
         this.configureRecyclerView();
 
-        // Get and Observe Current Estates
+        // Get and Observe Current Estate List
         this.getCurrentEstates();
 
         return view;
@@ -94,7 +96,6 @@ public class EstateListFragment extends Fragment {
         // Attach the adapter to the recyclerView to populate items
         mRecyclerView.setAdapter(mEstateListAdapter);
         // Set layout manager to position the items
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
     // --------------------------------------------------------------------------------------------
@@ -112,7 +113,9 @@ public class EstateListFragment extends Fragment {
     // Get all Estates for CurrentRealEstateAgent
     private void getCurrentEstates() {
         Log.d(TAG, "getEstates: ");
-        mEstatesListViewModel.getCurrentEstates().observe(this, this::updateEstateList);
+        CurrentEstateListDataRepository.getInstance().getCurrentEstateList()
+                .observe(this, this::updateEstateList);
+        //mEstatesListViewModel.getCurrentEstates().observe(this, this::updateEstateList);
     }
     // ---------------------------------------------------------------------------------------------
     //                                          UI
@@ -120,7 +123,6 @@ public class EstateListFragment extends Fragment {
     // Update the list of Estate
     private void updateEstateList(List<Estate> estates){
         Log.d(TAG, "updateEstateList: ");
-        Log.d(TAG, "updateEstateList: estates.size = "+ estates.size());
-        mEstateListAdapter.updateData(estates);
+        if (estates != null) mEstateListAdapter.updateData(estates);
     }
 }

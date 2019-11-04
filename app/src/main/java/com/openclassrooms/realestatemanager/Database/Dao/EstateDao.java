@@ -6,7 +6,9 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Update;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.openclassrooms.realestatemanager.Models.Estate;
 
@@ -21,6 +23,9 @@ public interface EstateDao {
 
     @Query("SELECT * FROM Estate WHERE realEstateAgent_Id = :realEstateAgent_Id")
     LiveData<List<Estate>> getEstates(long realEstateAgent_Id);
+
+    @RawQuery(observedEntities = Estate.class)
+    LiveData<List<Estate>> getEstates(SupportSQLiteQuery query);
 
     @Query("SELECT * FROM Estate WHERE estate_Id = :estate_Id")
     LiveData<Estate> getEstate(long estate_Id);

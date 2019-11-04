@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.PhotoList;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.Controllers.Activities.CreateEstateActivity;
 import com.openclassrooms.realestatemanager.Controllers.Activities.UpdateEstateActivity;
+import com.openclassrooms.realestatemanager.Controllers.Fragments.EstateDetailsFragment;
 import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
@@ -23,6 +25,7 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
     @BindView(R.id.photo_list_image) ImageView mImage;
     @BindView(R.id.photo_list_bt_delete) Button mDeleteButton;
     @BindView(R.id.photo_list_et_room) EditText mRoomType;
+
 
     private PhotoListAdapter.OnPhotoClick mOnPhotoClick;
     private String mPhoto;
@@ -53,6 +56,12 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
         if (caller == UpdateEstateActivity.class) {
             mRoomType.setVisibility(View.VISIBLE);
             mDeleteButton.setVisibility(View.VISIBLE);
+        }
+        if (caller == EstateDetailsFragment.class) {
+            mRoomType.setVisibility(View.VISIBLE);
+            mRoomType.setFocusable(false);
+            mRoomType.setBackgroundColor(Color.TRANSPARENT);
+            mRoomType.setHint("");
         }
     }
 

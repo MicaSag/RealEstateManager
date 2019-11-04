@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +28,7 @@ import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.Estate;
+import com.openclassrooms.realestatemanager.Models.views.EstateCreateViewModel;
 import com.openclassrooms.realestatemanager.Models.views.EstateUpdateViewModel;
 import com.openclassrooms.realestatemanager.PhotoList.PhotoListAdapter;
 import com.openclassrooms.realestatemanager.R;
@@ -36,16 +38,22 @@ import com.openclassrooms.realestatemanager.Utils.Converters;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import org.threeten.bp.DateTimeUtils;
+import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -74,6 +82,7 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
     @BindView(R.id.estate_ed_numbers_bathrooms) EditText mNumbersBathrooms;
     @BindView(R.id.estate_ed_numbers_bedrooms) EditText mNumbersBedrooms;
     @BindView(R.id.estate_ed_date_entry) EditText mEntryDate;
+    @BindView(R.id.activity_update_ed_date_sale) EditText mSaleDate;
     @BindView(R.id.estate_rv_photos) RecyclerView mRecyclerViewPhotos;
     @BindView(R.id.estate_chip_school) Chip mChipSchool;
     @BindView(R.id.estate_chip_garden) Chip mChipGarden;
@@ -86,6 +95,7 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
 
     // Declarations for management of the date fields with a DatePickerDialog
     private DatePickerDialog mEntryDatePickerDialog;
+    private DatePickerDialog mSaleDatePickerDialog;
     private SimpleDateFormat displayDateFormatter;
     private Calendar newCalendar;
 
@@ -166,10 +176,40 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
     // ---------------------------------------------------------------------------------------------
     //                                        VIEW MODEL
     // ---------------------------------------------------------------------------------------------
-    // Configure RealEstateViewModel
-    private void configureEstateUpdateViewModel(){
+    // Configure ViewModel
+    private void configureEstateUpdateViewModel() {
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
         mEstateUpdateViewModel = ViewModelProviders.of(this, modelFactory).get(EstateUpdateViewModel.class);
+
+        mEstateUpdateViewModel.getViewActionLiveData().observe(this, new Observer<EstateUpdateViewModel.ViewAction>() {
+            @Override
+            public void onChanged(EstateUpdateViewModel.ViewAction viewAction) {
+                if (viewAction == null) {
+                    return;
+                }
+
+                switch (viewAction) {
+                    case INVALID_INPUT:
+                        showSnackBar("Required data");
+                        break;
+
+                    case FINISH_ACTIVITY:
+                        Intent intent = new Intent();
+                        intent.putExtra(BUNDLE_UPDATE_OK, true);
+                        setResult(RESULT_OK, intent);
+                        // Close Activity and go back to previous activity
+                        finish();
+                        break;
+                }
+            }
+        });
+
+        // Observe a change of Date of Entry on the Market
+        mEstateUpdateViewModel.getDateEntryOfTheMarket().observe(this,this::refreshDateEntryOfTheMarket);
+        // Observe a change of Date of Sale
+        mEstateUpdateViewModel.getDateOfSale().observe(this,this::refreshDateOfSale);
+        // Observe a change of the photo list
+        mEstateUpdateViewModel.getPhotos().observe(this,this::refreshPhotoList);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -184,14 +224,6 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         mRecyclerViewPhotos.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items
         mRecyclerViewPhotos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-
-    // Positions an observable on the list of photos displayed in the RecyclerView
-        mEstateUpdateViewModel.getPhotos().observe(this,this::notifyRecyclerView);
-}
-    // Refreshes the RecyclerView with the new photo list
-    private void notifyRecyclerView(ArrayList<String> photos) {
-        Log.d(TAG, "notifyRecyclerView() called with: photos = [" + photos + "]");
-        mPhotoListAdapter.setNewData(photos);
     }
     // ---------------------------------------------------------------------------------------------
     //                                           ACTIONS
@@ -200,6 +232,11 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
     @OnClick(R.id.estate_ed_date_entry)
     public void onClickEntryDate(View view) {
         mEntryDatePickerDialog.show();
+    }
+    // Click on SaleDate Field
+    @OnClick(R.id.activity_update_ed_date_sale)
+    public void onClickSaleDate(View view) {
+        mSaleDatePickerDialog.show();
     }
     // Click on Take Photo
     @OnClick(R.id.estate_iv_take_photo)
@@ -223,52 +260,27 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
     public void validate(View view) {
         Log.d(TAG, "validate: ");
 
-        if (validateRequiredData()) {
-            mEstateUpdateViewModel.getEstate().setType(mAutoCompleteTVType.getText().toString());
-            mEstateUpdateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
-            mEstateUpdateViewModel.getEstate().setDescription(mDescription.getText().toString());
-            mEstateUpdateViewModel.getEstate().setPhotos(mEstateUpdateViewModel.getPhotos().getValue());
-            ArrayList<String> address = new ArrayList<>();
-            address.add(mAddressWay.getText().toString());
-            address.add(mAddressComplement.getText().toString());
-            address.add(mAddressPostalCode.getText().toString());
-            address.add(mAddressCity.getText().toString());
-            address.add(mAddressState.getText().toString());
-            mEstateUpdateViewModel.getEstate().setAddress(address);
-            mEstateUpdateViewModel.getEstate().setArea(Integer.parseInt(mSurface.getText().toString()));
-            mEstateUpdateViewModel.getEstate().setNumberOfParts(Integer.parseInt(mNumbersRooms.getText().toString()));
-            mEstateUpdateViewModel.getEstate().setNumberOfBathrooms(Integer.parseInt(mNumbersBathrooms.getText().toString()));
-            mEstateUpdateViewModel.getEstate().setNumberOfBedrooms(Integer.parseInt(mNumbersBedrooms.getText().toString()));
-            // Chips (overrides the value if the key already exists)
-            if (mEstateUpdateViewModel.getEstate().getPointOfInterest() == null)
-                mEstateUpdateViewModel.getEstate().setPointOfInterest(new HashMap<>());
-            if (mChipGarden.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("Garden","Garden");
-            else  mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("Garden");
-            if (mChipLibrary.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("Library","Library");
-            else mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("Library");
-            if (mChipRestaurant.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("Restaurant","Restaurant");
-            else mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("Restaurant");
-            if (mChipSchool.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("School","School");
-            else mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("School");
-            if (mChipSwimmingPool.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("Swimming Pool","Swimming Pool");
-            else mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("Swimming Pool");
-            if (mChipTownHall.isChecked()) mEstateUpdateViewModel.getEstate().getPointOfInterest().put("Town Hall","Town Hall");
-            else mEstateUpdateViewModel.getEstate().getPointOfInterest().remove("Town Hall");
-            // Current Agent Id
-            mEstateUpdateViewModel.getEstate().setRealEstateAgent_Id(CurrentRealEstateAgentDataRepository.
-                    getInstance().getCurrentRealEstateAgent_Id().getValue());
-
-            // Update Estate and save it in DataBase
-            mEstateUpdateViewModel.updateEstate();
-
-            // Notify the agent that the creative went well
-            // Create a intent for call Activity
-            Intent intent = new Intent();
-            intent.putExtra(BUNDLE_UPDATE_OK,true);
-            setResult(RESULT_OK,intent);
-            // Close Activity and go back to previous activity
-            this.finish();
-        }
+        mEstateUpdateViewModel.updateEstate(
+                mAutoCompleteTVType.getText().toString(),
+                mPrice.getText().toString(),
+                mSurface.getText().toString(),
+                mDescription.getText().toString(),
+                mAddressWay.getText().toString(),
+                mAddressComplement.getText().toString(),
+                mAddressPostalCode.getText().toString(),
+                mAddressCity.getText().toString(),
+                mAddressState.getText().toString(),
+                mNumbersRooms.getText().toString(),
+                mNumbersBathrooms.getText().toString(),
+                mNumbersBedrooms.getText().toString(),
+                // Point of Interest
+                mChipGarden.isChecked(),
+                mChipLibrary.isChecked(),
+                mChipRestaurant.isChecked(),
+                mChipSchool.isChecked(),
+                mChipSwimmingPool.isChecked(),
+                mChipTownHall.isChecked()
+        );
     }
     // ---------------------------------------------------------------------------------------------
     //                                     MANAGE PHOTO LIST
@@ -328,21 +340,14 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
 
         // Manage Photo Take
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            // Save photo in List
-            ArrayList<String> photos = new ArrayList<>();
-            photos.addAll(mEstateUpdateViewModel.getPhotos().getValue());
-            photos.add(currentPhotoPath);
-            mEstateUpdateViewModel.setPhotos(photos);
+            Log.d(TAG, "onActivityResult: currentPhotoPath = "+currentPhotoPath);
+            mEstateUpdateViewModel.addPhoto(currentPhotoPath);
         }
 
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
-            //Bitmap thumbnail = data.getParcelableExtra("data");
             Uri fullPhotoUri = data.getData();
-            // Save photo in List
-            ArrayList<String> photos = new ArrayList<>();
-            photos.addAll(mEstateUpdateViewModel.getPhotos().getValue());
-            photos.add(fullPhotoUri.toString());
-            mEstateUpdateViewModel.setPhotos(photos);
+            Log.d(TAG, "onActivityResult: fullPhotoUri = "+fullPhotoUri.toString());
+            mEstateUpdateViewModel.addPhoto(fullPhotoUri.toString());
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -366,6 +371,7 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         newCalendar = Calendar.getInstance();
         displayDateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         setEntryDateField();
+        setSaleDateField();
     }
     // Manage Entry Date Field
     private void setEntryDateField() {
@@ -373,51 +379,49 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         // Create a DatePickerDialog and manage it
         mEntryDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
+                Calendar newDateEntryOfTheMarket = Calendar.getInstance();
+                newDateEntryOfTheMarket.set(year, monthOfYear, dayOfMonth);
 
-                // Display date selected
-                mEntryDate.setText(displayDateFormatter.format(newDate.getTime()));
+                Instant i = DateTimeUtils.toInstant(newDateEntryOfTheMarket);
+                Timestamp ts = DateTimeUtils.toSqlTimestamp(i);
+                LocalDateTime ldt = DateTimeUtils.toLocalDateTime(ts);
 
-                // Save date selected in the Model
-                mEstateUpdateViewModel.getEstate()
-                        .setDateEntryOfTheMarket(DateTimeUtils.toInstant(newDate.getTime())
-                                .atZone(ZoneId.systemDefault()).toLocalDateTime());
+                // Update entryDate in ViewModel
+                mEstateUpdateViewModel.getDateEntryOfTheMarket().setValue(ldt);
+            }
+
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
+                newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+    // Manage Date Of Sale
+    private void setSaleDateField() {
+        Log.d(TAG, "setSaleDateField() called");
+        // Create a DatePickerDialog and manage it
+        mSaleDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDateOfSale = Calendar.getInstance();
+                newDateOfSale.set(year, monthOfYear, dayOfMonth);
+
+                Instant i = DateTimeUtils.toInstant(newDateOfSale);
+                Timestamp ts = DateTimeUtils.toSqlTimestamp(i);
+                LocalDateTime ldt = DateTimeUtils.toLocalDateTime(ts);
+
+                // Update SaleDate in ViewModel
+                mEstateUpdateViewModel.getDateOfSale().setValue(ldt);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
                 newCalendar.get(Calendar.DAY_OF_MONTH));
     }
     // ---------------------------------------------------------------------------------------------
-    //                                 VALIDATE REQUIRED DATA
-    // ---------------------------------------------------------------------------------------------
-    // Check if the required criteria are filled
-    protected boolean validateRequiredData() {
-        // > Required data <
-        // the list of keywords required for validate the estate creation
-        if (    mAutoCompleteTVType.getText().toString().equals("") ||
-                mPrice.getText().toString().equals("") ||
-                mDescription.getText().toString().equals("") ||
-                //mAddress.getText().toString().equals("") ||
-                mSurface.getText().toString().equals("") ||
-                mNumbersRooms.getText().toString().equals("") ||
-                mNumbersBathrooms.getText().toString().equals("") ||
-                mNumbersBedrooms.getText().toString().equals("") ||
-                mEntryDate.getText().toString().equals("")
-        ){
-            showSnackBar("Required data");
-            return false;
-        } else return true;
-    }
-    // ---------------------------------------------------------------------------------------------
     //                                         RESTORE DATA
     // ---------------------------------------------------------------------------------------------
     protected void restoreData(Estate estate) {
 
-        // Save Estate in ViewModel
-        mEstateUpdateViewModel.setEstate(estate);
+        // Restore Entry Date
+        mEstateUpdateViewModel.getDateEntryOfTheMarket().setValue(estate.getDateEntryOfTheMarket());
 
-        // Save Photos in ViewModel
+        // Restore Photo Lost
         mEstateUpdateViewModel.setPhotos(estate.getPhotos());
 
         // Display Data
@@ -426,20 +430,6 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
     // ---------------------------------------------------------------------------------------------
     //                                            UI
     // ---------------------------------------------------------------------------------------------
-    // Restore Points Of Interest
-    private void restorePointsOfInterest(){
-        Log.d(TAG, "restorePointsOfInterest: ");
-        Map<String,String> pointsOfInterest = mEstateUpdateViewModel.getEstate().getPointOfInterest();
-        if (pointsOfInterest != null)
-            for (Map.Entry<String, String> pointOfInterest : pointsOfInterest.entrySet()){
-                if (pointOfInterest.getKey().equals("Restaurant")) mChipRestaurant.setChecked(true);
-                if (pointOfInterest.getKey().equals("School")) mChipSchool.setChecked(true);
-                if (pointOfInterest.getKey().equals("Town Hall")) mChipTownHall.setChecked(true);
-                if (pointOfInterest.getKey().equals("Swimming Pool")) mChipSwimmingPool.setChecked(true);
-                if (pointOfInterest.getKey().equals("Library")) mChipLibrary.setChecked(true);
-                if (pointOfInterest.getKey().equals("Garden")) mChipGarden.setChecked(true);
-            }
-    }
     protected void updateUI(Estate estate) {
         Log.d(TAG, "updateUI: ");
 
@@ -455,9 +445,37 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         mNumbersRooms.setText(String.valueOf(estate.getNumberOfParts()));
         mNumbersBathrooms.setText(String.valueOf(estate.getNumberOfBathrooms()));
         mNumbersBedrooms.setText(String.valueOf(estate.getNumberOfBedrooms()));
-        mEntryDate.setText(Utils.fromLocalDateTime(estate.getDateEntryOfTheMarket()));
+        //mEntryDate.setText(Utils.fromLocalDateTime(estate.getDateEntryOfTheMarket()));
 
         // Restore Points of Interest
-        this.restorePointsOfInterest();
+        this.restorePointsOfInterest(estate);
+    }
+    // Restore Points Of Interest
+    private void restorePointsOfInterest(Estate estate){
+        Log.d(TAG, "restorePointsOfInterest: ");
+        Map<String,String> pointsOfInterest = estate.getPointOfInterest();
+        if (pointsOfInterest != null)
+            for (Map.Entry<String, String> pointOfInterest : pointsOfInterest.entrySet()){
+                if (pointOfInterest.getKey().equals("Restaurant")) mChipRestaurant.setChecked(true);
+                if (pointOfInterest.getKey().equals("School")) mChipSchool.setChecked(true);
+                if (pointOfInterest.getKey().equals("Town Hall")) mChipTownHall.setChecked(true);
+                if (pointOfInterest.getKey().equals("Swimming Pool")) mChipSwimmingPool.setChecked(true);
+                if (pointOfInterest.getKey().equals("Library")) mChipLibrary.setChecked(true);
+                if (pointOfInterest.getKey().equals("Garden")) mChipGarden.setChecked(true);
+            }
+    }
+    // Refresh the Entry date Field
+    private void refreshDateEntryOfTheMarket(LocalDateTime dateEntryOfTheMarket){
+        Log.d(TAG, "refreshDateEntryOfTheMarket: ");
+        mEntryDate.setText(Utils.fromLocalDateTime(dateEntryOfTheMarket));
+    }
+    // Refresh the Date Of Sale
+    private void refreshDateOfSale(LocalDateTime dateOfSale) {
+        Log.d(TAG, "refreshDateOfSale: ");
+        mSaleDate.setText(Utils.fromLocalDateTime(dateOfSale));
+    }
+    // refresh the Photo List
+    private void refreshPhotoList(List<String> photos){
+        mPhotoListAdapter.setNewData(photos);
     }
 }

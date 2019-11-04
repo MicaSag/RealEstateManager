@@ -25,7 +25,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     private final List<String> mPhotos = new ArrayList<>();
 
     // For Caller
-    Class mCaller;
+    private Class mCaller;
 
     // For CALLBACK
     public interface OnPhotoClick{

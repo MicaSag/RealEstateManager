@@ -9,6 +9,6 @@
 
     <!-- colors of the Photo List Delete Button -->
     <!-- E6 is for alpha and others pairs zero's are for R G B -->
-    <color name="photo_list_delete_button">#E6616161</color>
+    <color name="photo_list_description">#E6616161</color>
 
 </resources>

@@ -4,6 +4,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:showIn="@layout/activity_search_estate">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/search_estate_guideline_vertical_50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
     <!-- ESTATE TYPE -->
     <com.google.android.material.textfield.TextInputLayout
@@ -35,50 +41,48 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_estate_tf_price_1"
         style="@style/TextFieldTheme"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="@dimen/estate_marginTop"
         android:layout_marginEnd="32dp"
-        android:hint="@string/price"
-        app:helperText="*Required"
-        app:helperTextEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="Minimum price"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/search_estate_guideline_vertical_50"
         app:layout_constraintTop_toBottomOf="@+id/search_estate_tf_type"
         app:startIconDrawable="@drawable/baseline_attach_money_black_24">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_estate_ed_price_1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
             android:nextFocusDown="@id/search_estate_ed_price_2"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="0"/>
     </com.google.android.material.textfield.TextInputLayout>
     <!-- Second Price -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_estate_tf_price_2"
         style="@style/TextFieldTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="32dp"
         android:layout_marginTop="@dimen/estate_marginTop"
         android:layout_marginEnd="32dp"
-        android:hint="@string/price"
-        app:helperText="*Required"
-        app:helperTextEnabled="true"
+        android:hint="Maximum price"
         app:layout_constraintBottom_toBottomOf="@+id/search_estate_tf_price_1"
         app:layout_constraintTop_toTopOf="@+id/search_estate_tf_price_1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/search_estate_guideline_vertical_50"
         app:startIconDrawable="@drawable/baseline_attach_money_black_24">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_estate_ed_price_2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
             android:nextFocusDown="@id/search_estate_ed_city"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="0"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- City -->
@@ -91,7 +95,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginTop="@dimen/estate_marginTop"
         android:layout_marginBottom="@dimen/estate_marginTop"
-        app:layout_constraintBottom_toTopOf="@id/address_card_view_tf_state"
+        app:layout_constraintTop_toBottomOf="@id/search_estate_tf_price_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:hint="City">
@@ -104,130 +108,328 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- SURFACE -->
+    <!-- SURFACE Between -->
+    <!-- First surface -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/estate_tf_surface"
+        android:id="@+id/search_estate_tf_surface_1"
         style="@style/TextFieldTheme"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="@dimen/estate_marginTop"
         android:layout_marginEnd="32dp"
-        android:hint="@string/surface"
-        app:helperText="*Required"
-        app:helperTextEnabled="true"
-        app:layout_constraintBottom_toTopOf="@+id/estate_tf_numbers_rooms"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="Minimum area"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/estate_include_address_card_view"
+        app:layout_constraintEnd_toStartOf="@+id/search_estate_guideline_vertical_50"
+        app:layout_constraintTop_toBottomOf="@+id/search_estate_tf_city"
+        app:startIconDrawable="@drawable/baseline_settings_overscan_black_24">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_estate_ed_surface_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="0"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <!-- Second surface -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_estate_tf_surface_2"
+        style="@style/TextFieldTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/estate_marginTop"
+        android:layout_marginEnd="32dp"
+        android:hint="Maximum area"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintTop_toTopOf="@+id/search_estate_tf_surface_1"
+        app:layout_constraintBottom_toBottomOf="@+id/search_estate_tf_surface_1"
         app:startIconDrawable="@drawable/baseline_settings_overscan_black_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/estate_ed_surface"
+            android:id="@+id/search_estate_ed_surface_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="0"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- NUMBER OF ROOMS -->
+    <!-- First room -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/estate_tf_numbers_rooms"
+        android:id="@+id/search_estate_tf_numbers_rooms_1"
         style="@style/TextFieldTheme"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="@dimen/estate_marginTop"
         android:layout_marginEnd="32dp"
-        android:hint="@string/number_of_rooms"
-        app:helperText="*Required"
-        app:helperTextEnabled="true"
-        app:layout_constraintBottom_toTopOf="@+id/estate_tf_numbers_bathrooms"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="Minimum of room"
+        app:layout_constraintEnd_toStartOf="@id/search_estate_guideline_vertical_50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/estate_tf_surface"
+        app:layout_constraintTop_toBottomOf="@+id/search_estate_tf_surface_1"
         app:startIconDrawable="@drawable/baseline_home_black_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/estate_ed_numbers_rooms"
+            android:id="@+id/search_estate_ed_numbers_rooms_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="0"/>
     </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- NUMBER OF BATHROOMS -->
+    <!-- Second room -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/estate_tf_numbers_bathrooms"
+        android:id="@+id/search_estate_tf_numbers_rooms_2"
         style="@style/TextFieldTheme"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="@dimen/estate_marginTop"
         android:layout_marginEnd="32dp"
-        android:hint="@string/number_of_bathrooms"
-        app:helperText="*Required"
-        app:helperTextEnabled="true"
-        app:layout_constraintBottom_toTopOf="@+id/estate_tf_numbers_bedrooms"
+        android:hint="Maximum of room"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintBottom_toBottomOf="@+id/search_estate_tf_numbers_rooms_1"
+        app:layout_constraintTop_toTopOf="@+id/search_estate_tf_numbers_rooms_1"
+        app:startIconDrawable="@drawable/baseline_home_black_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_estate_ed_numbers_rooms_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="0"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- NUMBER OF BATHROOM -->
+    <!-- First bathroom -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_estate_tf_numbers_bathrooms_1"
+        style="@style/TextFieldTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/estate_marginTop"
+        android:layout_marginEnd="32dp"
+        android:hint="Minimum of bathroom"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/estate_tf_numbers_rooms"
+        app:layout_constraintEnd_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintTop_toBottomOf="@+id/search_estate_tf_numbers_rooms_1"
         app:startIconDrawable="@drawable/baseline_hot_tub_black_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/estate_ed_numbers_bathrooms"
+            android:id="@+id/search_estate_ed_numbers_bathrooms_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="0"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <!-- Second bathroom -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_estate_tf_numbers_bathrooms_2"
+        style="@style/TextFieldTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/estate_marginTop"
+        android:layout_marginEnd="32dp"
+        android:hint="Maximum of bathroom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintBottom_toBottomOf="@+id/search_estate_tf_numbers_bathrooms_1"
+        app:layout_constraintTop_toTopOf="@+id/search_estate_tf_numbers_bathrooms_1"
+        app:startIconDrawable="@drawable/baseline_hot_tub_black_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_estate_ed_numbers_bathrooms_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="0"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <!-- NUMBER OF BEDROOMS -->
+    <!-- First bedroom -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/estate_tf_numbers_bedrooms"
+        android:id="@+id/search_estate_tf_numbers_bedrooms_1"
         style="@style/TextFieldTheme"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="@dimen/estate_marginTop"
         android:layout_marginEnd="32dp"
-        android:hint="@string/number_of_bedrooms"
-        app:helperText="*Required"
-        app:helperTextEnabled="true"
-        app:layout_constraintBottom_toTopOf="@+id/estate_tf_date_entry"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="Minimum of bed"
+        app:layout_constraintEnd_toStartOf="@id/search_estate_guideline_vertical_50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/estate_tf_numbers_bathrooms"
+        app:layout_constraintTop_toBottomOf="@+id/search_estate_tf_numbers_bathrooms_1"
         app:startIconDrawable="@drawable/baseline_hotel_black_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/estate_ed_numbers_bedrooms"
+            android:id="@+id/search_estate_ed_numbers_bedrooms_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="0"/>
     </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- DATE OF ENTRY OF THE ESTATE -->
+    <!-- Second bedroom -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/estate_tf_date_entry"
+        android:id="@+id/search_estate_tf_numbers_bedrooms_2"
         style="@style/TextFieldTheme"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="@dimen/estate_marginTop"
         android:layout_marginEnd="32dp"
-        android:hint="@string/date_of_entry_of_the_estate"
-        app:helperText="*Required"
-        app:helperTextEnabled="true"
+        android:hint="Maximum of bed"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/estate_tf_numbers_bedrooms"
-        app:startIconDrawable="@drawable/baseline_date_range_24">
+        app:layout_constraintStart_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintBottom_toBottomOf="@+id/search_estate_tf_numbers_bedrooms_1"
+        app:layout_constraintTop_toTopOf="@+id/search_estate_tf_numbers_bedrooms_1"
+        app:startIconDrawable="@drawable/baseline_hotel_black_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/estate_ed_date_entry"
+            android:id="@+id/search_estate_ed_numbers_bedrooms_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="0"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- DATE OF ENTRY OF THE ESTATE -->
+    <!-- First entry date -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_estate_tf_date_entry_1"
+        style="@style/TextFieldTheme"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/estate_marginTop"
+        android:layout_marginEnd="32dp"
+        android:hint="Minimum date entry of the estate"
+        app:layout_constraintEnd_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_estate_tf_numbers_bedrooms_1"
+        app:startIconDrawable="@drawable/baseline_date_range_24">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_estate_ed_date_entry_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
             android:inputType="date" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <!-- Second entry date -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_estate_tf_date_entry_2"
+        style="@style/TextFieldTheme"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/estate_marginTop"
+        android:layout_marginEnd="32dp"
+        android:hint="Maximum date entry of the estate"
+        app:layout_constraintStart_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/search_estate_tf_date_entry_1"
+        app:layout_constraintBottom_toBottomOf="@+id/search_estate_tf_date_entry_1"
+        app:startIconDrawable="@drawable/baseline_date_range_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_estate_ed_date_entry_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="date" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- DATE OF SALE OF THE ESTATE -->
+    <!-- First sale date -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_estate_tf_date_sale_1"
+        style="@style/TextFieldTheme"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/estate_marginTop"
+        android:layout_marginEnd="32dp"
+        android:hint="Minimum sale of date"
+        app:layout_constraintEnd_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_estate_tf_date_entry_1"
+        app:startIconDrawable="@drawable/baseline_date_range_24">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_estate_ed_date_sale_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="date"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <!-- Second sale date -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_estate_tf_date_sale_2"
+        style="@style/TextFieldTheme"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/estate_marginTop"
+        android:layout_marginEnd="32dp"
+        android:hint="Maximum sale of Date"
+        app:layout_constraintStart_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/search_estate_tf_date_sale_1"
+        app:layout_constraintBottom_toBottomOf="@+id/search_estate_tf_date_sale_1"
+        app:startIconDrawable="@drawable/baseline_date_range_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_estate_ed_date_sale_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="date" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- NUMBER OF PHOTOS -->
+    <!-- First number -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/estate_tf_date_entry"
+        style="@style/TextFieldTheme"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/estate_marginTop"
+        android:layout_marginEnd="32dp"
+        android:hint="Minimum of photo"
+        app:layout_constraintEnd_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_estate_tf_date_sale_1">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_estate_ed_numbers_photo_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="0"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <!-- Second number -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_estate_tf_number_photo_2"
+        style="@style/TextFieldTheme"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/estate_marginTop"
+        android:layout_marginEnd="32dp"
+        android:hint="Maximum of photo"
+        app:layout_constraintStart_toStartOf="@id/search_estate_guideline_vertical_50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/estate_tf_date_entry"
+        app:layout_constraintBottom_toBottomOf="@+id/estate_tf_date_entry">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_estate_ed_numbers_photo_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="0"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <include layout="@layout/point_of_interest" />

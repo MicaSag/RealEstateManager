@@ -30,19 +30,19 @@ import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.views.EstateCreateViewModel;
 import com.openclassrooms.realestatemanager.PhotoList.PhotoListAdapter;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentDataRepository;
+import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import org.threeten.bp.DateTimeUtils;
-import org.threeten.bp.ZoneId;
+import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDateTime;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -141,13 +141,8 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
-
         // Configure AutoComplete Type
         this.configureAutoCompleteType();
-
-        // Configure RealEstateViewModel
-        this.configureEstateCreateViewModel();
 
         // Management of Date Fields
         this.manageDateFields();
@@ -155,13 +150,13 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         // Configure RecyclerView
         configureRecyclerView();
 
-        // Update UI
-        this.updateUI();
+        // Configure RealEstateViewModel
+        this.configureEstateCreateViewModel();
     }
     // ---------------------------------------------------------------------------------------------
     //                                        VIEW MODEL
     // ---------------------------------------------------------------------------------------------
-    // Configure RealEstateViewModel
+    // Configure ViewModel
     private void configureEstateCreateViewModel(){
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
         mEstateCreateViewModel = ViewModelProviders.of(this, modelFactory).get(EstateCreateViewModel.class);
@@ -179,11 +174,20 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                         break;
 
                     case FINISH_ACTIVITY:
+                        Intent intent = new Intent();
+                        intent.putExtra(BUNDLE_CREATE_OK,true);
+                        setResult(RESULT_OK,intent);
+                        // Close Activity and go back to previous activity
                         finish();
                         break;
                 }
             }
         });
+
+        // Observe a change of Date of Entry on the Market
+        mEstateCreateViewModel.getDateEntryOfTheMarket().observe(this,this::refreshDateEntryOfTheMarket);
+        // Observe a change of the photo list
+        mEstateCreateViewModel.getPhotos().observe(this,this::refreshPhotoList);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -198,14 +202,6 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         mRecyclerViewPhotos.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items
         mRecyclerViewPhotos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        // Positions an observable on the list of photos displayed in the RecyclerView
-        mEstateCreateViewModel.getPhotos().observe(this,this::notifyRecyclerView);
-    }
-    // Refreshes the RecyclerView with the new photo list
-    private void notifyRecyclerView(List<String> photos) {
-        Log.d(TAG, "notifyRecyclerView() called with: photos = [" + photos + "]");
-        mPhotoListAdapter.setNewData(photos);
     }
     // ---------------------------------------------------------------------------------------------
     //                                           ACTIONS
@@ -237,58 +233,27 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     public void validate(View view) {
         Log.d(TAG, "validate: ");
 
-        // TODO Ne pas construire d'ArrayList
-        ArrayList<String> address = new ArrayList<>();
-        address.add(mAddressWay.getText().toString());
-        address.add(mAddressComplement.getText().toString());
-        address.add(mAddressPostalCode.getText().toString());
-        address.add(mAddressCity.getText().toString());
-        address.add(mAddressState.getText().toString());
-
-
-
         mEstateCreateViewModel.createEstate(
                 mAutoCompleteTVType.getText().toString(),
-                mPrice.getText().toString(), // TODO Faire le parsing dans le ViewModel
-                Integer.parseInt(mSurface.getText().toString())
+                mPrice.getText().toString(),
+                mSurface.getText().toString(),
+                mDescription.getText().toString(),
+                mAddressWay.getText().toString(),
+                mAddressComplement.getText().toString(),
+                mAddressPostalCode.getText().toString(),
+                mAddressCity.getText().toString(),
+                mAddressState.getText().toString(),
+                mNumbersRooms.getText().toString(),
+                mNumbersBathrooms.getText().toString(),
+                mNumbersBedrooms.getText().toString(),
+                // Point of Interest
+                mChipGarden.isChecked(),
+                mChipLibrary.isChecked(),
+                mChipRestaurant.isChecked(),
+                mChipSchool.isChecked(),
+                mChipSwimmingPool.isChecked(),
+                mChipTownHall.isChecked()
         );
-
-        /*
-        if (validateRequiredData()) {
-            mEstateCreateViewModel.getEstate().setType();
-            mEstateCreateViewModel.getEstate().setPrice(Integer.parseInt(mPrice.getText().toString()));
-            mEstateCreateViewModel.getEstate().setDescription(mDescription.getText().toString());
-
-            mEstateCreateViewModel.getEstate().setAddress(address);
-            mEstateCreateViewModel.getEstate().setArea(Integer.parseInt(mSurface.getText().toString()));
-            mEstateCreateViewModel.getEstate().setNumberOfParts(Integer.parseInt(mNumbersRooms.getText().toString()));
-            mEstateCreateViewModel.getEstate().setNumberOfBathrooms(Integer.parseInt(mNumbersBathrooms.getText().toString()));
-            mEstateCreateViewModel.getEstate().setNumberOfBedrooms(Integer.parseInt(mNumbersBedrooms.getText().toString()));
-            // Chips
-            HashMap<String,String> pointsOfInterest = new HashMap<>();
-            mEstateCreateViewModel.getEstate().setPointOfInterest(pointsOfInterest);
-            if (mChipGarden.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("Garden","Garden");
-            if (mChipLibrary.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("Library","Library");
-            if (mChipRestaurant.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("Restaurant","Restaurant");
-            if (mChipSchool.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("School","School");
-            if (mChipSwimmingPool.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("Swimming Pool","Swimming Pool");
-            if (mChipTownHall.isChecked()) mEstateCreateViewModel.getEstate().getPointOfInterest().put("Town Hall","Town Hall");
-            // Current Agent Id
-            mEstateCreateViewModel.getEstate().setRealEstateAgent_Id(CurrentRealEstateAgentDataRepository.
-                    getInstance().getCurrentRealEstateAgent_Id().getValue());
-
-            // Create Estate and save it in DataBase
-            mEstateCreateViewModel.createEstate();
-
-            // Notify the agent that the creative went well
-            // Create a intent for call Activity
-            // TODO NO MORE NEEDED IIRC
-            Intent intent = new Intent();
-            intent.putExtra(BUNDLE_CREATE_OK,true);
-            setResult(RESULT_OK,intent);
-            // Close Activity and go back to previous activity
-            this.finish();
-        }*/
     }
     // ---------------------------------------------------------------------------------------------
     //                                     MANAGE PHOTO LIST
@@ -348,14 +313,16 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
 
         // Manage Photo Take
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            mEstateCreateViewModel.getPhotos().getValue().add(currentPhotoPath);
+            Log.d(TAG, "onActivityResult: currentPhotoPath = "+currentPhotoPath);
+            mEstateCreateViewModel.addPhoto(currentPhotoPath);
+            mEstateCreateViewModel.addPhoto(currentPhotoPath);
         }
 
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
             Uri fullPhotoUri = data.getData();
-            mEstateCreateViewModel.getPhotos().getValue().add(fullPhotoUri.toString());
+            Log.d(TAG, "onActivityResult: fullPhotoUri = "+fullPhotoUri.toString());
+            mEstateCreateViewModel.addPhoto(fullPhotoUri.toString());
         }
-        mPhotoListAdapter.notifyDataSetChanged();
     }
     // ---------------------------------------------------------------------------------------------
     //                              AUTOCOMPLETE TYPE CONFIGURATION
@@ -384,47 +351,29 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         // Create a DatePickerDialog and manage it
         mEntryDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
+                Calendar newDateEntryOfTheMarket = Calendar.getInstance();
+                newDateEntryOfTheMarket.set(year, monthOfYear, dayOfMonth);
 
-                // Display date selected
-                mEntryDate.setText(displayDateFormatter.format(newDate.getTime()));
+                Instant i = DateTimeUtils.toInstant(newDateEntryOfTheMarket);
+                Timestamp ts = DateTimeUtils.toSqlTimestamp(i);
+                LocalDateTime ldt = DateTimeUtils.toLocalDateTime(ts);
 
-                // TODO Save date selected in the !!View!!Model
-                /*mEstateCreateViewModel.getEstate()
-                        .setDateEntryOfTheMarket(DateTimeUtils.toInstant(newDate.getTime())
-                                .atZone(ZoneId.systemDefault()).toLocalDateTime());*/
+                // Update entryDate in ViewModel
+                mEstateCreateViewModel.getDateEntryOfTheMarket().setValue(ldt);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
                 newCalendar.get(Calendar.DAY_OF_MONTH));
     }
     // ---------------------------------------------------------------------------------------------
-    //                                 VALIDATE REQUIRED DATA
-    // ---------------------------------------------------------------------------------------------
-    // Check if the required criteria are filled
-   /* protected boolean validateRequiredData() {
-        // > Required data <
-        // the list of keywords required for validate the estate creation
-        if (    mAutoCompleteTVType.getText().toString().equals("") ||
-                mPrice.getText().toString().equals("") ||
-                mDescription.getText().toString().equals("") ||
-                //mAddress.getText().toString().equals("") ||
-                mSurface.getText().toString().equals("") ||
-                mNumbersRooms.getText().toString().equals("") ||
-                mNumbersBathrooms.getText().toString().equals("") ||
-                mNumbersBedrooms.getText().toString().equals("") ||
-                mEntryDate.getText().toString().equals("")
-        ){
-                    showSnackBar("Required data");
-
-            return false;
-        } else return true;
-    }*/
-    // ---------------------------------------------------------------------------------------------
     //                                            UI
     // ---------------------------------------------------------------------------------------------
-    protected void updateUI() {
-        Log.d(TAG, "updateUI: ");
+    // Refresh the Entry date Field
+    private void refreshDateEntryOfTheMarket(LocalDateTime dateEntryOfTheMarket){
+        mEntryDate.setText(Utils.fromLocalDateTime(dateEntryOfTheMarket));
+    }
+    // refresh the Photo List
+    private void refreshPhotoList(List<String> photos){
+        mPhotoListAdapter.setNewData(photos);
     }
 }

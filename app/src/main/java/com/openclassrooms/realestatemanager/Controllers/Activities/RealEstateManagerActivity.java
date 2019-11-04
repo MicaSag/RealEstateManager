@@ -1,50 +1,41 @@
 package com.openclassrooms.realestatemanager.Controllers.Activities;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
-
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.location.Location;
-import android.os.Build;
-import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.openclassrooms.realestatemanager.Controllers.Bases.BaseActivity;
 import com.openclassrooms.realestatemanager.Controllers.Fragments.EstateDetailsFragment;
 import com.openclassrooms.realestatemanager.Controllers.Fragments.EstateListFragment;
-import com.openclassrooms.realestatemanager.Controllers.Fragments.MapFragment;
 import com.openclassrooms.realestatemanager.EstateList.EstateListAdapter;
 import com.openclassrooms.realestatemanager.Injections.Injection;
 import com.openclassrooms.realestatemanager.Injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Models.Estate;
 import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
-import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Models.views.RealEstateAgentViewModel;
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Repositories.CurrentEstateDataRepository;
-import com.openclassrooms.realestatemanager.Repositories.CurrentRealEstateAgentDataRepository;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import butterknife.BindView;
@@ -60,7 +51,6 @@ public class RealEstateManagerActivity  extends BaseActivity
 
     // --> New RealEstateAgent
     private static long REAL_ESTATE_AGENT_ID_1 = 1;
-    private static long REAL_ESTATE_AGENT_ID_2 = 2;
 
     // Fragments Declarations
     private EstateDetailsFragment mEstateDetailsFragment;
@@ -69,6 +59,7 @@ public class RealEstateManagerActivity  extends BaseActivity
     // For call Activities
     public static final int CREATE_ACTIVITY_REQUEST_CODE = 10;
     public static final int UPDATE_ACTIVITY_REQUEST_CODE = 20;
+    public static final int SEARCH_ACTIVITY_REQUEST_CODE = 30;
     // For transmission data to activity
     public static final String KEY_LOCATION = "KEY_LOCATION";
 
@@ -225,6 +216,12 @@ public class RealEstateManagerActivity  extends BaseActivity
             if(data.getBooleanExtra(UpdateEstateActivity.BUNDLE_UPDATE_OK, false))
                 showSnackBar("The update of the estate was carried out");
         }
+        // If the return result comes from the search activity
+        if (SEARCH_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
+            // Fetch the result from the Intent
+            if(data.getBooleanExtra(SearchEstateActivity.BUNDLE_SEARCH_OK, false))
+                showSnackBar("The search for estates has succeeded");
+        }
     }
     // ---------------------------------------------------------------------------------------------
     //                                             UI
@@ -234,11 +231,11 @@ public class RealEstateManagerActivity  extends BaseActivity
         //Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.menu_activity_real_estate_manager_search:
-                //Log.d(TAG, "onOptionsItemSelected: Search Button Activated");
-                long agent_Id;
-                agent_Id = (CurrentRealEstateAgentDataRepository.getInstance().
-                        getCurrentRealEstateAgent_Id().getValue() == 2) ? 1 : 2;
-                CurrentRealEstateAgentDataRepository.getInstance().setCurrentRealEstateAgent_Id(agent_Id);
+                // Create a intent for call Activity
+                Intent searchIntent = new Intent(this, SearchEstateActivity.class);
+
+                // Go to SearchEstateActivity
+                startActivityForResult(searchIntent, SEARCH_ACTIVITY_REQUEST_CODE);
                 return true;
             case R.id.menu_activity_real_estate_manager_edit:
                 // Create a intent for call Activity
@@ -298,8 +295,8 @@ public class RealEstateManagerActivity  extends BaseActivity
                 this.getLocationAndInitializeApi();
                 break;
             case R.id.activity_real_estate_manager_search:
-                // Call Search Activity
-                //callSearchActivity();
+                // Start Search Estate Activity
+                startSearchEstateActivity();
                 break;
             default:
                 break;
@@ -309,7 +306,6 @@ public class RealEstateManagerActivity  extends BaseActivity
 
         return true;
     }
-
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed: ");
@@ -331,6 +327,11 @@ public class RealEstateManagerActivity  extends BaseActivity
             intent.putExtra(KEY_LOCATION, lastKnowLocation);
             startActivity(intent);
         }
+    }
+    public void startSearchEstateActivity(){
+        Log.d(TAG, "startSearchEstateActivity: ");
+
+
     }
     // ---------------------------------------------------------------------------------------------
     //                                      LOCATION
@@ -436,8 +437,6 @@ public class RealEstateManagerActivity  extends BaseActivity
     public void onEstateClick(Estate estate) {
         Log.d(TAG, "onEstateClick: ");
         CurrentEstateDataRepository.getInstance().setCurrentEstate_Id(estate.getEstate_Id());
-
-        this.showSnackBar("Estate_Id = "+estate.getEstate_Id());
 
         // We only add DetailsFragment in Tablet mode (If found frame_layout_detail)
         if (findViewById(R.id.fragment_estate_details) == null)

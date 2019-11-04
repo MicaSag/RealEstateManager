@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.Repositories;
 
 import androidx.lifecycle.LiveData;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.openclassrooms.realestatemanager.Database.Dao.EstateDao;
 import com.openclassrooms.realestatemanager.Models.Estate;
@@ -19,6 +20,11 @@ public class EstateDataRepository {
     // --- GET ---
     // ===========
 
+    // Returns a specific Estate
+    public LiveData<Estate> getEstate(long estate_Id){
+        return mEstateDao.getEstate(estate_Id);
+    }
+
     // Return Estates managed by an Agent
     public LiveData<List<Estate>> getEstates(long realEstateAgent_Id){
         return mEstateDao.getEstates(realEstateAgent_Id);
@@ -29,9 +35,9 @@ public class EstateDataRepository {
         return mEstateDao.getEstates();
     }
 
-    // Returns a specific Estate
-    public LiveData<Estate> getEstate(long estate_Id){
-        return mEstateDao.getEstate(estate_Id);
+    // Returns all Estates from database corresponding at the query
+    public LiveData<List<Estate>> getEstates(SupportSQLiteQuery query){
+        return mEstateDao.getEstates(query);
     }
 
     // --- CREATE ---
