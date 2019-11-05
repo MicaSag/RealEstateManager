@@ -5,9 +5,9 @@ import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.openclassrooms.realestatemanager.Database.RealEstateManagerDatabase;
-import com.openclassrooms.realestatemanager.Models.Estate;
-import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
+import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase;
+import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.RealEstateAgent;
 
 import org.junit.After;
 import org.junit.Before;

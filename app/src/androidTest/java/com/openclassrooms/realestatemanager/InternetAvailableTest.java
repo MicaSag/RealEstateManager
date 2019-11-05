@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
 
-import com.openclassrooms.realestatemanager.Utils.Utils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import org.junit.Test;
 

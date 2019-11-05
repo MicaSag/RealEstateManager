@@ -10,8 +10,8 @@ import android.util.Log;
 import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.openclassrooms.realestatemanager.Database.RealEstateManagerDatabase;
-import com.openclassrooms.realestatemanager.Utils.Converters;
+import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase;
+import com.openclassrooms.realestatemanager.utils.Converters;
 import com.openclassrooms.realestatemanager.provider.EstateContentProvider;
 
 import org.junit.Before;

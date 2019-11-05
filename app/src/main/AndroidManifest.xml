@@ -23,7 +23,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${googleMapsApiKey}" /> <!-- ENTRY Activity -->
-        <activity android:name=".Controllers.Activities.RealEstateManagerActivity">
+        <activity android:name=".controllers.activities.RealEstateManagerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,63 +32,63 @@
         </activity> <!-- A child of the main activity -->
         <!-- DETAILS ESTATE Activity -->
         <activity
-            android:name=".Controllers.Activities.DetailsEstateActivity"
+            android:name=".controllers.activities.DetailsEstateActivity"
             android:label="Details Estate"
-            android:parentActivityName=".Controllers.Activities.RealEstateManagerActivity">
+            android:parentActivityName=".controllers.activities.RealEstateManagerActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.Activities.RealEstateManagerActivity" />
+                android:value=".controllers.activities.RealEstateManagerActivity" />
         </activity> <!-- A child of the main activity -->
         <!-- MAP Activity -->
         <activity
-            android:name=".Controllers.Activities.MapActivity"
+            android:name=".controllers.activities.MapActivity"
             android:label="Map"
-            android:parentActivityName=".Controllers.Activities.RealEstateManagerActivity">
+            android:parentActivityName=".controllers.activities.RealEstateManagerActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.Activities.RealEstateManagerActivity" />
+                android:value=".controllers.activities.RealEstateManagerActivity" />
         </activity> <!-- A child of the main activity -->
         <!-- CREATE ESTATE Activity -->
         <activity
-            android:name=".Controllers.Activities.CreateEstateActivity"
+            android:name=".controllers.activities.CreateEstateActivity"
             android:label="Create Estate"
-            android:parentActivityName=".Controllers.Activities.RealEstateManagerActivity">
+            android:parentActivityName=".controllers.activities.RealEstateManagerActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.Activities.RealEstateManagerActivity" />
+                android:value=".controllers.activities.RealEstateManagerActivity" />
         </activity>
         <!-- UPDATE ESTATE Activity -->
         <activity
-            android:name=".Controllers.Activities.UpdateEstateActivity"
+            android:name=".controllers.activities.UpdateEstateActivity"
             android:label="Update Estate"
-            android:parentActivityName=".Controllers.Activities.RealEstateManagerActivity">
+            android:parentActivityName=".controllers.activities.RealEstateManagerActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.Activities.RealEstateManagerActivity" />
+                android:value=".controllers.activities.RealEstateManagerActivity" />
         </activity>
         <!-- SEARCH ESTATE Activity -->
         <activity
-            android:name=".Controllers.Activities.SearchEstateActivity"
+            android:name=".controllers.activities.SearchEstateActivity"
             android:label="Search Estate"
-            android:parentActivityName=".Controllers.Activities.RealEstateManagerActivity">
+            android:parentActivityName=".controllers.activities.RealEstateManagerActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.Activities.RealEstateManagerActivity" />
+                android:value=".controllers.activities.RealEstateManagerActivity" />
         </activity>
 
         <provider
             android:name=".provider.EstateContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.provider.EstateContentProvider"
+            android:authorities=".provider.EstateContentProvider"
             android:exported="true" />
         <provider
             android:name="androidx.core.content.FileProvider"

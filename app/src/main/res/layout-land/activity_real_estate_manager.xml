@@ -8,14 +8,14 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    tools:context=".Controllers.Activities.RealEstateManagerActivity">
+    tools:context=".controllers.activities.RealEstateManagerActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/activity_real_estate_manager_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".Controllers.Activities.RealEstateManagerActivity">
+        tools:context=".controllers.activities.RealEstateManagerActivity">
 
         <LinearLayout
             android:layout_width="match_parent"

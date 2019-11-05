@@ -6,7 +6,7 @@
     android:id="@+id/fragment_estate_details_cl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Controllers.Fragments.EstateDetailsFragment">
+    tools:context=".controllers.fragments.EstateDetailsFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/fragment_details_guideline_horizontal_30"

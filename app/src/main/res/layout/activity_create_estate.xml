@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:focusableInTouchMode="true"
-    tools:context=".Controllers.Activities.CreateEstateActivity">
+    tools:context=".controllers.activities.CreateEstateActivity">
 
     <!-- Toolbar Importation -->
     <include

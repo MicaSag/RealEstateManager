@@ -10,9 +10,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.openclassrooms.realestatemanager.Database.RealEstateManagerDatabase;
-import com.openclassrooms.realestatemanager.Models.Estate;
-import com.openclassrooms.realestatemanager.Models.RealEstateAgent;
+import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase;
+import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.RealEstateAgent;
 
 public class EstateContentProvider extends ContentProvider {
 

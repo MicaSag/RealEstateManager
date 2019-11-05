@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Controllers.Fragments.EstateListFragment">
+    tools:context=".controllers.fragments.EstateListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_list_estate_recycler_view"
