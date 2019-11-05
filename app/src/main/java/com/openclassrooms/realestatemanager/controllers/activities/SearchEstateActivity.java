@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -199,12 +200,29 @@ public class SearchEstateActivity extends BaseActivity {
     public void onClickSaleDate2(View view) {
         mSaleDatePickerDialog2.show();
     }
-
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Log.d(TAG, "onBackPressed: ");
+        // necessary so that onBackPressed does not destroy the previous application
+        Intent intent = new Intent(this, RealEstateManagerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Log.d(TAG, "onOptionsItemSelected: ");
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     // Click on Validate Button
     @OnClick(R.id.search_estate_bt_search)
     public void search(View view) {
