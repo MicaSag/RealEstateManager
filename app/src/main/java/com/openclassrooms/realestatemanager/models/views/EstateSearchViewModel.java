@@ -160,12 +160,15 @@ public class EstateSearchViewModel extends ViewModel {
             // Build SimpleSQLiteQuery
             final SimpleSQLiteQuery simpleQuery = new SimpleSQLiteQuery(queryString,args.toArray());
             // Submit Request and get the result
-            mEstateDataSource.getEstates(simpleQuery).observeForever(new Observer<List<Estate>>() {
+            LiveData<List<Estate>> lEstate = mEstateDataSource.getEstates(simpleQuery);
+
+           lEstate.observeForever(new Observer<List<Estate>>() {
                 @Override
                 public void onChanged(List<Estate> estates) {
+                    Log.d(TAG, "onChanged: ");
 
                     // Unsubscribe the Observer
-                    mEstateDataSource.getEstates(simpleQuery).removeObserver(this);
+                    lEstate.removeObserver(this);
 
                     if (estates.size() == 0) mViewActionLiveData.postValue(ViewAction.SEARCH_NO_RESULT);
                     else {
@@ -236,7 +239,7 @@ public class EstateSearchViewModel extends ViewModel {
         return localEstate;
     }
     // Control digital Data
-    private String controlDigitalData(
+    public String controlDigitalData(
             String price1,
             String price2,
             String area1,

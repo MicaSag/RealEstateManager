@@ -1,16 +1,14 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.bases.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.MapFragment;
-import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
 
@@ -18,9 +16,6 @@ public class MapActivity extends BaseActivity {
 
     // For Debug
     private static final String TAG = MapActivity.class.getSimpleName();
-
-    // Location
-    private Location mLocation;
 
     // Fragments Declarations
     private MapFragment mMapFragment;
@@ -65,7 +60,6 @@ public class MapActivity extends BaseActivity {
         Log.d(TAG, "configureToolbar: ");
         // Enable the Up button
         super.mActionBar.setDisplayHomeAsUpEnabled(true);
-
     }
     // ---------------------------------------------------------------------------------------------
     //                                        ENTRY POINT
@@ -75,29 +69,20 @@ public class MapActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
 
-        // Recover intent of the Caller
-        Intent intent = getIntent();
-        if (intent != null) {
-            Location mLocation = intent.getParcelableExtra(RealEstateManagerActivity.KEY_LOCATION);
-            if (mLocation != null) {
-                Log.d(TAG, "onCreate: mLocation.getLatitude()  = " + mLocation.getLatitude());
-                Log.d(TAG, "onCreate: mLocation.getLongitude() = " + mLocation.getLongitude());
-                // Configuring Estate DetailsMap Fragment (accessible in the navigation drawer)
-                this.configureMapFragment(mLocation);
-            }
-        }
+        // Configuring Map Fragment
+        this.configureMapFragment();
     }
     // ---------------------------------------------------------------------------------------------
     //                                        FRAGMENTS
     // ---------------------------------------------------------------------------------------------
-    private void configureMapFragment(Location location) {
+    private void configureMapFragment() {
         Log.d(TAG, "configureMapFragment: ");
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
         mMapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
 
         if (mMapFragment == null) {
             // Create new main fragment
-            mMapFragment = MapFragment.newInstance(location);
+            mMapFragment = MapFragment.newInstance();
             // Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_map, mMapFragment)

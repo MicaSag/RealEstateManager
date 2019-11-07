@@ -10,6 +10,10 @@ import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.R;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -47,14 +51,8 @@ public class EstateListViewHolder extends RecyclerView.ViewHolder implements Vie
         if (estate.getAddress() != null) mLocation.setText(estate.getAddress().get(3));
 
         // Display Estate Price
-        mPrize.setText("$"+Integer.toString(estate.getPrice()));
-
-        /* For Debug
-        Log.d(TAG, "updateWithProperty: RealEstateAgent_Id  = "+ estate.getRealEstateAgent_Id());
-        Log.d(TAG, "updateWithProperty: Estate_Id           = "+ estate.getEstate_Id());
-        if (estate.getPhotos() != null ) Log.d(TAG, "updateWithProperty: Estate PhotoURL     = "+ estate.getPhotos().get(0));
-        Log.d(TAG, "updateWithProperty: -------- END --------");
-        */
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", new DecimalFormatSymbols(Locale.US));
+        mPrize.setText("$"+decimalFormat.format(estate.getPrice()));
     }
 
     @Override

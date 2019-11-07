@@ -211,10 +211,7 @@ public class EstateUpdateViewModel extends ViewModel {
         }
         estate.setDateEntryOfTheMarket(mDateEntryOfTheMarket.getValue());
         // -------------------------
-        // Date Of Sale
-        if(mDateOfSale.getValue() == null){
-            return null;
-        }
+        // Date Of Sale Not required
         estate.setDateOfSale(mDateOfSale.getValue());
         // -------------------------
         // Current Agent Id

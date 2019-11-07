@@ -251,8 +251,6 @@ public class SearchEstateActivity extends BaseActivity {
                 mChipSwimmingPool.isChecked(),
                 mChipTownHall.isChecked()
         );
-
-
     }
     // ---------------------------------------------------------------------------------------------
     //                              AUTOCOMPLETE TYPE CONFIGURATION

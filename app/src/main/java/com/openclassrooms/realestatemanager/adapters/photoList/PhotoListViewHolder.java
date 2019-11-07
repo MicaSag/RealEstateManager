@@ -48,7 +48,6 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
         if (photo !=null) glide.load(photo).into(mImage);
 
         // Button Visibility
-        Log.d(TAG, "updateWithPhoto: caller = "+caller);
         if (caller == CreateEstateActivity.class) {
             mRoomType.setVisibility(View.VISIBLE);
             mDeleteButton.setVisibility(View.VISIBLE);

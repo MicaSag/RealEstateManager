@@ -129,7 +129,6 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
     public void updateUI(Estate estate){
         Log.d(TAG, "updateUI: ");
         if (estate != null) {
-            Log.d(TAG, "updateUI: estate = "+estate.getEstate_Id());
             mDescription.setText(estate.getDescription());
             mSurface.setText(estate.getArea().toString());
             mRoomsNumber.setText(estate.getNumberOfParts().toString());

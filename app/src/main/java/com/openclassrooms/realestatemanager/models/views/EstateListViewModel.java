@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.models.views;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.sqlite.db.SimpleSQLiteQuery;
@@ -33,14 +34,15 @@ public class EstateListViewModel extends ViewModel {
                 new SimpleSQLiteQuery("SELECT * FROM Estate WHERE realEstateAgent_Id =? ",
                         new Object[]{1});
 
+        LiveData<List<Estate>> lEstate = mEstateDataSource.getEstates(simpleQuery);
         // Initialize Current Estate List
-        mEstateDataSource.getEstates(simpleQuery).observeForever(new Observer<List<Estate>>() {
+        lEstate.observeForever(new Observer<List<Estate>>() {
             @Override
             public void onChanged(List<Estate> estates) {
                 Log.d(TAG, "onChanged: ");
 
                 // Unsubscribe the Observer
-                mEstateDataSource.getEstates(simpleQuery).removeObserver(this);
+                lEstate.removeObserver(this);
 
                 CurrentEstateListDataRepository.getInstance().setCurrentEstateList(estates);
             }

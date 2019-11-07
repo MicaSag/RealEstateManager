@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -239,6 +240,21 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
     public void onSelectPhotoClick(View view) {
         this.selectImage();
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Log.d(TAG, "onOptionsItemSelected: ");
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     // Click photo of the recycler view
     @Override
     public void onPhotoClick(int position,View view) {
@@ -412,7 +428,7 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         // Restore Entry Date
         mEstateUpdateViewModel.getDateEntryOfTheMarket().setValue(estate.getDateEntryOfTheMarket());
 
-        // Restore Photo Lost
+        // Restore Photo List
         mEstateUpdateViewModel.setPhotos(estate.getPhotos());
 
         // Display Data

@@ -1,13 +1,19 @@
 package com.openclassrooms.realestatemanager.models.views;
 
+import android.location.Location;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.repositories.CurrentEstateDataRepository;
 import com.openclassrooms.realestatemanager.repositories.CurrentRealEstateAgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 
@@ -27,6 +33,11 @@ public class MapViewModel extends ViewModel {
     // DATA
     @NonNull
     private MediatorLiveData<List<Estate>> mCurrentEstates = new MediatorLiveData<>();
+
+    // The geographical location where the device is currently located.
+    // That is, the last-known location retrieved by the Fused Location Provider.
+    // OR the default Location if permission not Granted
+    private MutableLiveData<Location> mLastKnownLocation = new MutableLiveData<>();
 
     public MapViewModel(EstateDataRepository estateDataSource,
                         Executor executor) {
@@ -75,8 +86,35 @@ public class MapViewModel extends ViewModel {
 
     // Get current Estate List
     public LiveData<List<Estate>> getCurrentEstates() {
-
+        Log.d(TAG, "getCurrentEstates: ");
         return mCurrentEstates;
     }
+
+    // Get Last Know Location
+    public LiveData<Location> getLastKnownLocation() {
+        Log.d(TAG, "getLastKnownLocation: ");
+        return mLastKnownLocation;
+    }
+
+    // Set Last Know Location
+    public void setLastKnownLocation(Location lastKnownLocation) {
+        Log.d(TAG, "setLastKnownLocation: ");
+        this.mLastKnownLocation.setValue(lastKnownLocation);
+    }
+
+    // Get Current Location
+    public LiveData<Location> getCurrentLocation() {
+        Log.d(TAG, "getCurrentLocation: ");
+        return mLastKnownLocation;
+    }
+
+    /*    return Transformations.switchMap(
+                getLastKnownLocation(),
+                locationResult -> {
+                    MutableLiveData<Location> locationLiveData = new MutableLiveData<>();
+                    locationLiveData.setValue(locationResult);
+                    return locationLiveData;
+                });
+    }*/
 }
 
