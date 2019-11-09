@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -43,6 +44,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -201,7 +203,7 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         // Observe a change of Date of Sale
         mEstateUpdateViewModel.getDateOfSale().observe(this,this::refreshDateOfSale);
         // Observe a change of the photo list
-        mEstateUpdateViewModel.getPhotos().observe(this,this::refreshPhotoList);
+        mEstateUpdateViewModel.getPhotos().observe(this,this::refreshPhotos);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -266,6 +268,21 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
     @OnClick(R.id.activity_update_estate_bt_update)
     public void validate(View view) {
         Log.d(TAG, "validate: ");
+
+        // Create le list of the photo description and update in ViewModel
+        ArrayList<String> photosDescription = new ArrayList<>();
+            for (int i = 0; i < mRecyclerViewPhotos.getChildCount(); i++) {
+                Log.d(TAG, "validate: mPhotoListAdapter.getItemCount() = "+
+                mPhotoListAdapter.getItemCount()+" "+mRecyclerViewPhotos.getChildCount()+" "+i);
+                View v = mRecyclerViewPhotos.getChildAt(i);
+                if (v != null) {
+                    Log.d(TAG, "validate: v!=null");
+                    TextView textView = v.findViewById(R.id.photo_list_et_room);
+                    Log.d(TAG, "validate: textView.getText().toString() = "+textView.getText().toString());
+                    photosDescription.add(textView.getText().toString());
+            }
+        }
+        mEstateUpdateViewModel.setPhotoDescription(photosDescription);
 
         mEstateUpdateViewModel.updateEstate(
                 mAutoCompleteTVType.getText().toString(),
@@ -349,12 +366,14 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.d(TAG, "onActivityResult: currentPhotoPath = "+currentPhotoPath);
             mEstateUpdateViewModel.addPhoto(currentPhotoPath);
+            mEstateUpdateViewModel.addPhotoDescription("");
         }
 
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
             Uri fullPhotoUri = data.getData();
             Log.d(TAG, "onActivityResult: fullPhotoUri = "+fullPhotoUri.toString());
             mEstateUpdateViewModel.addPhoto(fullPhotoUri.toString());
+            mEstateUpdateViewModel.addPhotoDescription("");
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -428,6 +447,8 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         // Restore Entry Date
         mEstateUpdateViewModel.getDateEntryOfTheMarket().setValue(estate.getDateEntryOfTheMarket());
 
+        // Restore Photo Description List
+        mEstateUpdateViewModel.setPhotoDescription(estate.getPhotosDescription());
         // Restore Photo List
         mEstateUpdateViewModel.setPhotos(estate.getPhotos());
 
@@ -452,7 +473,6 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         mNumbersRooms.setText(String.valueOf(estate.getNumberOfParts()));
         mNumbersBathrooms.setText(String.valueOf(estate.getNumberOfBathrooms()));
         mNumbersBedrooms.setText(String.valueOf(estate.getNumberOfBedrooms()));
-        //mEntryDate.setText(Utils.fromLocalDateTime(estate.getDateEntryOfTheMarket()));
 
         // Restore Points of Interest
         this.restorePointsOfInterest(estate);
@@ -482,7 +502,8 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         mSaleDate.setText(Utils.fromLocalDateTime(dateOfSale));
     }
     // refresh the Photo List
-    private void refreshPhotoList(List<String> photos){
-        mPhotoListAdapter.setNewData(photos);
+    private void refreshPhotos(List<String> photos){
+        mPhotoListAdapter.setNewPhotos(photos);
+        mPhotoListAdapter.setNewPhotosDescription(mEstateUpdateViewModel.getPhotoDescription());
     }
 }

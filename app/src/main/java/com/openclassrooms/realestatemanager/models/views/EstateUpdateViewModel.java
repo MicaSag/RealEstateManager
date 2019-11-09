@@ -33,6 +33,8 @@ public class EstateUpdateViewModel extends ViewModel {
     private MutableLiveData<LocalDateTime> mDateOfSale = new MutableLiveData<>();
     private MutableLiveData<ArrayList<String>> mPhotos  = new MutableLiveData<>();
 
+    private ArrayList<String> mPhotoDescription = new ArrayList<>();
+
     public enum ViewAction {
         INVALID_INPUT,
         FINISH_ACTIVITY
@@ -205,6 +207,11 @@ public class EstateUpdateViewModel extends ViewModel {
         if (chipTownHall) pointsOfInterest.put("Town Hall","Town Hall");
         estate.setPointOfInterest(pointsOfInterest);
         // -------------------------
+        // PhotosDescription Not required
+        // -------------------------
+        // Photos Description
+        estate.setPhotosDescription(mPhotoDescription);
+        // -------------------------
         // Entry date of Market
         if(mDateEntryOfTheMarket.getValue() == null){
             return null;
@@ -255,6 +262,18 @@ public class EstateUpdateViewModel extends ViewModel {
         ArrayList<String> l = mPhotos.getValue();
         l.add(photo);
         this.mPhotos.postValue(l);
+    }
+
+    public void setPhotoDescription(ArrayList<String> photosDescription) {
+        this.mPhotoDescription = photosDescription;
+    }
+
+    public ArrayList<String> getPhotoDescription() {
+        return mPhotoDescription;
+    }
+
+    public void addPhotoDescription(String photoDescription) {
+        this.mPhotoDescription.add(photoDescription);
     }
 
     // Manage Dates

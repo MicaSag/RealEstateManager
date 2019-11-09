@@ -26,9 +26,7 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
     @BindView(R.id.photo_list_bt_delete) Button mDeleteButton;
     @BindView(R.id.photo_list_et_room) EditText mRoomType;
 
-
     private PhotoListAdapter.OnPhotoClick mOnPhotoClick;
-    private String mPhoto;
 
     // Constructor
     public PhotoListViewHolder(View photoView) {
@@ -39,9 +37,8 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
     }
 
     // Method to update the current item
-    public void updateWithPhoto(Class caller, String photo, RequestManager glide, PhotoListAdapter.OnPhotoClick callback){
+    public void updateWithPhoto(Class caller, String photo, String description, RequestManager glide, PhotoListAdapter.OnPhotoClick callback){
         Log.d(TAG, "updateWithPhoto: ");
-        mPhoto = photo;
         mOnPhotoClick = callback;
 
         // Display Photo
@@ -55,12 +52,13 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
         if (caller == UpdateEstateActivity.class) {
             mRoomType.setVisibility(View.VISIBLE);
             mDeleteButton.setVisibility(View.VISIBLE);
+            mRoomType.setText(description);
         }
         if (caller == EstateDetailsFragment.class) {
             mRoomType.setVisibility(View.VISIBLE);
             mRoomType.setFocusable(false);
             mRoomType.setBackgroundColor(Color.TRANSPARENT);
-            mRoomType.setHint("");
+            mRoomType.setText(description);
         }
     }
 

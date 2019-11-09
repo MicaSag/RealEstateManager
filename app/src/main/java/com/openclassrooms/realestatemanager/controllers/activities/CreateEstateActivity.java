@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -41,6 +42,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -249,6 +251,16 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     public void validate(View view) {
         Log.d(TAG, "validate: ");
 
+        // Create the list of the photo description
+        ArrayList<String> photosDescription = new ArrayList<>();
+        for (int i = 0; i < mPhotoListAdapter.getItemCount(); i++) {
+            View v = mRecyclerViewPhotos.getChildAt(i);
+            if (v != null) {
+                TextView textView = v.findViewById(R.id.photo_list_et_room);
+                photosDescription.add(textView.getText().toString());
+            }
+        }
+
         mEstateCreateViewModel.createEstate(
                 mAutoCompleteTVType.getText().toString(),
                 mPrice.getText().toString(),
@@ -262,6 +274,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                 mNumbersRooms.getText().toString(),
                 mNumbersBathrooms.getText().toString(),
                 mNumbersBedrooms.getText().toString(),
+                photosDescription,
                 // Point of Interest
                 mChipGarden.isChecked(),
                 mChipLibrary.isChecked(),
@@ -270,6 +283,8 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                 mChipSwimmingPool.isChecked(),
                 mChipTownHall.isChecked()
         );
+        Log.d(TAG, "validate: mPhotoListAdapter = "+mPhotoListAdapter.getItemCount());
+        Log.d(TAG, "validate: mPhotoListAdapter = "+mPhotoListAdapter.getPhoto(0));
     }
     // ---------------------------------------------------------------------------------------------
     //                                     MANAGE PHOTO LIST
@@ -331,13 +346,14 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.d(TAG, "onActivityResult: currentPhotoPath = "+currentPhotoPath);
             mEstateCreateViewModel.addPhoto(currentPhotoPath);
-            mEstateCreateViewModel.addPhoto(currentPhotoPath);
+            mEstateCreateViewModel.addPhotoDescription("");
         }
 
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
             Uri fullPhotoUri = data.getData();
             Log.d(TAG, "onActivityResult: fullPhotoUri = "+fullPhotoUri.toString());
             mEstateCreateViewModel.addPhoto(fullPhotoUri.toString());
+            mEstateCreateViewModel.addPhotoDescription("");
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -391,6 +407,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     }
     // refresh the Photo List
     private void refreshPhotoList(List<String> photos){
-        mPhotoListAdapter.setNewData(photos);
+        mPhotoListAdapter.setNewPhotos(photos);
+        mPhotoListAdapter.setNewPhotosDescription(mEstateCreateViewModel.getPhotoDescription());
     }
 }

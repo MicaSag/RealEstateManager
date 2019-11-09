@@ -139,7 +139,9 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
             mLocation_3.setText(estate.getAddress().get(2));
             mLocation_4.setText(estate.getAddress().get(3));
             mLocation_5.setText(estate.getAddress().get(4));
-            mPhotoListAdapter.setNewData(estate.getPhotos());
+            mPhotoListAdapter.setNewPhotos(estate.getPhotos());
+            mPhotoListAdapter.setNewPhotosDescription(estate.getPhotosDescription());
+
 
             // Created Uri to recover the static map
             Uri.Builder uriStaticMap
