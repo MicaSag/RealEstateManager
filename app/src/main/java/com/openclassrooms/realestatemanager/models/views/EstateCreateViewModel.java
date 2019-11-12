@@ -8,16 +8,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.models.Estate;
-import com.openclassrooms.realestatemanager.repositories.CurrentEstateDataRepository;
 import com.openclassrooms.realestatemanager.repositories.CurrentRealEstateAgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 
 import org.threeten.bp.LocalDateTime;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.Executor;
 
 public class EstateCreateViewModel extends ViewModel {
@@ -62,7 +59,6 @@ public class EstateCreateViewModel extends ViewModel {
             String numberOfRooms,
             String numberOfBathrooms,
             String numberOfBedrooms,
-            ArrayList<String> photoDescription,
             Boolean chipGarden,
             Boolean chipLibrary,
             Boolean chipRestaurant,
@@ -71,14 +67,11 @@ public class EstateCreateViewModel extends ViewModel {
             Boolean chipTownHall
     ) {
         Estate estate = validateData(type, price, area, description,
-                numberOfRooms, numberOfBathrooms, numberOfBedrooms, photoDescription, addressWay,
+                numberOfRooms, numberOfBathrooms, numberOfBedrooms, addressWay,
                 addressComplement, addressPostalCode, addressCity, addressState, chipGarden,
                 chipLibrary, chipRestaurant,chipSchool, chipSwimmingPool, chipTownHall);
 
         if (estate != null) {
-
-            // Change Current estate Id
-            CurrentEstateDataRepository.getInstance().setCurrentEstate_Id(estate.getEstate_Id());
 
             mExecutor.execute(() -> {
                 mEstateDataSource.createEstate(estate);
@@ -98,7 +91,6 @@ public class EstateCreateViewModel extends ViewModel {
             String numberOfRooms,
             String numberOfBathrooms,
             String numberOfBedrooms,
-            ArrayList<String> photoDescription,
             String addressWay,
             String addressComplement,
             String addressPostalCode,
@@ -210,11 +202,6 @@ public class EstateCreateViewModel extends ViewModel {
         if (chipTownHall) pointsOfInterest.put("Town Hall","Town Hall");
         estate.setPointOfInterest(pointsOfInterest);
         // -------------------------
-        // PhotosDescription Not required
-        // -------------------------
-        // Photos Description
-        estate.setPhotosDescription(mPhotoDescription);
-        // -------------------------
         // Entry date of Market
         if(mDateEntryOfTheMarket.getValue() == null){
             return null;
@@ -234,6 +221,11 @@ public class EstateCreateViewModel extends ViewModel {
             return null;
         }
         estate.setPhotos(mPhotos.getValue());
+        // -------------------------
+        // PhotosDescription Not required
+        // -------------------------
+        // Photos Description
+        estate.setPhotosDescription(mPhotoDescription);
 
        return estate;
     }

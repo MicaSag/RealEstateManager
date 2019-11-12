@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Michaël SAGOT on 23/07/2019.
  */
-public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.OnPhotoClick {
+public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.OnPhotoClick{
 
     // For debugging Mode
     private static final String TAG = EstateDetailsFragment.class.getSimpleName();
@@ -108,7 +108,9 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
     private void configureRecyclerView(){
         // Create adapter
-        mPhotoListAdapter = new PhotoListAdapter(this.getClass(), Glide.with(this), this );
+        mPhotoListAdapter = new PhotoListAdapter(this.getClass(), Glide.with(this),
+                this,
+                null);
         // Attach the adapter to the recyclerView to populate items
         mRecyclerView.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items

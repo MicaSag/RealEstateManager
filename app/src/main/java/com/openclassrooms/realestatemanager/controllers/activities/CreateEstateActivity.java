@@ -52,7 +52,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class CreateEstateActivity extends BaseActivity implements PhotoListAdapter.OnPhotoClick  {
+public class CreateEstateActivity extends BaseActivity  implements  PhotoListAdapter.OnPhotoClick,
+                                                                    PhotoListAdapter.OnTextChange{
 
     // For debugging Mode
     private static final String TAG = CreateEstateActivity.class.getSimpleName();
@@ -190,7 +191,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         // Observe a change of Date of Entry on the Market
         mEstateCreateViewModel.getDateEntryOfTheMarket().observe(this,this::refreshDateEntryOfTheMarket);
         // Observe a change of the photo list
-        mEstateCreateViewModel.getPhotos().observe(this,this::refreshPhotoList);
+        mEstateCreateViewModel.getPhotos().observe(this,this::refreshPhotos);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -200,11 +201,13 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         // Create adapter passing the list of users
         mPhotoListAdapter = new PhotoListAdapter(this.getClass(),
                 Glide.with(this),
+                this,
                 this);
         // Attach the adapter to the recyclerView to populate items
         mRecyclerViewPhotos.setAdapter(mPhotoListAdapter);
         // Set layout manager to position the items
-        mRecyclerViewPhotos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerViewPhotos.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false));
     }
     // ---------------------------------------------------------------------------------------------
     //                                           ACTIONS
@@ -244,22 +247,26 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
     public void onPhotoClick(int position,View view) {
         Log.d(TAG, "onPhotoClick: ");
         if (view.getId() == R.id.photo_list_image) Log.d(TAG, "onClick: image");
-        if (view.getId() == R.id.photo_list_bt_delete) Log.d(TAG, "onClick: button delete");
+        if (view.getId() == R.id.photo_list_bt_delete) {
+            mEstateCreateViewModel.getPhotos().getValue().remove(position);
+            mEstateCreateViewModel.getPhotoDescription().remove(position);
+            this.refreshPhotos(mEstateCreateViewModel.getPhotos().getValue());
+        }
     }
+
+    @Override
+    public void onTextChange(int position,String value) {
+        Log.d(TAG, "onTextChange() called with: position = [" + position + "], " +
+                "value = [" + value + "]");
+
+        // Update PhotoDescription
+        mEstateCreateViewModel.getPhotoDescription().set(position,value);
+    }
+
     // Click on Validate Button
     @OnClick(R.id.activity_create_estate_bt_validate)
     public void validate(View view) {
         Log.d(TAG, "validate: ");
-
-        // Create the list of the photo description
-        ArrayList<String> photosDescription = new ArrayList<>();
-        for (int i = 0; i < mPhotoListAdapter.getItemCount(); i++) {
-            View v = mRecyclerViewPhotos.getChildAt(i);
-            if (v != null) {
-                TextView textView = v.findViewById(R.id.photo_list_et_room);
-                photosDescription.add(textView.getText().toString());
-            }
-        }
 
         mEstateCreateViewModel.createEstate(
                 mAutoCompleteTVType.getText().toString(),
@@ -274,7 +281,6 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                 mNumbersRooms.getText().toString(),
                 mNumbersBathrooms.getText().toString(),
                 mNumbersBedrooms.getText().toString(),
-                photosDescription,
                 // Point of Interest
                 mChipGarden.isChecked(),
                 mChipLibrary.isChecked(),
@@ -283,8 +289,6 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
                 mChipSwimmingPool.isChecked(),
                 mChipTownHall.isChecked()
         );
-        Log.d(TAG, "validate: mPhotoListAdapter = "+mPhotoListAdapter.getItemCount());
-        Log.d(TAG, "validate: mPhotoListAdapter = "+mPhotoListAdapter.getPhoto(0));
     }
     // ---------------------------------------------------------------------------------------------
     //                                     MANAGE PHOTO LIST
@@ -406,7 +410,7 @@ public class CreateEstateActivity extends BaseActivity implements PhotoListAdapt
         mEntryDate.setText(Utils.fromLocalDateTime(dateEntryOfTheMarket));
     }
     // refresh the Photo List
-    private void refreshPhotoList(List<String> photos){
+    private void refreshPhotos(List<String> photos){
         mPhotoListAdapter.setNewPhotos(photos);
         mPhotoListAdapter.setNewPhotosDescription(mEstateCreateViewModel.getPhotoDescription());
     }

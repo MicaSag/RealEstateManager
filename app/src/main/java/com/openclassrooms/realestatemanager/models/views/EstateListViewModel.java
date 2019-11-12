@@ -25,7 +25,6 @@ public class EstateListViewModel extends ViewModel {
 
     public EstateListViewModel(EstateDataRepository estateDataSource,
                                Executor executor) {
-        Log.d(TAG, "EstateListViewModel: ");
         mEstateDataSource = estateDataSource;
         mExecutor = executor;
 

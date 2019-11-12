@@ -55,7 +55,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapter.OnPhotoClick  {
+public class UpdateEstateActivity extends BaseActivity implements   PhotoListAdapter.OnPhotoClick,
+                                                                    PhotoListAdapter.OnTextChange{
 
     // For debugging Mode
     private static final String TAG = UpdateEstateActivity.class.getSimpleName();
@@ -213,6 +214,7 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
         // Create adapter passing the list of users
         mPhotoListAdapter = new PhotoListAdapter(this.getClass(),
                 Glide.with(this),
+                this,
                 this);
         // Attach the adapter to the recyclerView to populate items
         mRecyclerViewPhotos.setAdapter(mPhotoListAdapter);
@@ -262,27 +264,27 @@ public class UpdateEstateActivity extends BaseActivity implements PhotoListAdapt
     public void onPhotoClick(int position,View view) {
         Log.d(TAG, "onPhotoClick: ");
         if (view.getId() == R.id.photo_list_image) Log.d(TAG, "onPhotoClick: image");
-        if (view.getId() == R.id.photo_list_bt_delete) Log.d(TAG, "onPhotoClick: button delete");
+        if (view.getId() == R.id.photo_list_bt_delete) {
+            Log.d(TAG, "onPhotoClick: button delete");
+            mEstateUpdateViewModel.getPhotos().getValue().remove(position);
+            mEstateUpdateViewModel.getPhotoDescription().remove(position);
+            this.refreshPhotos(mEstateUpdateViewModel.getPhotos().getValue());
+        }
     }
+
+    @Override
+    public void onTextChange(int position,String value) {
+        Log.d(TAG, "onTextChange() called with: position = [" + position + "], " +
+                "value = [" + value + "]");
+
+        // Update PhotoDescription
+        mEstateUpdateViewModel.getPhotoDescription().set(position,value);
+    }
+
     // Click on Validate Button
     @OnClick(R.id.activity_update_estate_bt_update)
     public void validate(View view) {
         Log.d(TAG, "validate: ");
-
-        // Create le list of the photo description and update in ViewModel
-        ArrayList<String> photosDescription = new ArrayList<>();
-            for (int i = 0; i < mRecyclerViewPhotos.getChildCount(); i++) {
-                Log.d(TAG, "validate: mPhotoListAdapter.getItemCount() = "+
-                mPhotoListAdapter.getItemCount()+" "+mRecyclerViewPhotos.getChildCount()+" "+i);
-                View v = mRecyclerViewPhotos.getChildAt(i);
-                if (v != null) {
-                    Log.d(TAG, "validate: v!=null");
-                    TextView textView = v.findViewById(R.id.photo_list_et_room);
-                    Log.d(TAG, "validate: textView.getText().toString() = "+textView.getText().toString());
-                    photosDescription.add(textView.getText().toString());
-            }
-        }
-        mEstateUpdateViewModel.setPhotoDescription(photosDescription);
 
         mEstateUpdateViewModel.updateEstate(
                 mAutoCompleteTVType.getText().toString(),

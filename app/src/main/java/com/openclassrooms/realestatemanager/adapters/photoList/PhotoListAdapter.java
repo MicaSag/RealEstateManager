@@ -14,6 +14,8 @@ import com.openclassrooms.realestatemanager.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.OnFocusChange;
+
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> {
 
     // For Debug
@@ -33,43 +35,35 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     public interface OnPhotoClick{
         void onPhotoClick(int position,View view);
     }
-    private final OnPhotoClick mCallback;
+    private final OnPhotoClick mCallback_OnPhotoClick;
+    // For CALLBACK
+    public interface OnTextChange{
+        void onTextChange(int position,String value);
+    }
+    private final OnTextChange mCallback_OnTextChange;
 
     // CONSTRUCTOR
-    public PhotoListAdapter(Class caller, RequestManager glide, OnPhotoClick callback) {
+    public PhotoListAdapter(Class caller, RequestManager glide,
+                            OnPhotoClick callback_OnPhotoClick,
+                            OnTextChange callback_OnTextChange) {
         mCaller = caller;
         mGlide = glide;
-        mCallback = callback;
+        mCallback_OnPhotoClick = callback_OnPhotoClick;
+        mCallback_OnTextChange = callback_OnTextChange;
     }
 
-    // Update le recycler view data
+    // Update the photo list in the recycler view
     public void setNewPhotos(List<String> photos){
         Log.d(TAG, "setNewPhotos() called with: photos = [" + photos + "]");
         mPhotos.clear();
         mPhotos.addAll(photos);
         notifyDataSetChanged();
     }
-    // Update le recycler view data
+    // Update the photos description in the recycler view
     public void setNewPhotosDescription(List<String> photosDescription){
         Log.d(TAG, "setNewPhotosDescription() called with: photosDescription = [" + photosDescription + "]");
         mPhotosDescription.clear();
         mPhotosDescription.addAll(photosDescription);
-        notifyDataSetChanged();
-    }
-
-    // Update le recycler view data
-    public void setNewPhotos(List<String> photos, List<String> photosDescription){
-        Log.d(TAG, "setNewData() called with: photos = [" + photos + "], photosDescription = [" + photosDescription + "]");
-        mPhotos.clear();
-        mPhotos.addAll(photos);
-        mPhotosDescription.clear();
-        if (photosDescription !=null) {
-            mPhotosDescription.addAll(photosDescription);
-        }else{
-            for(String s: photos) {
-                mPhotosDescription.add("");
-            }
-        }
         notifyDataSetChanged();
     }
 
@@ -85,7 +79,9 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     // For update View Holder with Estate
     @Override
     public void onBindViewHolder(PhotoListViewHolder viewHolder, int position) {
-        viewHolder.updateWithPhoto(mCaller, mPhotos.get(position), mPhotosDescription.get(position), mGlide, mCallback);
+        viewHolder.updateWithPhoto(mCaller, mPhotos.get(position), mPhotosDescription.get(position), mGlide,
+                mCallback_OnPhotoClick,
+                mCallback_OnTextChange);
     }
 
     // Return the size of the recycler view

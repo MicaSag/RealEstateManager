@@ -3,14 +3,11 @@ package com.openclassrooms.realestatemanager.repositories;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.openclassrooms.realestatemanager.database.dao.EstateDao;
 import com.openclassrooms.realestatemanager.models.Estate;
 
 import java.util.List;
 
 public class CurrentEstateListDataRepository {
-
-    public final EstateDao mEstateDao;
 
     private static CurrentEstateListDataRepository sInstance;
 
@@ -19,13 +16,12 @@ public class CurrentEstateListDataRepository {
 
     public static CurrentEstateListDataRepository getInstance() {
         if (sInstance == null) {
-            sInstance = new CurrentEstateListDataRepository(null);
+            sInstance = new CurrentEstateListDataRepository();
         }
         return sInstance;
     }
 
-    public CurrentEstateListDataRepository(EstateDao estateDao) {
-        mEstateDao = estateDao;
+    public CurrentEstateListDataRepository() {
     }
 
     // --- GET ---

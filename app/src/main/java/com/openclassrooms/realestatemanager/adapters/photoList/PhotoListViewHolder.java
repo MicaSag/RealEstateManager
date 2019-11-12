@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.adapters.photoList;
 
 import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,8 +19,10 @@ import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 
-public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     private static final String TAG = PhotoListViewHolder.class.getSimpleName();
 
@@ -27,6 +31,7 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
     @BindView(R.id.photo_list_et_room) EditText mRoomType;
 
     private PhotoListAdapter.OnPhotoClick mOnPhotoClick;
+    private PhotoListAdapter.OnTextChange mOnTextChange;
 
     // Constructor
     public PhotoListViewHolder(View photoView) {
@@ -37,9 +42,13 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
     }
 
     // Method to update the current item
-    public void updateWithPhoto(Class caller, String photo, String description, RequestManager glide, PhotoListAdapter.OnPhotoClick callback){
+    public void updateWithPhoto(Class caller, String photo, String description, RequestManager glide,
+                                PhotoListAdapter.OnPhotoClick callback_OnPhotoClick,
+                                PhotoListAdapter.OnTextChange callback_OnTextChange
+                                ){
         Log.d(TAG, "updateWithPhoto: ");
-        mOnPhotoClick = callback;
+        mOnPhotoClick = callback_OnPhotoClick;
+        mOnTextChange = callback_OnTextChange;
 
         // Display Photo
         if (photo !=null) glide.load(photo).into(mImage);
@@ -48,10 +57,12 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
         if (caller == CreateEstateActivity.class) {
             mRoomType.setVisibility(View.VISIBLE);
             mDeleteButton.setVisibility(View.VISIBLE);
+            mRoomType.setHint("room type");
         }
         if (caller == UpdateEstateActivity.class) {
             mRoomType.setVisibility(View.VISIBLE);
             mDeleteButton.setVisibility(View.VISIBLE);
+            mRoomType.setHint("room type");
             mRoomType.setText(description);
         }
         if (caller == EstateDetailsFragment.class) {
@@ -64,10 +75,16 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
 
     @Override
     public void onClick(View view) {
-        Log.d(TAG, "onClick: ");
         Log.d(TAG, "onClick: getAdapterPosition = "+getAdapterPosition());
         mOnPhotoClick.onPhotoClick(getAdapterPosition(),view);
         if (view == mImage) Log.d(TAG, "onClick: image");
         if (view == mDeleteButton) Log.d(TAG, "onClick: button delete");
+    }
+
+    @OnTextChanged(R.id.photo_list_et_room)
+    public void onTextChanged(CharSequence text){
+        // Return, position, focus and Value
+        Log.d(TAG, "onTextChanged: "+text);
+        if (mOnTextChange != null) mOnTextChange.onTextChange(getAdapterPosition(),text.toString());
     }
 }

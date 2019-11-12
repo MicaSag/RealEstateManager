@@ -207,11 +207,6 @@ public class EstateUpdateViewModel extends ViewModel {
         if (chipTownHall) pointsOfInterest.put("Town Hall","Town Hall");
         estate.setPointOfInterest(pointsOfInterest);
         // -------------------------
-        // PhotosDescription Not required
-        // -------------------------
-        // Photos Description
-        estate.setPhotosDescription(mPhotoDescription);
-        // -------------------------
         // Entry date of Market
         if(mDateEntryOfTheMarket.getValue() == null){
             return null;
@@ -238,6 +233,11 @@ public class EstateUpdateViewModel extends ViewModel {
             return null;
         }
         estate.setPhotos(mPhotos.getValue());
+        // -------------------------
+        // PhotosDescription Not required
+        // -------------------------
+        // Photos Description
+        estate.setPhotosDescription(mPhotoDescription);
 
         return estate;
     }
