@@ -14,13 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.openclassrooms.realestatemanager.adapters.estateList.EstateListAdapter;
-import com.openclassrooms.realestatemanager.injections.Injection;
-import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.models.Estate;
-import com.openclassrooms.realestatemanager.models.views.EstateListViewModel;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.repositories.CurrentEstateListDataRepository;
+import com.openclassrooms.realestatemanager.adapters.estateList.EstateListAdapter;
+import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.views.RealEstateManagerViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +34,8 @@ public class EstateListFragment extends Fragment {
     // For debugging Mode
     private static final String TAG = EstateListFragment.class.getSimpleName();
 
-    // Declare EstateListViewModel
-    private EstateListViewModel mEstatesListViewModel;
+    // Declare EstateViewModel
+    private RealEstateManagerViewModel mRealEstateManagerViewModel;
 
     //For Data
     // Declare list of property & Adapter
@@ -58,7 +55,6 @@ public class EstateListFragment extends Fragment {
     //                                  FRAGMENT INSTANTIATION
     // ---------------------------------------------------------------------------------------------
     public static EstateListFragment newInstance() {
-        Log.d(TAG, "newInstance: ");
 
         // Create new fragment
         return new EstateListFragment();
@@ -89,13 +85,14 @@ public class EstateListFragment extends Fragment {
     // ---------------------------------------------------------------------------------------------
     // Configure ViewModel
     private void configureViewModel() {
-        ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
-        mEstatesListViewModel = ViewModelProviders.of(this, mViewModelFactory)
-                .get(EstateListViewModel.class);
+
+        // User RealEstateManagerActivity ViewModel
+        mRealEstateManagerViewModel = ViewModelProviders.of(getActivity())
+                .get(RealEstateManagerViewModel.class);
+
 
         // Observe a change of Current Estates
-        CurrentEstateListDataRepository.getInstance().getCurrentEstateList()
-                .observe(this, this::updateEstateList);
+        mRealEstateManagerViewModel.getCurrentEstates().observe(this, this::updateEstateList);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -125,7 +122,7 @@ public class EstateListFragment extends Fragment {
     // ---------------------------------------------------------------------------------------------
     // Update the list of Estate
     private void updateEstateList(List<Estate> estates){
-        Log.d(TAG, "updateEstateList: ");
+
         if (estates != null) mEstateListAdapter.updateData(estates);
     }
 }

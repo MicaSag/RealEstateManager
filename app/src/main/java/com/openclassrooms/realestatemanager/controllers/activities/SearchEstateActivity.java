@@ -17,11 +17,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.chip.Chip;
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.bases.BaseActivity;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.views.EstateSearchViewModel;
-import com.openclassrooms.realestatemanager.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -79,6 +79,7 @@ public class SearchEstateActivity extends BaseActivity {
 
     // To return the result to the parent activity
     public static final String BUNDLE_SEARCH_OK = "BUNDLE_SEARCH_OK";
+    public static final String BUNDLE_SEARCH_DATA = "BUNDLE_SEARCH_DATA";
 
     // ---------------------------------------------------------------------------------------------
     //                                DECLARATION BASE METHODS
@@ -156,13 +157,10 @@ public class SearchEstateActivity extends BaseActivity {
                     case FINISH_ACTIVITY:
                         Intent intent = new Intent();
                         intent.putExtra(BUNDLE_SEARCH_OK,true);
+                        intent.putExtra(BUNDLE_SEARCH_DATA, mEstateSearchViewModel.getSearchData());
                         setResult(RESULT_OK,intent);
-                        // Close Activity and go back to previous activity
+                        // Close Activity and go back to previous activity with a SearchData Object
                         finish();
-                        break;
-
-                    case SEARCH_NO_RESULT:
-                        showSnackBar("Search No Result found");
                         break;
                 }
             }

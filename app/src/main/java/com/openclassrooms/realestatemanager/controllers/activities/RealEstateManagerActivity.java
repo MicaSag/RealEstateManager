@@ -1,10 +1,6 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,16 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.controllers.bases.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.EstateDetailsFragment;
@@ -33,7 +23,8 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.RealEstateAgent;
-import com.openclassrooms.realestatemanager.models.views.RealEstateAgentViewModel;
+import com.openclassrooms.realestatemanager.models.SearchData;
+import com.openclassrooms.realestatemanager.models.views.RealEstateManagerViewModel;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.repositories.CurrentEstateDataRepository;
 import com.openclassrooms.realestatemanager.utils.Utils;
@@ -47,7 +38,7 @@ public class RealEstateManagerActivity  extends BaseActivity
     private static final String TAG = RealEstateManagerActivity.class.getSimpleName();
 
     // Declare EstateListViewModel
-    private RealEstateAgentViewModel mRealEstateAgentViewModel;
+    private RealEstateManagerViewModel mRealEstateManagerViewModel;
 
     // --> New RealEstateAgent
     private static long REAL_ESTATE_AGENT_ID_1 = 1;
@@ -60,8 +51,6 @@ public class RealEstateManagerActivity  extends BaseActivity
     public static final int CREATE_ACTIVITY_REQUEST_CODE = 10;
     public static final int UPDATE_ACTIVITY_REQUEST_CODE = 20;
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 30;
-    // For transmission data to activity
-    public static final String KEY_LOCATION = "KEY_LOCATION";
 
     // Data
     private long mCurrentRealEstateAgent_Id;
@@ -131,9 +120,9 @@ public class RealEstateManagerActivity  extends BaseActivity
     // Configure ViewModel
     private void configureViewModel(){
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
-        mRealEstateAgentViewModel = ViewModelProviders.of(this, modelFactory).get(RealEstateAgentViewModel.class);
+        mRealEstateManagerViewModel = ViewModelProviders.of(this, modelFactory).get(RealEstateManagerViewModel.class);
 
-        mRealEstateAgentViewModel.init(mCurrentRealEstateAgent_Id);
+        mRealEstateManagerViewModel.init(mCurrentRealEstateAgent_Id);
     }
     // ---------------------------------------------------------------------------------------------
     //                                        FRAGMENTS
@@ -173,7 +162,7 @@ public class RealEstateManagerActivity  extends BaseActivity
     // Get Current RealEstateAgent
     private void getCurrentRealEstateAgent(){
         Log.d(TAG, "getCurrentRealEstateAgent: ");
-        mRealEstateAgentViewModel.getCurrentRealEstateAgent().observe(this, this::updateCurrentRealEstateAgent_Id);
+        mRealEstateManagerViewModel.getCurrentRealEstateAgent().observe(this, this::updateCurrentRealEstateAgent_Id);
     }
     // Update the RealEstateAgent Data
     private void updateCurrentRealEstateAgent_Id(RealEstateAgent realEstateAgent){
@@ -201,6 +190,8 @@ public class RealEstateManagerActivity  extends BaseActivity
             // Fetch the result from the Intent
             if(data.getBooleanExtra(SearchEstateActivity.BUNDLE_SEARCH_OK, false))
                 showSnackBar("The search for estates has succeeded");
+            SearchData searchData = data.getParcelableExtra(SearchEstateActivity.BUNDLE_SEARCH_DATA);
+            mRealEstateManagerViewModel.setSearchData(searchData);
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -264,8 +255,10 @@ public class RealEstateManagerActivity  extends BaseActivity
                 Utils.startActivity(this,MapActivity.class);
                 break;
             case R.id.activity_real_estate_manager_search:
-                // Start Search Estate Activity
-                Utils.startActivity(this,SearchEstateActivity.class);
+                // Create a intent for call Activity
+                Intent searchIntent = new Intent(this, SearchEstateActivity.class);
+                // Go to SearchEstateActivity
+                startActivityForResult(searchIntent, SEARCH_ACTIVITY_REQUEST_CODE);
                 break;
             default:
                 break;
@@ -302,38 +295,5 @@ public class RealEstateManagerActivity  extends BaseActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-    // ---------------------------------------------------------------------------------------------
-    //                                         TEST
-    // ---------------------------------------------------------------------------------------------
-
-    @Override
-    protected void onPause() {
-        Log.d(TAG, "onPause: ");
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d(TAG, "onStop: ");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy: ");
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onRestart() {
-        Log.d(TAG, "onRestart: ");
-        super.onRestart();
-    }
-
-    @Override
-    protected void onStart() {
-        Log.d(TAG, "onStart: ");
-        super.onStart();
     }
 }

@@ -199,12 +199,12 @@ public class EstateUpdateViewModel extends ViewModel {
         // -------------------------
         // Chips Not required
         HashMap<String,String> pointsOfInterest = new HashMap<>();
-        if (chipGarden) pointsOfInterest.put("Garden","Garden");
-        if (chipLibrary) pointsOfInterest.put("Library","Library");
-        if (chipRestaurant) pointsOfInterest.put("Restaurant","Restaurant");
         if (chipSchool) pointsOfInterest.put("School","School");
         if (chipSwimmingPool) pointsOfInterest.put("Swimming Pool","Swimming Pool");
         if (chipTownHall) pointsOfInterest.put("Town Hall","Town Hall");
+        if (chipLibrary) pointsOfInterest.put("Library","Library");
+        if (chipGarden) pointsOfInterest.put("Garden","Garden");
+        if (chipRestaurant) pointsOfInterest.put("Restaurant","Restaurant");
         estate.setPointOfInterest(pointsOfInterest);
         // -------------------------
         // Entry date of Market

@@ -5,11 +5,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.models.views.EstateCreateViewModel;
 import com.openclassrooms.realestatemanager.models.views.EstateDetailsViewModel;
-import com.openclassrooms.realestatemanager.models.views.EstateListViewModel;
 import com.openclassrooms.realestatemanager.models.views.EstateSearchViewModel;
 import com.openclassrooms.realestatemanager.models.views.EstateUpdateViewModel;
 import com.openclassrooms.realestatemanager.models.views.MapViewModel;
-import com.openclassrooms.realestatemanager.models.views.RealEstateAgentViewModel;
+import com.openclassrooms.realestatemanager.models.views.RealEstateManagerViewModel;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 import com.openclassrooms.realestatemanager.repositories.RealEstateAgentDataRepository;
 
@@ -29,14 +28,11 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(EstateListViewModel.class)) {
-            return (T) new EstateListViewModel(estateDataSource, executor);
-        }
         if (modelClass.isAssignableFrom(EstateDetailsViewModel.class)) {
             return (T) new EstateDetailsViewModel(estateDataSource, executor);
         }
-        if (modelClass.isAssignableFrom(RealEstateAgentViewModel.class)) {
-            return (T) new RealEstateAgentViewModel(realEstateAgentDataSource, executor);
+        if (modelClass.isAssignableFrom(RealEstateManagerViewModel.class)) {
+            return (T) new RealEstateManagerViewModel(estateDataSource, realEstateAgentDataSource);
         }
         if (modelClass.isAssignableFrom(EstateCreateViewModel.class)) {
             return (T) new EstateCreateViewModel(estateDataSource, executor);
@@ -48,7 +44,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new MapViewModel(estateDataSource, executor);
         }
         if (modelClass.isAssignableFrom(EstateSearchViewModel.class)) {
-            return (T) new EstateSearchViewModel(estateDataSource, executor);
+            return (T) new EstateSearchViewModel();
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

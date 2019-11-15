@@ -5,15 +5,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-import androidx.sqlite.db.SimpleSQLiteQuery;
 
-import com.openclassrooms.realestatemanager.models.Estate;
-import com.openclassrooms.realestatemanager.repositories.CurrentEstateDataRepository;
-import com.openclassrooms.realestatemanager.repositories.CurrentEstateListDataRepository;
+import com.openclassrooms.realestatemanager.models.SearchData;
 import com.openclassrooms.realestatemanager.repositories.CurrentRealEstateAgentDataRepository;
-import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 import com.openclassrooms.realestatemanager.utils.Converters;
 
 import org.threeten.bp.DateTimeUtils;
@@ -23,16 +18,11 @@ import org.threeten.bp.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 public class EstateSearchViewModel extends ViewModel {
 
     // For debugging Mode
     private static final String TAG = EstateSearchViewModel.class.getSimpleName();
-
-    // REPOSITORIES
-    private final EstateDataRepository mEstateDataSource;
-    private final Executor mExecutor;
 
     // DATA
     private MutableLiveData<ViewAction> mViewActionLiveData = new MutableLiveData<>();
@@ -41,16 +31,15 @@ public class EstateSearchViewModel extends ViewModel {
     private MutableLiveData<Calendar> mDateSale1 = new MutableLiveData<>();
     private MutableLiveData<Calendar> mDateSale2 = new MutableLiveData<>();
 
+    // Search Object that will be returned to the calling activity RealEstateManagerActivity
+    private SearchData mSearchData = new SearchData();
+
     public enum ViewAction {
         INVALID_INPUT,
-        FINISH_ACTIVITY,
-        SEARCH_NO_RESULT
+        FINISH_ACTIVITY
     }
 
-    public EstateSearchViewModel(EstateDataRepository estateDataSource,
-                                 Executor executor) {
-        mEstateDataSource = estateDataSource;
-        mExecutor = executor;
+    public EstateSearchViewModel() {
     }
 
     public void searchEstate(
@@ -156,88 +145,29 @@ public class EstateSearchViewModel extends ViewModel {
                 args.add(Converters.dateToTimestamp(localDT2));
             }
 
-            Log.d(TAG, "searchEstate: queryString = "+queryString);
-            // Build SimpleSQLiteQuery
-            final SimpleSQLiteQuery simpleQuery = new SimpleSQLiteQuery(queryString,args.toArray());
-            // Submit Request and get the result
-            LiveData<List<Estate>> lEstate = mEstateDataSource.getEstates(simpleQuery);
+            // Build SearchData Object for Result
+            mSearchData.setQueryString(queryString);
+            mSearchData.setArgs(args);
+            mSearchData.setCity(city);
+            mSearchData.setPhotoMin(photoMin);
+            mSearchData.setPhotoMax(photoMax);
+            ArrayList<Boolean> chips = new ArrayList<>();
+            if (chipSchool) chips.add(chipSchool); else chips.add(false);
+            if (chipSwimmingPool) chips.add(chipSwimmingPool); else chips.add(false);
+            if (chipTownHall)chips.add(chipTownHall); else chips.add(false);
+            if (chipLibrary) chips.add(chipLibrary); else chips.add(false);
+            if (chipGarden) chips.add(chipGarden); else chips.add(false);
+            if (chipRestaurant) chips.add(chipRestaurant); else chips.add(false);
+            mSearchData.setChips(chips);
 
-           lEstate.observeForever(new Observer<List<Estate>>() {
-                @Override
-                public void onChanged(List<Estate> estates) {
-                    Log.d(TAG, "onChanged: ");
-
-                    // Unsubscribe the Observer
-                    lEstate.removeObserver(this);
-
-                    if (estates.size() == 0) mViewActionLiveData.postValue(ViewAction.SEARCH_NO_RESULT);
-                    else {
-                        List<Estate> localEstate = estates;
-                        Log.d(TAG, "onChanged: 1:localEstate.size() = "+localEstate.size());
-                        // Filter on City argument
-                        if (!city.isEmpty()) localEstate = filterEstatesCity(estates,city);
-                        // Filter on numberOfPhoto
-                        if (photoMax > 0) localEstate = filterEstatesNumberOfPhoto(localEstate,photoMin,photoMax);
-                        // Filter on interestPoint
-                        if (chipGarden) localEstate = filterEstatesInterestPoint(localEstate,"Garden");
-                        if (chipLibrary) localEstate = filterEstatesInterestPoint(localEstate,"Library");
-                        if (chipRestaurant) localEstate = filterEstatesInterestPoint(localEstate,"Restaurant");
-                        if (chipSchool) localEstate = filterEstatesInterestPoint(localEstate,"School");
-                        if (chipSwimmingPool) localEstate = filterEstatesInterestPoint(localEstate,"Swimming Pool");
-                        if (chipTownHall) localEstate = filterEstatesInterestPoint(localEstate,"Town Hall");
-
-                        // Update Current Estate List
-                        Log.d(TAG, "onChanged: estates.size() = "+estates.size());
-                        Log.d(TAG, "onChanged: 2:localEstate.size() = "+localEstate.size());
-                        if (localEstate.size() == 0) mViewActionLiveData.postValue(ViewAction.SEARCH_NO_RESULT);
-                        else {
-                            CurrentEstateListDataRepository.getInstance().setCurrentEstateList(localEstate);
-                            CurrentEstateDataRepository.getInstance().setCurrentEstate_Id(localEstate.get(0).getEstate_Id());
-
-                            mViewActionLiveData.postValue(ViewAction.FINISH_ACTIVITY);
-                        }
-                    }
-                }
-            });
+            // Finish Activity
+            mViewActionLiveData.setValue(ViewAction.FINISH_ACTIVITY);
         } else {
             Log.d(TAG, "searchEstate: Query is Empty");
             mViewActionLiveData.setValue(ViewAction.INVALID_INPUT);
         }
     }
 
-    // Retrieves only the Estate list of the city specified as a parameter
-    private List<Estate> filterEstatesCity(List<Estate> estates, String city) {
-        List<Estate> localEstate = new ArrayList<>();
-
-        for (Estate estate : estates) {
-            if (estate.getAddress().get(3).equals(city)) {
-                localEstate.add(estate);
-            }
-        }
-        return localEstate;
-    }
-    // Retrieves only the Estate list of the number of photo specified as a parameter
-    private List<Estate> filterEstatesNumberOfPhoto(List<Estate> estates, int photoMin, int photoMax) {
-        List<Estate> localEstate = new ArrayList<>();
-
-        for (Estate estate : estates) {
-            if (    estate.getPhotos().size() >= photoMin &&
-                    estate.getPhotos().size() <= photoMax   ) {
-                localEstate.add(estate);
-            }
-        }
-        return localEstate;
-    }
-    // Retrieves only the Estate list of the interest point specified as a parameter
-    private List<Estate> filterEstatesInterestPoint(List<Estate> estates,String interestPoint)
-    {
-        List<Estate> localEstate = new ArrayList<>();
-
-        for (Estate estate : estates) {
-            if (estate.getPointOfInterest().containsKey(interestPoint)) localEstate.add(estate);
-        }
-        return localEstate;
-    }
     // Control digital Data
     public String controlDigitalData(
             String price1,
@@ -411,6 +341,6 @@ public class EstateSearchViewModel extends ViewModel {
     public MutableLiveData<Calendar> getDateSale1() {return mDateSale1; }
 
     public MutableLiveData<Calendar> getDateSale2() {return mDateSale2; }
+
+    public SearchData getSearchData() {return mSearchData; }
 }
-
-
