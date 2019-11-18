@@ -561,6 +561,9 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
         // Restore Entry Date
         mUpdateEstateViewModel.getDateEntryOfTheMarket().setValue(estate.getDateEntryOfTheMarket());
 
+        // Restore Date Of Sale
+        mUpdateEstateViewModel.getDateOfSale().setValue(estate.getDateOfSale());
+
         // Restore Photo Description List
         mUpdateEstateViewModel.setPhotoDescription(estate.getPhotosDescription());
         // Restore Photo List
@@ -615,7 +618,7 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
     // Refresh the Date Of Sale
     private void refreshDateOfSale(LocalDateTime dateOfSale) {
         Log.d(TAG, "refreshDateOfSale: ");
-        mSaleDate.setText(Utils.fromLocalDateTime(dateOfSale));
+        if (dateOfSale != null) mSaleDate.setText(Utils.fromLocalDateTime(dateOfSale));
     }
     // refresh the Photo List
     private void refreshPhotos(List<String> photos){
@@ -626,7 +629,7 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
     private void refreshVideo(String video){
         Log.d(TAG, "refreshVideo() called with: video = [" + video + "]");
 
-        if (!video.isEmpty()) {
+        if (video != null && !video.isEmpty()) {
             Glide.with(this) //SHOWING PREVIEW OF VIDEO
                     .load(video)
                     .apply(RequestOptions.centerCropTransform())

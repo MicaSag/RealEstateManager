@@ -2,13 +2,17 @@ package com.openclassrooms.realestatemanager.adapters.estateList;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
+import com.google.android.material.card.MaterialCardView;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.repositories.CurrentEstateDataRepository;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -25,6 +29,9 @@ public class EstateListViewHolder extends RecyclerView.ViewHolder implements Vie
     @BindView(R.id.fragment_list_estate_location) TextView mLocation;
     @BindView(R.id.fragment_list_estate_type) TextView mType;
     @BindView(R.id.fragment_list_estate_prize) TextView mPrize;
+    @BindView(R.id.fragment_list_estate_sale) ImageView mSale;
+    @BindView(R.id.fragment_list_estate_mcv) MaterialCardView mMCV;
+
 
     private EstateListAdapter.OnEstateClick mOnEstateClick;
     private Estate mEstate;
@@ -54,6 +61,19 @@ public class EstateListViewHolder extends RecyclerView.ViewHolder implements Vie
         // Display Estate Price
         DecimalFormat decimalFormat = new DecimalFormat("#,###", new DecimalFormatSymbols(Locale.US));
         mPrize.setText("$"+decimalFormat.format(estate.getPrice()));
+
+        // Display Sale
+        if (estate.getDateOfSale() != null) mSale.setVisibility(View.VISIBLE);
+        else mSale.setVisibility(View.INVISIBLE);
+
+        // For indicate item Selected
+        if (estate.getEstate_Id() == CurrentEstateDataRepository.getInstance()
+                .getCurrentEstate_Id().getValue()) {
+            mMCV.setCardBackgroundColor(Color.YELLOW);
+        }
+        else {
+            mMCV.setCardBackgroundColor(Color.WHITE);
+        }
     }
 
     @Override

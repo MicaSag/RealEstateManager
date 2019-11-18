@@ -21,6 +21,7 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.views.RealEstateManagerViewModel;
+import com.openclassrooms.realestatemanager.repositories.CurrentEstateDataRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +99,9 @@ public class EstateListFragment extends Fragment {
 
         // Observe a change of Current Estates
         mRealEstateManagerViewModel.getCurrentEstates().observe(this, this::updateEstateList);
+
+        // Observe a change of Current Estate
+        CurrentEstateDataRepository.getInstance().getCurrentEstate_Id().observe(this, this::updateEstateList);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -129,5 +133,10 @@ public class EstateListFragment extends Fragment {
     private void updateEstateList(List<Estate> estates){
 
         if (estates != null) mEstateListAdapter.updateData(estates);
+    }
+    // Update the list of Estate
+    private void updateEstateList(Long currentEstate_Id){
+
+        mEstateListAdapter.notifyDataSetChanged();
     }
 }

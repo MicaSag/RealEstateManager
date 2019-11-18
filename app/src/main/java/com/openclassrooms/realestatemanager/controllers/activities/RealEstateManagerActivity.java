@@ -237,6 +237,8 @@ public class RealEstateManagerActivity  extends BaseActivity
         Log.d(TAG, "onEstateClick: ");
         CurrentEstateDataRepository.getInstance().setCurrentEstate_Id(estate.getEstate_Id());
 
+        //
+
 
         // We only add DetailsFragment in Tablet mode (If found frame_layout_detail)
         if (findViewById(R.id.fragment_estate_details) == null)
