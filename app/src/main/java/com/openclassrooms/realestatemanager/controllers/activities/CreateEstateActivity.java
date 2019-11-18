@@ -11,11 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -28,11 +27,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.openclassrooms.realestatemanager.controllers.bases.BaseActivity;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.models.views.EstateCreateViewModel;
+import com.openclassrooms.realestatemanager.models.views.CreateEstateViewModel;
 import com.openclassrooms.realestatemanager.adapters.photoList.PhotoListAdapter;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.utils.Utils;
@@ -45,7 +45,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -86,8 +85,10 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
     @BindView(R.id.estate_chip_town_hall) Chip mChipTownHall;
     @BindView(R.id.estate_chip_swimming_pool) Chip mChipSwimmingPool;
     @BindView(R.id.estate_iv_video_preview) ImageView mVideoPreview;
+    @BindView(R.id.estate_bt_delete_video_preview) Button mDeleteVideoPreview;
+    @BindView(R.id.estate_mcv_display_video) MaterialCardView mVideoMCV;
 
-    private EstateCreateViewModel mEstateCreateViewModel;
+    private CreateEstateViewModel mCreateEstateViewModel;
 
     // Declarations for management of the date fields with a DatePickerDialog
     private DatePickerDialog mEntryDatePickerDialog;
@@ -171,11 +172,11 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
     // Configure ViewModel
     private void configureEstateCreateViewModel(){
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
-        mEstateCreateViewModel = ViewModelProviders.of(this, modelFactory).get(EstateCreateViewModel.class);
+        mCreateEstateViewModel = ViewModelProviders.of(this, modelFactory).get(CreateEstateViewModel.class);
 
-        mEstateCreateViewModel.getViewActionLiveData().observe(this, new Observer<EstateCreateViewModel.ViewAction>() {
+        mCreateEstateViewModel.getViewActionLiveData().observe(this, new Observer<CreateEstateViewModel.ViewAction>() {
             @Override
-            public void onChanged(EstateCreateViewModel.ViewAction viewAction) {
+            public void onChanged(CreateEstateViewModel.ViewAction viewAction) {
                 if (viewAction == null)  {
                     return;
                 }
@@ -197,11 +198,11 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
         });
 
         // Observe a change of Date of Entry on the Market
-        mEstateCreateViewModel.getDateEntryOfTheMarket().observe(this,this::refreshDateEntryOfTheMarket);
+        mCreateEstateViewModel.getDateEntryOfTheMarket().observe(this,this::refreshDateEntryOfTheMarket);
         // Observe a change of the photo list
-        mEstateCreateViewModel.getPhotos().observe(this,this::refreshPhotos);
+        mCreateEstateViewModel.getPhotos().observe(this,this::refreshPhotos);
         // Observe a change of the video
-        mEstateCreateViewModel.getVideo().observe(this,this::refreshVideo);
+        mCreateEstateViewModel.getVideo().observe(this,this::refreshVideo);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -246,9 +247,9 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
         Log.d(TAG, "onPhotoClick: ");
         if (view.getId() == R.id.photo_list_image) Log.d(TAG, "onClick: image");
         if (view.getId() == R.id.photo_list_bt_delete) {
-            mEstateCreateViewModel.getPhotos().getValue().remove(position);
-            mEstateCreateViewModel.getPhotoDescription().remove(position);
-            this.refreshPhotos(mEstateCreateViewModel.getPhotos().getValue());
+            mCreateEstateViewModel.getPhotos().getValue().remove(position);
+            mCreateEstateViewModel.getPhotoDescription().remove(position);
+            this.refreshPhotos(mCreateEstateViewModel.getPhotos().getValue());
         }
     }
     // ---------------
@@ -264,7 +265,7 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
     public void onSelectVideoClick(View view) {
         this.selectVideo();
     }
-    // Click Video View
+    // Click Video Preview
     @OnClick(R.id.estate_iv_video_preview)
     public void onVideoPreviewClick(View view) {
         Log.d(TAG, "onVideoPreviewClick: ");
@@ -272,8 +273,14 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
         // Start Video Activity
         Utils.startActivity(this,
                 VideoActivity.class,
-               VideoActivity.BUNDLE_VIDEO_ACTIVITY_URI,
-                mEstateCreateViewModel.getVideo().getValue());
+                VideoActivity.BUNDLE_VIDEO_ACTIVITY_URI,
+                mCreateEstateViewModel.getVideo().getValue());
+    }
+    // Click delete Video Preview
+    @OnClick(R.id.estate_bt_delete_video_preview)
+    public void onDeleteVideoPreviewClick(View view) {
+        Log.d(TAG, "onDeleteVideoPreviewClick: ");
+        mCreateEstateViewModel.setVideo("");
     }
     // ---------------
 
@@ -299,7 +306,7 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
                 "value = [" + value + "]");
 
         // Update PhotoDescription
-        mEstateCreateViewModel.getPhotoDescription().set(position,value);
+        mCreateEstateViewModel.getPhotoDescription().set(position,value);
     }
 
     // Click on Validate Button
@@ -307,7 +314,7 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
     public void validate(View view) {
         Log.d(TAG, "validate: ");
 
-        mEstateCreateViewModel.createEstate(
+        mCreateEstateViewModel.createEstate(
                 mAutoCompleteTVType.getText().toString(),
                 mPrice.getText().toString(),
                 mSurface.getText().toString(),
@@ -446,26 +453,27 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
         // Manage Photo Take
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.d(TAG, "onActivityResult: mCurrentPhotoPath = "+mCurrentPhotoPath);
-            mEstateCreateViewModel.addPhoto(mCurrentPhotoPath);
-            mEstateCreateViewModel.addPhotoDescription("");
+            mCreateEstateViewModel.addPhoto(mCurrentPhotoPath);
+            mCreateEstateViewModel.addPhotoDescription("");
         }
 
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
             Uri fullPhotoUri = data.getData();
             Log.d(TAG, "onActivityResult: fullPhotoUri = "+fullPhotoUri.toString());
-            mEstateCreateViewModel.addPhoto(fullPhotoUri.toString());
-            mEstateCreateViewModel.addPhotoDescription("");
+            mCreateEstateViewModel.addPhoto(fullPhotoUri.toString());
+            mCreateEstateViewModel.addPhotoDescription("");
         }
 
+        // Manage Video Take
         if (requestCode == REQUEST_TAKE_VIDEO && resultCode == RESULT_OK) {
             Log.d(TAG, "onActivityResult: mCurrentVideoPath = "+mCurrentVideoPath);
-            mEstateCreateViewModel.setVideo(mCurrentVideoPath);
+            mCreateEstateViewModel.setVideo(mCurrentVideoPath);
         }
 
         if (requestCode == REQUEST_VIDEO_GET && resultCode == RESULT_OK) {
             Uri fullPhotoUri = data.getData();
             Log.d(TAG, "onActivityResult: fullPhotoUri = "+fullPhotoUri.toString());
-            mEstateCreateViewModel.setVideo(fullPhotoUri.toString());
+            mCreateEstateViewModel.setVideo(fullPhotoUri.toString());
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -504,7 +512,7 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
                 LocalDateTime ldt = DateTimeUtils.toLocalDateTime(ts);
 
                 // Update entryDate in ViewModel
-                mEstateCreateViewModel.getDateEntryOfTheMarket().setValue(ldt);
+                mCreateEstateViewModel.getDateEntryOfTheMarket().setValue(ldt);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
@@ -521,14 +529,21 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
     private void refreshPhotos(List<String> photos){
         Log.d(TAG, "refreshPhotos() called with: photos = [" + photos + "]");
         mPhotoListAdapter.setNewPhotos(photos);
-        mPhotoListAdapter.setNewPhotosDescription(mEstateCreateViewModel.getPhotoDescription());
+        mPhotoListAdapter.setNewPhotosDescription(mCreateEstateViewModel.getPhotoDescription());
     }
     // refresh the video
     private void refreshVideo(String video){
         Log.d(TAG, "refreshVideo() called with: video = [" + video + "]");
-        Glide.with(this) //SHOWING PREVIEW OF VIDEO
-                .load(video)
-                .apply(RequestOptions.centerCropTransform())
-                .into(this.mVideoPreview);
+
+        if (!video.isEmpty()) {
+            Glide.with(this) //SHOWING PREVIEW OF VIDEO
+                    .load(video)
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(this.mVideoPreview);
+            mVideoMCV.setVisibility(View.VISIBLE);
+        }
+        else {
+            mVideoMCV.setVisibility(View.INVISIBLE);
+        }
     }
 }

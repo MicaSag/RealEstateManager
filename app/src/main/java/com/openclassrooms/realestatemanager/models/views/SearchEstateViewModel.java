@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class EstateSearchViewModel extends ViewModel {
+public class SearchEstateViewModel extends ViewModel {
 
     // For debugging Mode
-    private static final String TAG = EstateSearchViewModel.class.getSimpleName();
+    private static final String TAG = SearchEstateViewModel.class.getSimpleName();
 
     // DATA
     private MutableLiveData<ViewAction> mViewActionLiveData = new MutableLiveData<>();
@@ -39,7 +39,7 @@ public class EstateSearchViewModel extends ViewModel {
         FINISH_ACTIVITY
     }
 
-    public EstateSearchViewModel() {
+    public SearchEstateViewModel() {
     }
 
     public void searchEstate(

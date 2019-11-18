@@ -18,16 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.BuildConfig;
-import com.openclassrooms.realestatemanager.controllers.activities.RealEstateManagerActivity;
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.adapters.photoList.PhotoListAdapter;
 import com.openclassrooms.realestatemanager.controllers.activities.VideoActivity;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
-import com.openclassrooms.realestatemanager.models.views.EstateDetailsViewModel;
-import com.openclassrooms.realestatemanager.adapters.photoList.PhotoListAdapter;
-import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.models.views.RealEstateManagerViewModel;
-import com.openclassrooms.realestatemanager.repositories.CurrentEstateDataRepository;
+import com.openclassrooms.realestatemanager.models.views.DetailsEstateViewModel;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
 import butterknife.BindView;
@@ -57,8 +54,8 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
     @BindView(R.id.fragment_details_static_map) ImageView mStaticMap;
     @BindView(R.id.fragment_details_video_link) TextView mVideoLink;
 
-    // Declare EstateDetailsViewModel
-    private EstateDetailsViewModel mEstateDetailsViewModel;
+    // Declare DetailsEstateViewModel
+    private DetailsEstateViewModel mDetailsEstateViewModel;
 
     // For Display list of photos
     PhotoListAdapter mPhotoListAdapter;
@@ -91,7 +88,7 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
         // Configuration Photo RecyclerView
         this.configureRecyclerView();
 
-        // Configure EstateDetailsViewModel
+        // Configure DetailsEstateViewModel
         this.configureEstateDetailsViewModel();
 
         return view;
@@ -103,11 +100,11 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
     private void configureEstateDetailsViewModel(){
 
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(getContext());
-        mEstateDetailsViewModel = ViewModelProviders.of(this, mViewModelFactory)
-                .get(EstateDetailsViewModel.class);
+        mDetailsEstateViewModel = ViewModelProviders.of(this, mViewModelFactory)
+                .get(DetailsEstateViewModel.class);
 
         // Observe a change of Current Estate
-        mEstateDetailsViewModel.getCurrentEstate().observe(this, this::updateUI);
+        mDetailsEstateViewModel.getCurrentEstate().observe(this, this::updateUI);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -136,18 +133,11 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
     @OnClick(R.id.fragment_details_video_link)
     public void onVideoClick(View view) {
 
-        /*if (getActivity().getClass() == RealEstateManagerActivity.class){
-
-            RealEstateManagerViewModel vm = ((RealEstateManagerActivity)getActivity())
-                    .getRealEstateManagerViewModel();
-            Integer currentEstate_Id = CurrentEstateDataRepository.getInstance().getCurrentEstate_Id()
-                    .getValue().intValue();*/
             // Start Video Activity
             Utils.startActivity(getActivity(),
                     VideoActivity.class,
                     VideoActivity.BUNDLE_VIDEO_ACTIVITY_URI,
-                    mEstateDetailsViewModel.getCurrentEstate().getValue().getVideo());
-
+                    mDetailsEstateViewModel.getCurrentEstate().getValue().getVideo());
     }
     // ---------------------------------------------------------------------------------------------
     //                                             UI
@@ -168,7 +158,8 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
             mPhotoListAdapter.setNewPhotosDescription(estate.getPhotosDescription());
 
             Log.d(TAG, "updateUI: estate.getVideo() = "+estate.getVideo());
-            if (estate.getVideo() == null) mVideoLink.setVisibility(View.INVISIBLE);
+            if (estate.getVideo() == null || estate.getVideo().isEmpty() )
+                 mVideoLink.setVisibility(View.INVISIBLE);
             else mVideoLink.setVisibility(View.VISIBLE);
 
             // Created Uri to recover the static map

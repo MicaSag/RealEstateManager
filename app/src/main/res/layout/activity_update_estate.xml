@@ -41,7 +41,7 @@
                 app:helperTextEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/estate_rv_photos"
+                app:layout_constraintTop_toBottomOf="@+id/estate_mcv_take_video"
                 app:startIconDrawable="@drawable/baseline_date_range_24">
 
                 <com.google.android.material.textfield.TextInputEditText

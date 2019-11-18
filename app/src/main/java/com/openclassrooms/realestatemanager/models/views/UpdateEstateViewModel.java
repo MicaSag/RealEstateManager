@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.repositories.CurrentEstateDataRepository;
 import com.openclassrooms.realestatemanager.repositories.CurrentRealEstateAgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.Executor;
 
-public class EstateCreateViewModel extends ViewModel {
+public class UpdateEstateViewModel extends ViewModel {
 
     // For debugging Mode
-    private static final String TAG = EstateCreateViewModel.class.getSimpleName();
+    private static final String TAG = UpdateEstateViewModel.class.getSimpleName();
 
     // REPOSITORIES
     private final EstateDataRepository mEstateDataSource;
@@ -29,8 +30,9 @@ public class EstateCreateViewModel extends ViewModel {
     // DATA
     private MutableLiveData<ViewAction> mViewActionLiveData = new MutableLiveData<>();
     private MutableLiveData<LocalDateTime> mDateEntryOfTheMarket = new MutableLiveData<>();
+    private MutableLiveData<LocalDateTime> mDateOfSale = new MutableLiveData<>();
     // For Manage Photos
-    private MutableLiveData<ArrayList<String>> mPhotos = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<String>> mPhotos  = new MutableLiveData<>();
     private ArrayList<String> mPhotoDescription = new ArrayList<>();
     // For Manage Video
     private MutableLiveData<String> mVideo = new MutableLiveData<>();
@@ -40,15 +42,15 @@ public class EstateCreateViewModel extends ViewModel {
         FINISH_ACTIVITY
     }
 
-    public EstateCreateViewModel(EstateDataRepository estateDataSource,
+    public UpdateEstateViewModel(EstateDataRepository estateDataSource,
                                  Executor executor) {
         mEstateDataSource = estateDataSource;
         mExecutor = executor;
-        mPhotos.setValue(new ArrayList<>());
         mDateEntryOfTheMarket.setValue(LocalDateTime.now());
+        mPhotos.setValue(new ArrayList<>());
     }
 
-    public void createEstate(
+    public void updateEstate(
             @NonNull String type,
             String price,
             String area,
@@ -68,20 +70,21 @@ public class EstateCreateViewModel extends ViewModel {
             Boolean chipSwimmingPool,
             Boolean chipTownHall
     ) {
+        Log.d(TAG, "updateEstate: ");
         Estate estate = validateData(type, price, area, description,
-                numberOfRooms, numberOfBathrooms, numberOfBedrooms, addressWay,
-                addressComplement, addressPostalCode, addressCity, addressState, chipGarden,
-                chipLibrary, chipRestaurant,chipSchool, chipSwimmingPool, chipTownHall);
+                numberOfRooms, numberOfBathrooms, numberOfBedrooms, addressWay, addressComplement,
+                addressPostalCode, addressCity, addressState, chipGarden, chipLibrary, chipRestaurant,
+                chipSchool, chipSwimmingPool, chipTownHall);
 
         if (estate != null) {
+            Log.d(TAG, "updateEstate: estate Sale Date = "+estate.getDateOfSale());
 
             mExecutor.execute(() -> {
-                mEstateDataSource.createEstate(estate);
+                mEstateDataSource.updateEstate(estate);
             });
-
-            mViewActionLiveData.setValue(ViewAction.FINISH_ACTIVITY);
+            mViewActionLiveData.setValue(UpdateEstateViewModel.ViewAction.FINISH_ACTIVITY);
         } else {
-            mViewActionLiveData.setValue(ViewAction.INVALID_INPUT);
+            mViewActionLiveData.setValue(UpdateEstateViewModel.ViewAction.INVALID_INPUT);
         }
     }
 
@@ -210,6 +213,9 @@ public class EstateCreateViewModel extends ViewModel {
         }
         estate.setDateEntryOfTheMarket(mDateEntryOfTheMarket.getValue());
         // -------------------------
+        // Date Of Sale Not required
+        estate.setDateOfSale(mDateOfSale.getValue());
+        // -------------------------
         // Current Agent Id
         if(CurrentRealEstateAgentDataRepository.
                 getInstance().getCurrentRealEstateAgent_Id().getValue().toString().isEmpty()){
@@ -217,6 +223,10 @@ public class EstateCreateViewModel extends ViewModel {
         }
         estate.setRealEstateAgent_Id(CurrentRealEstateAgentDataRepository.
                 getInstance().getCurrentRealEstateAgent_Id().getValue());
+        // -------------------------
+        // Estate_Id
+        estate.setEstate_Id(CurrentEstateDataRepository.getInstance()
+                .getCurrentEstate_Id().getValue());
         // -------------------------
         // Photo List
         if(mPhotos.getValue().size() == 0){
@@ -234,9 +244,10 @@ public class EstateCreateViewModel extends ViewModel {
         // Photos Description
         estate.setVideo(mVideo.getValue());
 
-       return estate;
+        return estate;
     }
 
+    // Manage Actions
     public LiveData<ViewAction> getViewActionLiveData() {
         return mViewActionLiveData;
     }
@@ -246,12 +257,22 @@ public class EstateCreateViewModel extends ViewModel {
         return mPhotos;
     }
 
+    public void setPhotos(ArrayList<String> photos) {
+        Log.d(TAG, "setPhotos: ");
+        this.mPhotos.setValue(photos);
+    }
+
     public void addPhoto(String photo) {
         Log.d(TAG, "addPhoto: ");
         ArrayList<String> l = mPhotos.getValue();
         l.add(photo);
         this.mPhotos.postValue(l);
     }
+
+    public void setPhotoDescription(ArrayList<String> photosDescription) {
+        this.mPhotoDescription = photosDescription;
+    }
+
     public ArrayList<String> getPhotoDescription() {
         return mPhotoDescription;
     }
@@ -267,8 +288,21 @@ public class EstateCreateViewModel extends ViewModel {
     public void setVideo(String video) {
         mVideo.setValue(video);
     }
+
+    // For Manage Dates
     public MutableLiveData<LocalDateTime> getDateEntryOfTheMarket() {
+
         return mDateEntryOfTheMarket;
+    }
+    public MutableLiveData<LocalDateTime> getDateOfSale() {
+
+        return mDateOfSale;
+    }
+
+    // Manage Estate
+    public LiveData<Estate> getEstate(long estate_Id) {
+        Log.d(TAG, "getEstate() called with: estate_Id = [" + estate_Id + "]");
+        return mEstateDataSource.getEstate(estate_Id);
     }
 }
 

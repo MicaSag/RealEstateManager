@@ -11,12 +11,10 @@ import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.repositories.CurrentEstateDataRepository;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 
-import java.util.concurrent.Executor;
-
-public class EstateDetailsViewModel extends ViewModel {
+public class DetailsEstateViewModel extends ViewModel {
 
     // For debugging Mode
-    private static final String TAG = EstateDetailsViewModel.class.getSimpleName();
+    private static final String TAG = DetailsEstateViewModel.class.getSimpleName();
 
     // REPOSITORIES
     private final EstateDataRepository mEstateDataSource;
@@ -24,7 +22,7 @@ public class EstateDetailsViewModel extends ViewModel {
     @NonNull
     private LiveData<Estate> mCurrentEstate;
 
-    public EstateDetailsViewModel(EstateDataRepository estateDataSource) {
+    public DetailsEstateViewModel(EstateDataRepository estateDataSource) {
         mEstateDataSource = estateDataSource;
 
         mCurrentEstate = Transformations.switchMap(

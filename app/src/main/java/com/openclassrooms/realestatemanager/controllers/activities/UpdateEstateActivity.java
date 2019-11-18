@@ -11,9 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -25,12 +26,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.openclassrooms.realestatemanager.controllers.bases.BaseActivity;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
-import com.openclassrooms.realestatemanager.models.views.EstateUpdateViewModel;
+import com.openclassrooms.realestatemanager.models.views.UpdateEstateViewModel;
 import com.openclassrooms.realestatemanager.adapters.photoList.PhotoListAdapter;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.repositories.CurrentEstateDataRepository;
@@ -44,7 +47,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -86,8 +88,11 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
     @BindView(R.id.estate_chip_restaurant) Chip mChipRestaurant;
     @BindView(R.id.estate_chip_town_hall) Chip mChipTownHall;
     @BindView(R.id.estate_chip_swimming_pool) Chip mChipSwimmingPool;
+    @BindView(R.id.estate_iv_video_preview) ImageView mVideoPreview;
+    @BindView(R.id.estate_bt_delete_video_preview) Button mDeleteVideoPreview;
+    @BindView(R.id.estate_mcv_display_video) MaterialCardView mVideoMCV;
 
-    private EstateUpdateViewModel mEstateUpdateViewModel;
+    private UpdateEstateViewModel mUpdateEstateViewModel;
 
     // Declarations for management of the date fields with a DatePickerDialog
     private DatePickerDialog mEntryDatePickerDialog;
@@ -98,10 +103,14 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
     // For Display list of photos
     private PhotoListAdapter mPhotoListAdapter;
     private String currentPhotoPath;
+    // For Display video
+    private String mCurrentVideoPath;
 
-    // For use intents to retrieve photos
+    // For use intents to retrieve photos & video
     static final int REQUEST_TAKE_PHOTO = 1;
-    static final int REQUEST_IMAGE_GET = 2;
+    static final int REQUEST_IMAGE_GET = 10;
+    static final int REQUEST_TAKE_VIDEO = 2;
+    static final int REQUEST_VIDEO_GET = 20;
 
     // To return the result to the parent activity
     public static final String BUNDLE_UPDATE_OK = "BUNDLE_UPDATE_OK";
@@ -163,7 +172,7 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
         configureRecyclerView();
 
         // Restore Estate on the View
-        mEstateUpdateViewModel
+        mUpdateEstateViewModel
                 .getEstate(CurrentEstateDataRepository.getInstance().getCurrentEstate_Id().getValue())
                 .observe(this,this::restoreData);
     }
@@ -173,12 +182,12 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
     // Configure ViewModel
     private void configureViewModel() {
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
-        mEstateUpdateViewModel = ViewModelProviders.of(this, modelFactory)
-                .get(EstateUpdateViewModel.class);
+        mUpdateEstateViewModel = ViewModelProviders.of(this, modelFactory)
+                .get(UpdateEstateViewModel.class);
 
-        mEstateUpdateViewModel.getViewActionLiveData().observe(this, new Observer<EstateUpdateViewModel.ViewAction>() {
+        mUpdateEstateViewModel.getViewActionLiveData().observe(this, new Observer<UpdateEstateViewModel.ViewAction>() {
             @Override
-            public void onChanged(EstateUpdateViewModel.ViewAction viewAction) {
+            public void onChanged(UpdateEstateViewModel.ViewAction viewAction) {
                 if (viewAction == null) {
                     return;
                 }
@@ -200,11 +209,13 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
         });
 
         // Observe a change of Date of Entry on the Market
-        mEstateUpdateViewModel.getDateEntryOfTheMarket().observe(this,this::refreshDateEntryOfTheMarket);
+        mUpdateEstateViewModel.getDateEntryOfTheMarket().observe(this,this::refreshDateEntryOfTheMarket);
         // Observe a change of Date of Sale
-        mEstateUpdateViewModel.getDateOfSale().observe(this,this::refreshDateOfSale);
+        mUpdateEstateViewModel.getDateOfSale().observe(this,this::refreshDateOfSale);
         // Observe a change of the photo list
-        mEstateUpdateViewModel.getPhotos().observe(this,this::refreshPhotos);
+        mUpdateEstateViewModel.getPhotos().observe(this,this::refreshPhotos);
+        // Observe a change of the video
+        mUpdateEstateViewModel.getVideo().observe(this,this::refreshVideo);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -234,6 +245,9 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
     public void onClickSaleDate(View view) {
         mSaleDatePickerDialog.show();
     }
+
+    // PHOTOS ACTIONS
+    // ---------------
     // Click on Take Photo
     @OnClick(R.id.estate_iv_take_photo)
     public void onTakePhotoClick(View view) {
@@ -244,6 +258,50 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
     public void onSelectPhotoClick(View view) {
         this.selectImage();
     }
+    // Click photo of the recycler view
+    @Override
+    public void onPhotoClick(int position,View view) {
+        Log.d(TAG, "onPhotoClick: ");
+        if (view.getId() == R.id.photo_list_image) Log.d(TAG, "onPhotoClick: image");
+        if (view.getId() == R.id.photo_list_bt_delete) {
+            Log.d(TAG, "onPhotoClick: button delete");
+            mUpdateEstateViewModel.getPhotos().getValue().remove(position);
+            mUpdateEstateViewModel.getPhotoDescription().remove(position);
+            this.refreshPhotos(mUpdateEstateViewModel.getPhotos().getValue());
+        }
+    }
+    // ---------------
+    //  VIDEO ACTIONS
+    // ---------------
+    // Click on Take Video
+    @OnClick(R.id.estate_iv_take_video)
+    public void onTakeVideoClick(View view) {
+        this.dispatchTakeVideoIntent();
+    }
+    // Click on Select Video
+    @OnClick(R.id.estate_iv_select_video)
+    public void onSelectVideoClick(View view) {
+        this.selectVideo();
+    }
+    // Click Video Preview
+    @OnClick(R.id.estate_iv_video_preview)
+    public void onVideoPreviewClick(View view) {
+        Log.d(TAG, "onVideoPreviewClick: ");
+
+        // Start Video Activity
+        Utils.startActivity(this,
+                VideoActivity.class,
+                VideoActivity.BUNDLE_VIDEO_ACTIVITY_URI,
+                mUpdateEstateViewModel.getVideo().getValue());
+    }
+    // Click delete Video Preview
+    @OnClick(R.id.estate_bt_delete_video_preview)
+    public void onDeleteVideoPreviewClick(View view) {
+        Log.d(TAG, "onDeleteVideoPreviewClick: ");
+        mUpdateEstateViewModel.setVideo("");
+    }
+    // ---------------
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -259,26 +317,13 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
                 return super.onOptionsItemSelected(item);
         }
     }
-    // Click photo of the recycler view
-    @Override
-    public void onPhotoClick(int position,View view) {
-        Log.d(TAG, "onPhotoClick: ");
-        if (view.getId() == R.id.photo_list_image) Log.d(TAG, "onPhotoClick: image");
-        if (view.getId() == R.id.photo_list_bt_delete) {
-            Log.d(TAG, "onPhotoClick: button delete");
-            mEstateUpdateViewModel.getPhotos().getValue().remove(position);
-            mEstateUpdateViewModel.getPhotoDescription().remove(position);
-            this.refreshPhotos(mEstateUpdateViewModel.getPhotos().getValue());
-        }
-    }
-
     @Override
     public void onTextChange(int position,String value) {
         Log.d(TAG, "onTextChange() called with: position = [" + position + "], " +
                 "value = [" + value + "]");
 
         // Update PhotoDescription
-        mEstateUpdateViewModel.getPhotoDescription().set(position,value);
+        mUpdateEstateViewModel.getPhotoDescription().set(position,value);
     }
 
     // Click on Validate Button
@@ -286,7 +331,7 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
     public void validate(View view) {
         Log.d(TAG, "validate: ");
 
-        mEstateUpdateViewModel.updateEstate(
+        mUpdateEstateViewModel.updateEstate(
                 mAutoCompleteTVType.getText().toString(),
                 mPrice.getText().toString(),
                 mSurface.getText().toString(),
@@ -359,6 +404,61 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
             startActivityForResult(intent, REQUEST_IMAGE_GET);
         }
     }
+
+    // ---------------------------------------------------------------------------------------------
+    //                                     MANAGE VIDEO
+    // ---------------------------------------------------------------------------------------------
+    private void dispatchTakeVideoIntent() {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File videoFile = null;
+            try {
+                videoFile = createVideoFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (videoFile != null) {
+                Uri videoURI = FileProvider.getUriForFile(this,
+                        "com.openclassrooms.realestatemanager.fileprovider",
+                        videoFile);
+                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoURI);
+
+                // Save a file: path for use with ACTION_VIEW intents
+                mCurrentVideoPath = videoFile.getAbsolutePath();
+
+                startActivityForResult(takeVideoIntent, REQUEST_TAKE_VIDEO);
+            }
+        }
+    }
+    // Create à image File name
+    private File createVideoFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String videoFileName = "estate_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
+        File video = File.createTempFile(
+                videoFileName,  /* prefix */
+                ".mp4",    /* suffix */
+                storageDir      /* directory */
+        );
+        return video;
+    }
+    // Selects a photo in a device location
+    public void selectVideo() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("video/mp4");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_VIDEO_GET);
+        }
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                              MANGE INTENTS RETURN
+    // ---------------------------------------------------------------------------------------------
     // For Manage Intents Return
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -367,15 +467,27 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
         // Manage Photo Take
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.d(TAG, "onActivityResult: currentPhotoPath = "+currentPhotoPath);
-            mEstateUpdateViewModel.addPhoto(currentPhotoPath);
-            mEstateUpdateViewModel.addPhotoDescription("");
+            mUpdateEstateViewModel.addPhoto(currentPhotoPath);
+            mUpdateEstateViewModel.addPhotoDescription("");
         }
 
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
             Uri fullPhotoUri = data.getData();
             Log.d(TAG, "onActivityResult: fullPhotoUri = "+fullPhotoUri.toString());
-            mEstateUpdateViewModel.addPhoto(fullPhotoUri.toString());
-            mEstateUpdateViewModel.addPhotoDescription("");
+            mUpdateEstateViewModel.addPhoto(fullPhotoUri.toString());
+            mUpdateEstateViewModel.addPhotoDescription("");
+        }
+
+        // Manage Video Take
+        if (requestCode == REQUEST_TAKE_VIDEO && resultCode == RESULT_OK) {
+            Log.d(TAG, "onActivityResult: mCurrentVideoPath = "+mCurrentVideoPath);
+            mUpdateEstateViewModel.setVideo(mCurrentVideoPath);
+        }
+
+        if (requestCode == REQUEST_VIDEO_GET && resultCode == RESULT_OK) {
+            Uri fullPhotoUri = data.getData();
+            Log.d(TAG, "onActivityResult: fullPhotoUri = "+fullPhotoUri.toString());
+            mUpdateEstateViewModel.setVideo(fullPhotoUri.toString());
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -415,7 +527,7 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
                 LocalDateTime ldt = DateTimeUtils.toLocalDateTime(ts);
 
                 // Update entryDate in ViewModel
-                mEstateUpdateViewModel.getDateEntryOfTheMarket().setValue(ldt);
+                mUpdateEstateViewModel.getDateEntryOfTheMarket().setValue(ldt);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
@@ -435,7 +547,7 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
                 LocalDateTime ldt = DateTimeUtils.toLocalDateTime(ts);
 
                 // Update SaleDate in ViewModel
-                mEstateUpdateViewModel.getDateOfSale().setValue(ldt);
+                mUpdateEstateViewModel.getDateOfSale().setValue(ldt);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
@@ -447,12 +559,14 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
     protected void restoreData(Estate estate) {
 
         // Restore Entry Date
-        mEstateUpdateViewModel.getDateEntryOfTheMarket().setValue(estate.getDateEntryOfTheMarket());
+        mUpdateEstateViewModel.getDateEntryOfTheMarket().setValue(estate.getDateEntryOfTheMarket());
 
         // Restore Photo Description List
-        mEstateUpdateViewModel.setPhotoDescription(estate.getPhotosDescription());
+        mUpdateEstateViewModel.setPhotoDescription(estate.getPhotosDescription());
         // Restore Photo List
-        mEstateUpdateViewModel.setPhotos(estate.getPhotos());
+        mUpdateEstateViewModel.setPhotos(estate.getPhotos());
+        // Restore Video
+        mUpdateEstateViewModel.setVideo(estate.getVideo());
 
         // Display Data
         updateUI(estate);
@@ -506,6 +620,21 @@ public class UpdateEstateActivity extends BaseActivity implements   PhotoListAda
     // refresh the Photo List
     private void refreshPhotos(List<String> photos){
         mPhotoListAdapter.setNewPhotos(photos);
-        mPhotoListAdapter.setNewPhotosDescription(mEstateUpdateViewModel.getPhotoDescription());
+        mPhotoListAdapter.setNewPhotosDescription(mUpdateEstateViewModel.getPhotoDescription());
+    }
+    // refresh the video
+    private void refreshVideo(String video){
+        Log.d(TAG, "refreshVideo() called with: video = [" + video + "]");
+
+        if (!video.isEmpty()) {
+            Glide.with(this) //SHOWING PREVIEW OF VIDEO
+                    .load(video)
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(this.mVideoPreview);
+            mVideoMCV.setVisibility(View.VISIBLE);
+        }
+        else {
+            mVideoMCV.setVisibility(View.INVISIBLE);
+        }
     }
 }

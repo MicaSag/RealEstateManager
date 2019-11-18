@@ -42,7 +42,8 @@ public class EstateListViewHolder extends RecyclerView.ViewHolder implements Vie
         mOnEstateClick = callback;
 
         // Display Estate Photo
-        if (estate.getPhotos() !=null) if (estate.getPhotos().get(0) != null) glide.load(estate.getPhotos().get(0)).into(mImage);
+        if (estate.getPhotos() !=null) if (estate.getPhotos().get(0) != null)
+            glide.load(estate.getPhotos().get(0)).into(mImage);
 
         // Display Estate Type
         mType.setText(estate.getType());

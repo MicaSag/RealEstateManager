@@ -21,7 +21,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.bases.BaseActivity;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.models.views.EstateSearchViewModel;
+import com.openclassrooms.realestatemanager.models.views.SearchEstateViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -66,7 +66,7 @@ public class SearchEstateActivity extends BaseActivity {
     @BindView(R.id.estate_chip_town_hall) Chip mChipTownHall;
     @BindView(R.id.estate_chip_swimming_pool) Chip mChipSwimmingPool;
 
-    private EstateSearchViewModel mEstateSearchViewModel;
+    private SearchEstateViewModel mSearchEstateViewModel;
 
     // Declarations for management of the date fields with a DatePickerDialog
     private DatePickerDialog mEntryDatePickerDialog1;
@@ -140,11 +140,11 @@ public class SearchEstateActivity extends BaseActivity {
     // Configure RealEstateViewModel
     private void configureEstateCreateViewModel(){
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
-        mEstateSearchViewModel = ViewModelProviders.of(this, modelFactory).get(EstateSearchViewModel.class);
+        mSearchEstateViewModel = ViewModelProviders.of(this, modelFactory).get(SearchEstateViewModel.class);
 
-        mEstateSearchViewModel.getViewActionLiveData().observe(this, new Observer<EstateSearchViewModel.ViewAction>() {
+        mSearchEstateViewModel.getViewActionLiveData().observe(this, new Observer<SearchEstateViewModel.ViewAction>() {
             @Override
-            public void onChanged(EstateSearchViewModel.ViewAction viewAction) {
+            public void onChanged(SearchEstateViewModel.ViewAction viewAction) {
                 if (viewAction == null)  {
                     return;
                 }
@@ -157,7 +157,7 @@ public class SearchEstateActivity extends BaseActivity {
                     case FINISH_ACTIVITY:
                         Intent intent = new Intent();
                         intent.putExtra(BUNDLE_SEARCH_OK,true);
-                        intent.putExtra(BUNDLE_SEARCH_DATA, mEstateSearchViewModel.getSearchData());
+                        intent.putExtra(BUNDLE_SEARCH_DATA, mSearchEstateViewModel.getSearchData());
                         setResult(RESULT_OK,intent);
                         // Close Activity and go back to previous activity with a SearchData Object
                         finish();
@@ -167,13 +167,13 @@ public class SearchEstateActivity extends BaseActivity {
         });
 
         // Observe a change of Date of Entry1 on the Market
-        mEstateSearchViewModel.getDateEntryOfTheMarket1().observe(this,this::refreshDateEntryOfTheMarket1);
+        mSearchEstateViewModel.getDateEntryOfTheMarket1().observe(this,this::refreshDateEntryOfTheMarket1);
         // Observe a change of Date of Entry2 on the Market
-        mEstateSearchViewModel.getDateEntryOfTheMarket2().observe(this,this::refreshDateEntryOfTheMarket2);
+        mSearchEstateViewModel.getDateEntryOfTheMarket2().observe(this,this::refreshDateEntryOfTheMarket2);
         // Observe a change of Date of Sale1 on the Market
-        mEstateSearchViewModel.getDateSale1().observe(this,this::refreshDateSale1);
+        mSearchEstateViewModel.getDateSale1().observe(this,this::refreshDateSale1);
         // Observe a change of Date of Sale2 on the Market
-        mEstateSearchViewModel.getDateSale2().observe(this,this::refreshDateSale2);
+        mSearchEstateViewModel.getDateSale2().observe(this,this::refreshDateSale2);
     }
     // ---------------------------------------------------------------------------------------------
     //                                           ACTIONS
@@ -226,7 +226,7 @@ public class SearchEstateActivity extends BaseActivity {
     public void search(View view) {
         Log.d(TAG, "search: ");
 
-        mEstateSearchViewModel.searchEstate(
+        mSearchEstateViewModel.searchEstate(
                 mEstateType.getText().toString(),
                 mPrice1.getText().toString(),
                 mPrice2.getText().toString(),
@@ -284,7 +284,7 @@ public class SearchEstateActivity extends BaseActivity {
                 newDateEntryOfTheMarket.set(year, monthOfYear, dayOfMonth);
 
                 // Update entryDate in ViewModel
-                mEstateSearchViewModel.getDateEntryOfTheMarket1().setValue(newDateEntryOfTheMarket);
+                mSearchEstateViewModel.getDateEntryOfTheMarket1().setValue(newDateEntryOfTheMarket);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
@@ -299,7 +299,7 @@ public class SearchEstateActivity extends BaseActivity {
                 newDateEntryOfTheMarket.set(year, monthOfYear, dayOfMonth);
 
                 // Update entryDate in ViewModel
-                mEstateSearchViewModel.getDateEntryOfTheMarket2().setValue(newDateEntryOfTheMarket);
+                mSearchEstateViewModel.getDateEntryOfTheMarket2().setValue(newDateEntryOfTheMarket);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
@@ -314,7 +314,7 @@ public class SearchEstateActivity extends BaseActivity {
                 newDateEntryOfTheMarket.set(year, monthOfYear, dayOfMonth);
 
                 // Update entryDate in ViewModel
-                mEstateSearchViewModel.getDateSale1().setValue(newDateEntryOfTheMarket);
+                mSearchEstateViewModel.getDateSale1().setValue(newDateEntryOfTheMarket);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
@@ -329,7 +329,7 @@ public class SearchEstateActivity extends BaseActivity {
                 newDateEntryOfTheMarket.set(year, monthOfYear, dayOfMonth);
 
                 // Update entryDate in ViewModel
-                mEstateSearchViewModel.getDateSale2().setValue(newDateEntryOfTheMarket);
+                mSearchEstateViewModel.getDateSale2().setValue(newDateEntryOfTheMarket);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),

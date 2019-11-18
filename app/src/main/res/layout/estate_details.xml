@@ -341,17 +341,44 @@
             android:layout_marginBottom="2dp"
             android:src="@drawable/baseline_folder_black_48" />
     </com.google.android.material.card.MaterialCardView>
-    <!-- MEDIA : Video visualization -->
-    <ImageView
-        android:id="@+id/estate_iv_video_preview"
-        android:layout_width="150dp"
+    <!-- MEDIA : Video displaying -->
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.MaterialComponents.CardView"
+        android:id="@+id/estate_mcv_display_video"
+        android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:layout_marginStart="2dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardElevation="0.7dp"
         app:layout_constraintTop_toTopOf="@+id/estate_mcv_select_video"
         app:layout_constraintBottom_toBottomOf="@+id/estate_mcv_select_video"
         app:layout_constraintStart_toEndOf="@+id/estate_mcv_select_video"
-        />
+        android:maxHeight="150dp"
+        android:visibility="invisible">
 
+        <FrameLayout
+            android:id="@+id/estate_fl_video_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/estate_iv_video_preview"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginStart="2dp"
+                />
+            <!-- Delete Image Button -->
+            <Button
+                android:id="@+id/estate_bt_delete_video_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="delete"
+                android:alpha="0.5"
+                android:layout_gravity="center"
+                />
+        </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
 </merge>
