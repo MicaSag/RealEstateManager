@@ -120,16 +120,22 @@ public class RealEstateManagerActivity  extends BaseActivity
     // Configure ViewModel
     private void configureViewModel(){
         ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
-        mRealEstateManagerViewModel = ViewModelProviders.of(this, modelFactory).get(RealEstateManagerViewModel.class);
+        mRealEstateManagerViewModel = ViewModelProviders.of(this, modelFactory)
+                .get(RealEstateManagerViewModel.class);
 
         mRealEstateManagerViewModel.init(mCurrentRealEstateAgent_Id);
+    }
+
+    public RealEstateManagerViewModel getRealEstateManagerViewModel() {
+        return mRealEstateManagerViewModel;
     }
     // ---------------------------------------------------------------------------------------------
     //                                        FRAGMENTS
     // ---------------------------------------------------------------------------------------------
     private void configureAndShowEstateListFragment() {
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        mEstateListFragment = (EstateListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_estate_list);
+        mEstateListFragment = (EstateListFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_estate_list);
 
         if (mEstateListFragment == null) {
             // Create new main fragment
@@ -142,7 +148,8 @@ public class RealEstateManagerActivity  extends BaseActivity
     }
     private void configureAndShowEstateDetailsFragment() {
         // Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        mEstateDetailsFragment = (EstateDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_estate_details);
+        mEstateDetailsFragment = (EstateDetailsFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_estate_details);
 
         // We only add DetailsFragment in Tablet mode (If found frame_layout_detail)
         if (mEstateDetailsFragment == null && getResources().getBoolean(R.bool.is_tablet)) {
@@ -162,7 +169,8 @@ public class RealEstateManagerActivity  extends BaseActivity
     // Get Current RealEstateAgent
     private void getCurrentRealEstateAgent(){
         Log.d(TAG, "getCurrentRealEstateAgent: ");
-        mRealEstateManagerViewModel.getCurrentRealEstateAgent().observe(this, this::updateCurrentRealEstateAgent_Id);
+        mRealEstateManagerViewModel.getCurrentRealEstateAgent()
+                .observe(this, this::updateCurrentRealEstateAgent_Id);
     }
     // Update the RealEstateAgent Data
     private void updateCurrentRealEstateAgent_Id(RealEstateAgent realEstateAgent){

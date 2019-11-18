@@ -29,7 +29,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
         if (modelClass.isAssignableFrom(EstateDetailsViewModel.class)) {
-            return (T) new EstateDetailsViewModel(estateDataSource, executor);
+            return (T) new EstateDetailsViewModel(estateDataSource);
         }
         if (modelClass.isAssignableFrom(RealEstateManagerViewModel.class)) {
             return (T) new RealEstateManagerViewModel(estateDataSource, realEstateAgentDataSource);

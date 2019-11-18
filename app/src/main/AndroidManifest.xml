@@ -29,7 +29,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- A child of the main activity -->
+        </activity>
+        <!-- A child of the main activity -->
         <!-- DETAILS ESTATE Activity -->
         <activity
             android:name=".controllers.activities.DetailsEstateActivity"
@@ -40,7 +41,8 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.RealEstateManagerActivity" />
-        </activity> <!-- A child of the main activity -->
+        </activity>
+        <!-- A child of the main activity -->
         <!-- MAP Activity -->
         <activity
             android:name=".controllers.activities.MapActivity"
@@ -51,7 +53,8 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.RealEstateManagerActivity" />
-        </activity> <!-- A child of the main activity -->
+        </activity>
+        <!-- A child of the main activity -->
         <!-- CREATE ESTATE Activity -->
         <activity
             android:name=".controllers.activities.CreateEstateActivity"
@@ -74,10 +77,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.RealEstateManagerActivity" />
         </activity>
+        <!-- A child of the main activity -->
         <!-- SEARCH ESTATE Activity -->
         <activity
             android:name=".controllers.activities.SearchEstateActivity"
             android:label="Search Estate"
+            android:parentActivityName=".controllers.activities.RealEstateManagerActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controllers.activities.RealEstateManagerActivity" />
+        </activity>
+        <!-- A child of the main activity -->
+        <!-- VIDEO Activity -->
+        <activity
+            android:name=".controllers.activities.VideoActivity"
+            android:label="Video"
             android:parentActivityName=".controllers.activities.RealEstateManagerActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->

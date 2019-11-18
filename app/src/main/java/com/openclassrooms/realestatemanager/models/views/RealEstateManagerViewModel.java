@@ -57,12 +57,24 @@ public class RealEstateManagerViewModel extends ViewModel {
                 new Observer<List<Estate>>() {
                     @Override
                     public void onChanged(@Nullable List<Estate> estates) {
-                        Log.d(TAG, "onChanged: estates in database");
-                        for (Estate estate : estates) {
-                            Log.d(TAG, "filterEstatesAgentId() : "+estate.getEstate_Id());
-                        }
-                        // Filter and Update Estates List
-                        mCurrentEstates.setValue(manageFilterEstates(estates,mSearchData.getValue()));
+                        Log.d(TAG, "onChanged() estates called with: mSearchData = [" + mSearchData + "]");
+                        // Build SimpleSQLiteQuery
+                        SimpleSQLiteQuery mSimpleQuery = new SimpleSQLiteQuery(
+                                mSearchData.getValue().getQueryString(), mSearchData.getValue().getArgs().toArray());
+                        // Submit Request and get the result
+                        LiveData<List<Estate>> lEstate = mEstateDataSource.getEstates(mSimpleQuery);
+
+                        lEstate.observeForever(new Observer<List<Estate>>() {
+                            @Override
+                            public void onChanged(List<Estate> estates) {
+
+                                // Unsubscribe the Observer
+                                lEstate.removeObserver(this);
+
+                                // Filter and Update Estates List
+                                mCurrentEstates.setValue(manageFilterEstates(estates,mSearchData.getValue()));
+                            }
+                        });
                     }
                 });
 
@@ -73,7 +85,23 @@ public class RealEstateManagerViewModel extends ViewModel {
                     @Override
                     public void onChanged(@Nullable Long agentId) {
                         Log.d(TAG, "onChanged: agentId");
-                        manageFilterEstates(estates.getValue(),mSearchData.getValue());
+                        // Build SimpleSQLiteQuery
+                        SimpleSQLiteQuery mSimpleQuery = new SimpleSQLiteQuery(
+                                mSearchData.getValue().getQueryString(), mSearchData.getValue().getArgs().toArray());
+                        // Submit Request and get the result
+                        LiveData<List<Estate>> lEstate = mEstateDataSource.getEstates(mSimpleQuery);
+
+                        lEstate.observeForever(new Observer<List<Estate>>() {
+                            @Override
+                            public void onChanged(List<Estate> estates) {
+
+                                // Unsubscribe the Observer
+                                lEstate.removeObserver(this);
+
+                                // Filter and Update Estates List
+                                mCurrentEstates.setValue(manageFilterEstates(estates,mSearchData.getValue()));
+                            }
+                        });
                     }
                 });
 

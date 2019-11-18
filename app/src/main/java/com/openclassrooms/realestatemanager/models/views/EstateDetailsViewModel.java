@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.models.views;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -19,12 +20,16 @@ public class EstateDetailsViewModel extends ViewModel {
 
     // REPOSITORIES
     private final EstateDataRepository mEstateDataSource;
-    private final Executor mExecutor;
 
-        public EstateDetailsViewModel(EstateDataRepository estateDataSource,
-                               Executor executor) {
+    @NonNull
+    private LiveData<Estate> mCurrentEstate;
+
+    public EstateDetailsViewModel(EstateDataRepository estateDataSource) {
         mEstateDataSource = estateDataSource;
-        mExecutor = executor;
+
+        mCurrentEstate = Transformations.switchMap(
+                CurrentEstateDataRepository.getInstance().getCurrentEstate_Id(),
+                this::getEstate);
     }
 
     // Get Estate of the DataBase
@@ -35,14 +40,9 @@ public class EstateDetailsViewModel extends ViewModel {
     }
 
     // Get Current Estate
+    @NonNull
     public LiveData<Estate> getCurrentEstate() {
-        Log.d(TAG, "getCurrentEstate: ");
-
-         return Transformations.switchMap(
-                CurrentEstateDataRepository.getInstance().getCurrentEstate_Id(),
-                longResult -> {
-                    return getEstate(longResult);
-                });
+        return mCurrentEstate;
     }
 }
 

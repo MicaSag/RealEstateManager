@@ -288,5 +288,70 @@
         app:layout_constraintTop_toTopOf="@+id/estate_mcv_select_photo"
         app:layout_constraintBottom_toBottomOf="@+id/estate_mcv_select_photo"
         app:layout_constraintStart_toEndOf="@+id/estate_mcv_select_photo"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <!-- MEDIA : ADD VIDEO -->
+    <!-- MEDIA : ADD VIDEO : With Camera -->
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.MaterialComponents.CardView"
+        android:id="@+id/estate_mcv_take_video"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="@dimen/estate_marginTop"
+        android:layout_marginBottom="2dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardElevation="0.7dp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/estate_mcv_take_photo"
+        android:maxHeight="150dp">
+
+        <ImageView
+            android:id="@+id/estate_iv_take_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:src="@drawable/baseline_ondemand_video_black_48" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- MEDIA : ADD VIDEO -->
+    <!-- MEDIA : ADD VIDEO : Selects in a device location -->
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.MaterialComponents.CardView"
+        android:id="@+id/estate_mcv_select_video"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardElevation="0.7dp"
+        app:layout_constraintTop_toTopOf="@+id/estate_mcv_take_video"
+        app:layout_constraintBottom_toBottomOf="@+id/estate_mcv_take_video"
+        app:layout_constraintStart_toEndOf="@+id/estate_mcv_take_video"
+        android:maxHeight="150dp">
+
+        <ImageView
+            android:id="@+id/estate_iv_select_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:src="@drawable/baseline_folder_black_48" />
+    </com.google.android.material.card.MaterialCardView>
+    <!-- MEDIA : Video visualization -->
+    <ImageView
+        android:id="@+id/estate_iv_video_preview"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="2dp"
+        app:layout_constraintTop_toTopOf="@+id/estate_mcv_select_video"
+        app:layout_constraintBottom_toBottomOf="@+id/estate_mcv_select_video"
+        app:layout_constraintStart_toEndOf="@+id/estate_mcv_select_video"
+        />
+
 </merge>

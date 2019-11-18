@@ -13,7 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -25,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.chip.Chip;
 import com.openclassrooms.realestatemanager.controllers.bases.BaseActivity;
 import com.openclassrooms.realestatemanager.injections.Injection;
@@ -82,6 +85,7 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
     @BindView(R.id.estate_chip_restaurant) Chip mChipRestaurant;
     @BindView(R.id.estate_chip_town_hall) Chip mChipTownHall;
     @BindView(R.id.estate_chip_swimming_pool) Chip mChipSwimmingPool;
+    @BindView(R.id.estate_iv_video_preview) ImageView mVideoPreview;
 
     private EstateCreateViewModel mEstateCreateViewModel;
 
@@ -92,11 +96,15 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
 
     // For Display list of photos
     private PhotoListAdapter mPhotoListAdapter;
-    private String currentPhotoPath;
+    private String mCurrentPhotoPath;
+    // For Display video
+    private String mCurrentVideoPath;
 
-    // For use intents to retrieve photos
+    // For use intents to retrieve photos & video
     static final int REQUEST_TAKE_PHOTO = 1;
-    static final int REQUEST_IMAGE_GET = 2;
+    static final int REQUEST_IMAGE_GET = 10;
+    static final int REQUEST_TAKE_VIDEO = 2;
+    static final int REQUEST_VIDEO_GET = 20;
 
     // To return the result to the parent activity
     public static final String BUNDLE_CREATE_OK = "BUNDLE_CREATE_OK";
@@ -192,6 +200,8 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
         mEstateCreateViewModel.getDateEntryOfTheMarket().observe(this,this::refreshDateEntryOfTheMarket);
         // Observe a change of the photo list
         mEstateCreateViewModel.getPhotos().observe(this,this::refreshPhotos);
+        // Observe a change of the video
+        mEstateCreateViewModel.getVideo().observe(this,this::refreshVideo);
     }
     // --------------------------------------------------------------------------------------------
     //                                    CONFIGURATION
@@ -217,16 +227,56 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
     public void onClickEntryDate(View view) {
         mEntryDatePickerDialog.show();
     }
+
+    // PHOTOS ACTIONS
+    // ---------------
     // Click on Take Photo
     @OnClick(R.id.estate_iv_take_photo)
     public void onTakePhotoClick(View view) {
         this.dispatchTakePictureIntent();
     }
-    // Click on Validate Button
+    // Click on Select Photo
     @OnClick(R.id.estate_iv_select_photo)
     public void onSelectPhotoClick(View view) {
         this.selectImage();
     }
+    // Click photo of the recycler view
+    @Override
+    public void onPhotoClick(int position,View view) {
+        Log.d(TAG, "onPhotoClick: ");
+        if (view.getId() == R.id.photo_list_image) Log.d(TAG, "onClick: image");
+        if (view.getId() == R.id.photo_list_bt_delete) {
+            mEstateCreateViewModel.getPhotos().getValue().remove(position);
+            mEstateCreateViewModel.getPhotoDescription().remove(position);
+            this.refreshPhotos(mEstateCreateViewModel.getPhotos().getValue());
+        }
+    }
+    // ---------------
+    //  VIDEO ACTIONS
+    // ---------------
+    // Click on Take Video
+    @OnClick(R.id.estate_iv_take_video)
+    public void onTakeVideoClick(View view) {
+        this.dispatchTakeVideoIntent();
+    }
+    // Click on Select Video
+    @OnClick(R.id.estate_iv_select_video)
+    public void onSelectVideoClick(View view) {
+        this.selectVideo();
+    }
+    // Click Video View
+    @OnClick(R.id.estate_iv_video_preview)
+    public void onVideoPreviewClick(View view) {
+        Log.d(TAG, "onVideoPreviewClick: ");
+
+        // Start Video Activity
+        Utils.startActivity(this,
+                VideoActivity.class,
+               VideoActivity.BUNDLE_VIDEO_ACTIVITY_URI,
+                mEstateCreateViewModel.getVideo().getValue());
+    }
+    // ---------------
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -240,17 +290,6 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-    // Click photo of the recycler view
-    @Override
-    public void onPhotoClick(int position,View view) {
-        Log.d(TAG, "onPhotoClick: ");
-        if (view.getId() == R.id.photo_list_image) Log.d(TAG, "onClick: image");
-        if (view.getId() == R.id.photo_list_bt_delete) {
-            mEstateCreateViewModel.getPhotos().getValue().remove(position);
-            mEstateCreateViewModel.getPhotoDescription().remove(position);
-            this.refreshPhotos(mEstateCreateViewModel.getPhotos().getValue());
         }
     }
 
@@ -310,9 +349,11 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
                         "com.openclassrooms.realestatemanager.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                Log.d(TAG, "dispatchTakePictureIntent: photoURI = "+photoURI);
 
                 // Save a file: path for use with ACTION_VIEW intents
-                currentPhotoPath = photoFile.getAbsolutePath();
+                mCurrentPhotoPath = photoFile.getAbsolutePath();
+                Log.d(TAG, "dispatchTakePictureIntent: mCurrentPhotoPath = "+mCurrentPhotoPath);
 
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
@@ -341,15 +382,71 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
             startActivityForResult(intent, REQUEST_IMAGE_GET);
         }
     }
+    // ---------------------------------------------------------------------------------------------
+    //                                     MANAGE VIDEO
+    // ---------------------------------------------------------------------------------------------
+    private void dispatchTakeVideoIntent() {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File videoFile = null;
+            try {
+                videoFile = createVideoFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (videoFile != null) {
+                Uri videoURI = FileProvider.getUriForFile(this,
+                        "com.openclassrooms.realestatemanager.fileprovider",
+                        videoFile);
+                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoURI);
+
+                // Save a file: path for use with ACTION_VIEW intents
+                mCurrentVideoPath = videoFile.getAbsolutePath();
+
+                startActivityForResult(takeVideoIntent, REQUEST_TAKE_VIDEO);
+            }
+        }
+    }
+    // Create à image File name
+    private File createVideoFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String videoFileName = "estate_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
+        File video = File.createTempFile(
+                videoFileName,  /* prefix */
+                ".mp4",    /* suffix */
+                storageDir      /* directory */
+        );
+        return video;
+    }
+    // Selects a photo in a device location
+    public void selectVideo() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("video/mp4");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_VIDEO_GET);
+        }
+    }
+    // ---------------------------------------------------------------------------------------------
+    //                              MANGE INTENTS RETURN
+    // ---------------------------------------------------------------------------------------------
     // For Manage Intents Return
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], " +
+                "resultCode = [" + resultCode + "], data = [" + data + "]");
 
         // Manage Photo Take
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Log.d(TAG, "onActivityResult: currentPhotoPath = "+currentPhotoPath);
-            mEstateCreateViewModel.addPhoto(currentPhotoPath);
+            Log.d(TAG, "onActivityResult: mCurrentPhotoPath = "+mCurrentPhotoPath);
+            mEstateCreateViewModel.addPhoto(mCurrentPhotoPath);
             mEstateCreateViewModel.addPhotoDescription("");
         }
 
@@ -358,6 +455,17 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
             Log.d(TAG, "onActivityResult: fullPhotoUri = "+fullPhotoUri.toString());
             mEstateCreateViewModel.addPhoto(fullPhotoUri.toString());
             mEstateCreateViewModel.addPhotoDescription("");
+        }
+
+        if (requestCode == REQUEST_TAKE_VIDEO && resultCode == RESULT_OK) {
+            Log.d(TAG, "onActivityResult: mCurrentVideoPath = "+mCurrentVideoPath);
+            mEstateCreateViewModel.setVideo(mCurrentVideoPath);
+        }
+
+        if (requestCode == REQUEST_VIDEO_GET && resultCode == RESULT_OK) {
+            Uri fullPhotoUri = data.getData();
+            Log.d(TAG, "onActivityResult: fullPhotoUri = "+fullPhotoUri.toString());
+            mEstateCreateViewModel.setVideo(fullPhotoUri.toString());
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -411,7 +519,16 @@ public class CreateEstateActivity extends BaseActivity  implements  PhotoListAda
     }
     // refresh the Photo List
     private void refreshPhotos(List<String> photos){
+        Log.d(TAG, "refreshPhotos() called with: photos = [" + photos + "]");
         mPhotoListAdapter.setNewPhotos(photos);
         mPhotoListAdapter.setNewPhotosDescription(mEstateCreateViewModel.getPhotoDescription());
+    }
+    // refresh the video
+    private void refreshVideo(String video){
+        Log.d(TAG, "refreshVideo() called with: video = [" + video + "]");
+        Glide.with(this) //SHOWING PREVIEW OF VIDEO
+                .load(video)
+                .apply(RequestOptions.centerCropTransform())
+                .into(this.mVideoPreview);
     }
 }

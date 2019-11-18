@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.adapters.estateList.EstateListAdapter;
+import com.openclassrooms.realestatemanager.controllers.activities.RealEstateManagerActivity;
+import com.openclassrooms.realestatemanager.injections.Injection;
+import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.views.RealEstateManagerViewModel;
 
@@ -34,7 +37,7 @@ public class EstateListFragment extends Fragment {
     // For debugging Mode
     private static final String TAG = EstateListFragment.class.getSimpleName();
 
-    // Declare EstateViewModel
+    // Declare ViewModel
     private RealEstateManagerViewModel mRealEstateManagerViewModel;
 
     //For Data
@@ -87,9 +90,11 @@ public class EstateListFragment extends Fragment {
     private void configureViewModel() {
 
         // User RealEstateManagerActivity ViewModel
-        mRealEstateManagerViewModel = ViewModelProviders.of(getActivity())
-                .get(RealEstateManagerViewModel.class);
+        /*mRealEstateManagerViewModel = ViewModelProviders.of(getActivity())
+                .get(RealEstateManagerViewModel.class);*/
 
+        mRealEstateManagerViewModel = ((RealEstateManagerActivity) getActivity())
+                .getRealEstateManagerViewModel();
 
         // Observe a change of Current Estates
         mRealEstateManagerViewModel.getCurrentEstates().observe(this, this::updateEstateList);

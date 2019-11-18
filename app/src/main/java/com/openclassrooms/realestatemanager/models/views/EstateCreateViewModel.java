@@ -29,9 +29,11 @@ public class EstateCreateViewModel extends ViewModel {
     // DATA
     private MutableLiveData<ViewAction> mViewActionLiveData = new MutableLiveData<>();
     private MutableLiveData<LocalDateTime> mDateEntryOfTheMarket = new MutableLiveData<>();
+    // For Manage Photos
     private MutableLiveData<ArrayList<String>> mPhotos = new MutableLiveData<>();
-
     private ArrayList<String> mPhotoDescription = new ArrayList<>();
+    // For Manage Video
+    private MutableLiveData<String> mVideo = new MutableLiveData<>();
 
     public enum ViewAction {
         INVALID_INPUT,
@@ -226,6 +228,11 @@ public class EstateCreateViewModel extends ViewModel {
         // -------------------------
         // Photos Description
         estate.setPhotosDescription(mPhotoDescription);
+        // -------------------------
+        // Video Not required
+        // -------------------------
+        // Photos Description
+        estate.setVideo(mVideo.getValue());
 
        return estate;
     }
@@ -234,6 +241,7 @@ public class EstateCreateViewModel extends ViewModel {
         return mViewActionLiveData;
     }
 
+    // For Manage Photos
     public LiveData<ArrayList<String>> getPhotos() {
         return mPhotos;
     }
@@ -244,11 +252,6 @@ public class EstateCreateViewModel extends ViewModel {
         l.add(photo);
         this.mPhotos.postValue(l);
     }
-
-    public void setPhotoDescription(ArrayList<String> photosDescription) {
-        this.mPhotoDescription = photosDescription;
-    }
-
     public ArrayList<String> getPhotoDescription() {
         return mPhotoDescription;
     }
@@ -257,6 +260,13 @@ public class EstateCreateViewModel extends ViewModel {
         this.mPhotoDescription.add(photoDescription);
     }
 
+    // For Manage Video
+    public LiveData<String> getVideo() {
+        return mVideo;
+    }
+    public void setVideo(String video) {
+        mVideo.setValue(video);
+    }
     public MutableLiveData<LocalDateTime> getDateEntryOfTheMarket() {
         return mDateEntryOfTheMarket;
     }

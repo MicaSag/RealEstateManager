@@ -97,29 +97,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                         "this sprawling mini estate is carved out of pristine woodland enfolding it with a sense of seclusion with ample space for the addition of any number of summer recreational venues. " +
                         "Across the rear of the house a wide bluestone patio with outdoor kitchen, fire pit, and easy access to the pool, is perfect for summer entertaining. " +
                         "The long circular drive and service courtyard serving the attached three car garage provide ample parking for guests. Providing the ultimate in luxurious “Gold Coast” living, " +
-                        "the bright and airy interior is a work of art designed to please all with supreme comfort and stunning style. " +
-                        "It begins with a spectacular two-story marble entrance foyer where a graceful floating staircase with ornate filigree balustrade carries the eye up to a soaring tray ceiling. " +
-                        "A cloak room and powder room are nearby, and to the rear, three steps lead into the sky-lit living room with three sets of French doors with transom lights open to the rear patio. " +
-                        "The fireplace’s massive marble overmantel ascends to the soaring two-story vaulted ceiling, and a unique glass-enclosed, climate-controlled wine vault makes beverage selection a breeze. " +
-                        "The banquet-sized formal dining room, with its coffered barrel ceiling, fielded paneling, and pinpoint lighting, provides a stunning setting for gracious dinner parties. " +
-                        "The magnificent cook’s kitchen with clerestory-lit vaulted ceiling, offers the finest in appliances, and marble-topped custom cabinetry including a huge center island with prep sink and seating. " +
-                        "A second sink looks over the front lawn. Both have integrated dishwashers. Other appliances include a Wolf gas six-burner cooktop with pot filler, " +
-                        "built-in double oven, microwave, and oversized refrigerator and freezer. A breakfast alcove features a glass wall and door into the pool area. " +
-                        "A service hall leads to the laundry room, garage, mudroom, back stairs, and cabana bath and dressing room by the pool. With vaulted coffered ceiling, " +
-                        "the den is perfect for both relaxing and entertaining with a stacked-stone fireplace, built-in wet bar, French doors to the patio, and a folding wall of glass opening the room to the pool. " +
-                        "This indoor treat boasts a large freeform pool surrounded by stone flooring and illuminated by a huge greenhouse-like wall of windows extending into the vaulted ceiling. A wall of sliding doors opens to the patio. " +
-                        "Off the foyer, a private hall leads to the five-star master suite. This tranquil and spacious getaway begins with a sunny study with closet and private staircase to the second floor. " +
-                        "The palatial master bedroom is the perfect retreat where you can relax in your armchairs by the cozy gas fireplace in the winter while watching the television over your mantel or relax on your patio " +
-                        "in the summer enjoying soft evening sea breezes. A private hall gives access to your marble powder room with bidet, two large, custom fitted, walk-in closets with pocket doors, and a spacious marble " +
-                        "ath boasting two generous vanities with extensive cabinetry (one with dressing table), a Roman spa, and a huge glass-enclosed steam shower with seat and multiple computer-controlled shower heads. " +
-                        "Another hall off the foyer provides access to two guest suites with their own luxury baths and custom-fitted walk-in closets. The second-floor landing proffers a dramatic open floor plan with filigree " +
-                        "balustrades overlooking the foyer, great room, and den. At one end, a spacious open sitting area is flooded with sunlight through a wall of windows with doors to an expansive rear terrace, " +
-                        "ideal for sunbathing or morning coffee. A door opens to a hall off which three generous bedrooms enjoy their own private designer baths. Two have custom-fitted walk-in closets, " +
-                        "and one offers an entire wall of closets. At the other end of the floor, a second suite of rooms includes a large staff bedroom with private access to a hall bath, " +
-                        "which can also serve a huge bonus room with walk-in linen or game closet and a laundry room. The full finished basement offers ample space for fun and entertainment. " +
-                        "One area, with mirrored wall, could serve as a gym, dance studio, or even a ballroom. Another immense space with enough room for any number of activities, " +
-                        "provides access to a home theatre and a powder room. Additional features of this exceptional home include inground sprinklers and handicap access. " +
-                        "Offering the comfort, style, elegance, and state-of-the-art technology in a resort-like location close to the city, all this home now needs is you.");
+                        "the bright and airy interior is a work of art designed to please all with supreme comfort and stunning style. ");
                 String photos = "[\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_outside.jpg\"," +
                         "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_facade.jpg\"," +
                         "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_living_room.jpg\"," +

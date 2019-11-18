@@ -34,6 +34,7 @@ public class Estate {
     private String  description;
     private ArrayList<String> photos;
     private ArrayList<String> photosDescription;
+    private String video;
     private ArrayList<String> address;
     private Map<String,String> pointOfInterest;
     private Boolean status;                     // True = sold, False = for sale
@@ -51,7 +52,8 @@ public class Estate {
 
     public Estate(String type, Integer price, Integer area,
                   Integer numberOfParts, Integer numberOfBathrooms, Integer numberOfBedrooms,
-                  String description, ArrayList<String> photos, ArrayList<String> photosDescription,  ArrayList<String> address,
+                  String description, ArrayList<String> photos, ArrayList<String> photosDescription,
+                  String video, ArrayList<String> address,
                   Map<String,String> pointOfInterest, LocalDateTime dateEntryOfTheMarket,
                   LocalDateTime dateOfSale, long realEstateAgent_Id) {
         this.type = type;
@@ -63,6 +65,7 @@ public class Estate {
         this.description = description;
         this.photos = photos;
         this.photosDescription = photosDescription;
+        this.video = video;
         this.address = address;
         this.pointOfInterest = pointOfInterest;
         this.status = false;
@@ -83,6 +86,7 @@ public class Estate {
     public String getDescription() { return description; }
     public ArrayList<String> getPhotos() { return photos; }
     public ArrayList<String> getPhotosDescription() { return photosDescription; }
+    public String getVideo() { return video; }
     public ArrayList<String> getAddress() { return address; }
     public Map<String,String> getPointOfInterest() { return pointOfInterest; }
     public Boolean getStatus() { return status; }
@@ -102,6 +106,7 @@ public class Estate {
     public void setDescription(String description) {  this.description = description;  }
     public void setPhotos(ArrayList<String> photos) {  this.photos = photos;  }
     public void setPhotosDescription(ArrayList<String> photosDescription) {  this.photosDescription = photosDescription;  }
+    public void setVideo(String video) { this.video = video; }
     public void setAddress(ArrayList<String> address) {  this.address = address;  }
     public void setPointOfInterest(Map<String,String> pointOfInterest) {  this.pointOfInterest = pointOfInterest;  }
     public void setStatus(Boolean status) {  this.status = status;  }
@@ -124,6 +129,7 @@ public class Estate {
                 ", description='" + description + '\'' +
                 ", photos=" + photos +
                 ", photosDescription='" + photosDescription + '\'' +
+                ", video ='" + video + '\'' +
                 ", address=" + address +
                 ", pointOfInterest=" + pointOfInterest +
                 ", status=" + status +
@@ -147,6 +153,7 @@ public class Estate {
         if (values.containsKey("description")) estate.setDescription(values.getAsString("description"));
         if (values.containsKey("photos")) estate.setPhotos(Converters.fromString(values.getAsString("photos")));
         if (values.containsKey("photosDescription")) estate.setPhotosDescription(Converters.fromString(values.getAsString("photosDescription")));
+        if (values.containsKey("video")) estate.setVideo(values.getAsString("video"));
         if (values.containsKey("address")) estate.setAddress(Converters.fromString(values.getAsString("address")));
         if (values.containsKey("pointOfInterest")) estate.setPointOfInterest(Converters.fromStringToMapStringString(values.getAsString("pointOfInterest")));
         if (values.containsKey("status")) estate.setStatus(values.getAsBoolean("status"));
