@@ -1,7 +1,10 @@
 package com.openclassrooms.realestatemanager.adapters.estateList;
 
+import androidx.annotation.ColorRes;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -67,12 +70,15 @@ public class EstateListViewHolder extends RecyclerView.ViewHolder implements Vie
         else mSale.setVisibility(View.INVISIBLE);
 
         // For indicate item Selected
+        Resources res = itemView.getResources();
         if (estate.getEstate_Id() == CurrentEstateDataRepository.getInstance()
                 .getCurrentEstate_Id().getValue()) {
-            mMCV.setCardBackgroundColor(Color.YELLOW);
+            mMCV.setCardBackgroundColor(res.getColorStateList(R.color.colorAccent));
+            mPrize.setTextColor(Color.WHITE);
         }
         else {
             mMCV.setCardBackgroundColor(Color.WHITE);
+            mPrize.setTextColor(res.getColorStateList(R.color.colorAccent));
         }
     }
 

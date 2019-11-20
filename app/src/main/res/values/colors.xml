@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#009688</color>
+    <color name="colorPrimary">#9CCC65</color>
+    <color name="colorPrimaryDark">#7CB342</color>
+    <color name="colorAccent">#9575CD</color>
 
     <!-- colors of the Navigation Drawer -->
     <color name="navigationDrawerBackground">#B2B9E1</color>
