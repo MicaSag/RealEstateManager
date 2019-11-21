@@ -18,7 +18,9 @@ import org.threeten.bp.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static junit.framework.TestCase.assertTrue;
 
@@ -42,30 +44,47 @@ public class EstateDaoTest {
             new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg")),
+            new ArrayList<>(Arrays.asList("entrance","bedroom","bathroom")),
+            "/video_link",
             new ArrayList<>(Arrays.asList("3 way of the temple","","PARIS","75001","France","1er arrond")),
-            new ArrayList<>(Arrays.asList("School Jean Baptiste" , "Super Market Lidl")),
+            new HashMap<String, String>() {{
+                put("School Jean Baptiste", "School Jean Baptiste");
+                put("Super Market Lidl", "Super Market Lidl");
+            }},
             (LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
             LocalDateTime.now(),
             REAL_ESTATE_AGENT_ID);
+
     private static Estate newEstateHouse
             = new Estate("House", 10000000, 750,
             5, 2, 4, "Beautifull FLAT in Paris",
             new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg")),
+            new ArrayList<>(Arrays.asList("entrance","bedroom","bathroom")),
+            "/video_link",
             new ArrayList<>(Arrays.asList("3 way of the temple","","PARIS","75005","France","5ème arrond")),
-            new ArrayList<>(Arrays.asList("School Jean Baptiste" , "Super Market Lidl")),
+            new HashMap<String, String>() {{
+                put("School Jean Baptiste", "School Jean Baptiste");
+                put("Super Market Lidl", "Super Market Lidl");
+            }},
             (LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
             LocalDateTime.now(),
             REAL_ESTATE_AGENT_ID);
+
     private static Estate newEstatePenthouse
             = new Estate("Penthouse", 10000000, 750,
             5, 2, 4, "Beautifull FLAT in Paris",
             new ArrayList<>(Arrays.asList("https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
                     "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg")),
+            new ArrayList<>(Arrays.asList("entrance","bedroom","bathroom")),
+            "/video_link",
             new ArrayList<>(Arrays.asList("3 way of the temple","","PARIS","75010","France","10ème arrond")),
-            new ArrayList<>(Arrays.asList("School Jean Baptiste" , "Super Market Lidl")),
+            new HashMap<String, String>() {{
+                put("School Jean Baptiste", "School Jean Baptiste");
+                put("Super Market Lidl", "Super Market Lidl");
+            }},
             (LocalDateTime.now().withDayOfMonth(10).withYear(2019).withMonth(8)),
             LocalDateTime.now(),
             REAL_ESTATE_AGENT_ID);

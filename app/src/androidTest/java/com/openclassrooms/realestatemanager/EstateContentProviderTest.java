@@ -49,7 +49,9 @@ public class EstateContentProviderTest {
 
     @Test
     public void getEstates() {
-        final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(EstateContentProvider.URI_ESTATE, USER_ID), null, null, null, null);
+        Uri u = EstateContentProvider.URI_ESTATE;
+        Log.d(TAG, "getEstates: u = "+u.toString());
+        final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(u, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
 
         for (int i=0; i < cursor.getCount();i++){
@@ -66,7 +68,7 @@ public class EstateContentProviderTest {
             Log.d(TAG, "getEstatesWhenNoEstateInserted: description ="+cursor.getString(cursor.getColumnIndexOrThrow("description")));
             Log.d(TAG, "getEstatesWhenNoEstateInserted: photos ="+ Converters.fromString(cursor.getString(cursor.getColumnIndexOrThrow("photos"))));
             Log.d(TAG, "getEstatesWhenNoEstateInserted: address ="+Converters.fromString(cursor.getString(cursor.getColumnIndexOrThrow("address"))));
-            Log.d(TAG, "getEstatesWhenNoEstateInserted: pointOfInterest ="+Converters.fromString(cursor.getString(cursor.getColumnIndexOrThrow("pointOfInterest"))));
+            Log.d(TAG, "getEstatesWhenNoEstateInserted: pointOfInterest ="+Converters.fromStringToMapStringString(cursor.getString(cursor.getColumnIndexOrThrow("pointOfInterest"))));
             Log.d(TAG, "getEstatesWhenNoEstateInserted: status ="+cursor.getString(cursor.getColumnIndexOrThrow("status")));
             Log.d(TAG, "getEstatesWhenNoEstateInserted: dateEntryOfTheMarket ="+Converters.fromTimestamp(cursor.getLong(cursor.getColumnIndexOrThrow("dateEntryOfTheMarket"))));
             Log.d(TAG, "getEstatesWhenNoEstateInserted: dateOfSale ="+Converters.fromTimestamp(cursor.getLong(cursor.getColumnIndexOrThrow("dateOfSale"))));
@@ -79,6 +81,7 @@ public class EstateContentProviderTest {
 
     @Test
     public void insertAndGetEstate() {
+        Log.d(TAG, "insertAndGetEstate: ");
         // BEFORE : Adding demo item
         final Uri userUri = mContentResolver.insert(EstateContentProvider.URI_ESTATE, generateEstate());
         // TEST
@@ -92,6 +95,7 @@ public class EstateContentProviderTest {
     // ---
 
     private ContentValues generateEstate(){
+        Log.d(TAG, "generateEstate: ");
         final ContentValues values = new ContentValues();
         values.put("type", "Penthouse");
         values.put("price", "33333");
@@ -100,18 +104,23 @@ public class EstateContentProviderTest {
         values.put("bathrooms","2");
         values.put("bedrooms","2");
         values.put("description","A good description");
-        values.put("photos",Converters.fromArrayList(
-                new ArrayList<>(Arrays.asList(  "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg",
-                                                "https://i.ebayimg.com/images/g/kvQAAOSwEwVcxXKq/s-l500.jpg"))));
-        values.put("address",Converters.fromArrayList(
-                new ArrayList<>(Arrays.asList(  "Vale Court","Ealing Road","London","TW8 0LN","UK" ))));
-        values.put("interests",Converters.fromArrayList(
-                new ArrayList<>(Arrays.asList(  "Sushi Tetsu",
-                                                "Amrutha Lounge"))));
-        values.put("status","1");
-        values.put("dateEntryOfTheMarket",Converters.dateToTimestamp(LocalDateTime.now()));
-        values.put("dateOfSale",Converters.dateToTimestamp(LocalDateTime.now()));
-        values.put("realEstateAgentId","1");
+        String photos = "[\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_outside.jpg\"," +
+                "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_facade.jpg\"," +
+                "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_living_room.jpg\"," +
+                "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_dining_room.jpg\"," +
+                "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_kitchen.jpg\"," +
+                "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_bedroom.jpg\"," +
+                "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_bathroom.jpg\"," +
+                "\"/sdcard/Android/data/com.openclassrooms.realestatemanager/files/Pictures/house1/house_1_swimming_pool.jpg\"]";
+        values.put("photos", photos);
+        values.put("photosDescription","[\"outside\",\"facade\",\"living room\",\"dining room\"," +
+                "\"kitchen\",\"bedroom\",\"bathroom\",\"swimming-pool\"]");
+        values.put("address", Arrays.asList("\"8 Mindy Ct\"", "\"\"", "\"Lattingtown\"", "\"New York\"", "\"United states\"").toString());
+        values.put("pointOfInterest", "{\"Swimming Pool\":\"Swimming Pool\",\"Library\":\"Library\"}");
+        values.put("status", false);
+        values.put("dateEntryOfTheMarket", Converters.dateToTimestamp(LocalDateTime.now().withDayOfMonth(3).withYear(2018).withMonth(4)));
+        values.put("dateOfSale", LocalDateTime.now().toString());
+        values.put("realEstateAgent_Id", 1);
         return values;
     }
 

@@ -159,7 +159,7 @@ public class Estate {
         if (values.containsKey("status")) estate.setStatus(values.getAsBoolean("status"));
         if (values.containsKey("dateEntryOfTheMarket")) estate.setDateEntryOfTheMarket(Converters.fromTimestamp(values.getAsLong("dateEntryOfTheMarket")));
         if (values.containsKey("dateOfSale")) estate.setDateOfSale(Converters.fromTimestamp(values.getAsLong("dateOfSale")));
-        if (values.containsKey("realEstateAgentId")) estate.setRealEstateAgent_Id(values.getAsLong("realEstateAgentId"));
+        if (values.containsKey("realEstateAgent_Id")) estate.setRealEstateAgent_Id(values.getAsLong("realEstateAgent_Id"));
         return estate;
     }
 }

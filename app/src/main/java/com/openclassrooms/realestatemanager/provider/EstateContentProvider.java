@@ -20,11 +20,9 @@ public class EstateContentProvider extends ContentProvider {
     private static final String TAG = EstateContentProvider.class.getSimpleName();
 
     // FOR DATA
-    public static final String AUTHORITY = "com.openclassrooms.realestatemanager.provider.EstateContentProvider";
+    public static final String AUTHORITY = "com.openclassrooms.realestatemanager.provider";
     public static final String TABLE_NAME_ESTATE = Estate.class.getSimpleName();
-    public static final String TABLE_NAME_REAL_ESTATE_AGENT = RealEstateAgent.class.getSimpleName();
     public static final Uri URI_ESTATE = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME_ESTATE);
-    public static final Uri URI_REAL_ESTATE_AGENT = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME_REAL_ESTATE_AGENT);
 
     @Override
     public boolean onCreate() {
