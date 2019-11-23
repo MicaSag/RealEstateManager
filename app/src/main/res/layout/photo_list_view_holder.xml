@@ -10,8 +10,8 @@
 
     <FrameLayout
         android:id="@+id/fragment_photo_list_cl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <!-- Image of the Estate -->
         <ImageView
@@ -19,8 +19,8 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
             android:layout_marginStart="2dp"
+            android:scaleType="fitXY"
             />
         <!-- Delete Image Button -->
         <Button
@@ -28,7 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="delete"
-            android:alpha="0.5"
+            android:alpha="0.70"
+            android:textColor="@android:color/holo_red_dark"
             android:layout_gravity="center"
             android:visibility="invisible"/>
         <!-- Room Type -->
@@ -36,10 +37,9 @@
             android:id="@+id/photo_list_et_room"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
             android:layout_marginStart="2dp"
-            android:background="@color/photo_list_description"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
             android:layout_gravity="bottom"
             android:textAlignment="center"
             android:visibility="invisible"/>

@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-            <!-- Image of the Restaurant -->
+            <!-- Image of the Estate -->
             <ImageView
                 android:id="@+id/fragment_list_estate_image"
                 android:layout_width="100dp"
@@ -59,7 +59,7 @@
             android:hint="@string/type_of_estate"
             android:maxLines="1"
             android:ellipsize="end"
-            android:textSize="20sp"
+            android:textSize="@dimen/size_text_title"
             android:textStyle="bold"
             />
 
@@ -75,7 +75,7 @@
             android:hint="@string/location_of_the_estate"
             android:maxLines="1"
             android:ellipsize="end"
-            android:textSize="20sp"
+            android:textSize="@dimen/size_text"
             />
 
         <!-- Third line -->
@@ -90,7 +90,7 @@
             android:hint="@string/price_of_the_estate"
             android:maxLines="1"
             android:ellipsize="end"
-            android:textSize="25sp"
+            android:textSize="@dimen/size_prize"
             android:textColor="@color/colorAccent"
             />
 

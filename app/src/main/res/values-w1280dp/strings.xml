@@ -32,5 +32,5 @@
         <item>Duplex</item>
     </string-array>
 
-    <bool name="is_w1280">false</bool>
+    <bool name="is_w1280">true</bool>
 </resources>

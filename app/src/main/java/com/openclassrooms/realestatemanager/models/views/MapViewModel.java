@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.repositories.CurrentRealEstateAgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
@@ -36,6 +37,9 @@ public class MapViewModel extends ViewModel {
     // That is, the last-known location retrieved by the Fused Location Provider.
     // OR the default Location if permission not Granted
     private MutableLiveData<Location> mLastKnownLocation = new MutableLiveData<>();
+
+    // ==> For use Api Google Play Service : map
+    private GoogleMap mGoogleMap;
 
     public MapViewModel(EstateDataRepository estateDataSource,
                         Executor executor) {
@@ -106,13 +110,14 @@ public class MapViewModel extends ViewModel {
         return mLastKnownLocation;
     }
 
-    /*    return Transformations.switchMap(
-                getLastKnownLocation(),
-                locationResult -> {
-                    MutableLiveData<Location> locationLiveData = new MutableLiveData<>();
-                    locationLiveData.setValue(locationResult);
-                    return locationLiveData;
-                });
-    }*/
+    // Get Google Map
+    public GoogleMap getGoogleMap() {
+        return mGoogleMap;
+    }
+
+    // Set Google Map
+    public void setGoogleMap(GoogleMap googleMap) {
+        this.mGoogleMap = googleMap;
+    }
 }
 

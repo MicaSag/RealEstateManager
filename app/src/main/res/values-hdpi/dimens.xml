@@ -5,10 +5,9 @@
     <dimen name="nav_header_height">176dp</dimen>
 
     <!-- Text -->
-    <dimen name="size_text_title">21sp</dimen>
-    <dimen name="size_text">20sp</dimen>
-    <dimen name="size_prize">25sp</dimen>
-
+    <dimen name="size_text_title">11sp</dimen>
+    <dimen name="size_text">10sp</dimen>
+    <dimen name="size_prize">15sp</dimen>
 
 
 

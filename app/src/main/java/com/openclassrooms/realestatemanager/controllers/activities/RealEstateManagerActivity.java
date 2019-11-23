@@ -151,8 +151,8 @@ public class RealEstateManagerActivity  extends BaseActivity
         mEstateDetailsFragment = (EstateDetailsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_estate_details);
 
-        // We only add DetailsFragment in Tablet mode (If found frame_layout_detail)
-        if (mEstateDetailsFragment == null && getResources().getBoolean(R.bool.is_tablet)) {
+        // We only add DetailsFragment for wight 1280 (If found frame_layout_detail)
+        if (mEstateDetailsFragment == null && getResources().getBoolean(R.bool.is_w1280)) {
             // Create new main fragment
             mEstateDetailsFragment = EstateDetailsFragment.newInstance();
             // Add it to FrameLayout container
@@ -237,12 +237,10 @@ public class RealEstateManagerActivity  extends BaseActivity
         Log.d(TAG, "onEstateClick: ");
         CurrentEstateDataRepository.getInstance().setCurrentEstate_Id(estate.getEstate_Id());
 
-        //
-
-
-        // We only add DetailsFragment in Tablet mode (If found frame_layout_detail)
-        if (findViewById(R.id.fragment_estate_details) == null)
-            Utils.startActivity(this, DetailsEstateActivity.class);
+        // If wight < 1280 then call DetailsEstateActivity
+        Log.d(TAG, "onEstateClick: is_w1280 = "+getResources().getBoolean(R.bool.is_w1280));
+        if (!getResources().getBoolean(R.bool.is_w1280))
+        Utils.startActivity(this, DetailsEstateActivity.class);
     }
     @Override
     public void onBackPressed() {

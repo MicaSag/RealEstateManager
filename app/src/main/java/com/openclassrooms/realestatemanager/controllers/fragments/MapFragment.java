@@ -63,9 +63,6 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
     // For add Google Map in Fragment
     private SupportMapFragment mMapFragment;
 
-    // ==> For use Api Google Play Service : map
-    private GoogleMap mGoogleMap;
-
     // ==> For update UI Location
     private static final float DEFAULT_ZOOM = 13f;
 
@@ -148,13 +145,13 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady: ");
-        mGoogleMap = googleMap;
+        mMapViewModel.setGoogleMap(googleMap);
 
         // Disable 3D Building
-        mGoogleMap.setBuildingsEnabled(false);
+        mMapViewModel.getGoogleMap().setBuildingsEnabled(false);
 
         // Activate OnMarkerClickListener
-        mGoogleMap.setOnInfoWindowClickListener(this);
+        mMapViewModel.getGoogleMap().setOnInfoWindowClickListener(this);
 
         // Get Location Permission
         getLocationPermission();
@@ -272,11 +269,11 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
             Log.d(TAG, "showCurrentLocation: currentLocation.getLongitude() = "
                     + currentLocation.getLongitude());
         }
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+        mMapViewModel.getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng( currentLocation.getLatitude(),
                             currentLocation.getLongitude()), DEFAULT_ZOOM));
         // Add a Marker for current position
-        Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+        Marker marker =  mMapViewModel.getGoogleMap().addMarker(new MarkerOptions()
                 .position(new LatLng(currentLocation.getLatitude(),
                         currentLocation.getLongitude()))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
@@ -304,14 +301,14 @@ public class MapFragment extends Fragment implements    OnMapReadyCallback,
                 // Displays the Marker if the location was found
                 if (!list.isEmpty()) {
                     // Declare a Marker for current Estate
-                    Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                    Marker marker =  mMapViewModel.getGoogleMap().addMarker(new MarkerOptions()
                             .position(new LatLng(list.get(0).getLatitude(), list.get(0).getLongitude()))
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
                             .title(estate.getAddress().get(0))
                             .snippet(snippet(estate))
                     );
                     marker.setTag(estate.getEstate_Id());
-                    mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    mMapViewModel.getGoogleMap().setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
                         @Override
                         public View getInfoWindow(Marker marker) {return null;}

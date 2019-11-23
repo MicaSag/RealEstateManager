@@ -40,7 +40,7 @@ public class DetailsEstateActivity extends BaseActivity {
     }
 
     // BASE METHOD Implementation
-    // Get the menu toolbar Layout
+    // Get the menu toolbar LayoutIf the screen has a
     // CALLED BY BASE METHOD
     @Override
     protected int getToolbarMenu() {
@@ -58,11 +58,14 @@ public class DetailsEstateActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume: ");
         super.onResume();
 
-        if (getResources().getBoolean(R.bool.is_tablet)) finish();
+        // If the width of the device is => 1280 then if the activity is reset during a rotation,
+        // then it is closed
+        Log.d(TAG, "onResume: is_w1280 = "+getResources().getBoolean(R.bool.is_w1280));
+        if (getResources().getBoolean(R.bool.is_w1280)) finish();
     }
-
     // ---------------------------------------------------------------------------------------------
     //                                        ENTRY POINT
     // ---------------------------------------------------------------------------------------------

@@ -377,7 +377,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="delete"
-                android:alpha="0.5"
+                android:alpha="0.70"
+                android:textColor="@android:color/holo_red_dark"
                 android:layout_gravity="center"
                 />
         </FrameLayout>

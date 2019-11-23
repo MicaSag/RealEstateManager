@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.adapters.photoList;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -50,6 +51,9 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
         mOnPhotoClick = callback_OnPhotoClick;
         mOnTextChange = callback_OnTextChange;
 
+        // Get Resources
+        Resources res = itemView.getResources();
+
         // Display Photo
         if (photo !=null) glide.load(photo).into(mImage);
 
@@ -68,8 +72,9 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder implements View
         if (caller == EstateDetailsFragment.class) {
             mRoomType.setVisibility(View.VISIBLE);
             mRoomType.setFocusable(false);
-            mRoomType.setBackgroundColor(Color.TRANSPARENT);
-            mRoomType.setText(description);
+            mRoomType.setBackgroundColor(res.getColor(R.color.photo_list_description));
+            if (description.equals("")) mRoomType.setVisibility(View.INVISIBLE);
+            else mRoomType.setText(description);
         }
     }
 
