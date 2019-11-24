@@ -41,17 +41,17 @@ Its intuitive and user-friendly interface is very easy to use.
 
 You can contact me for any questions : contact_realestatemanager@sfr.fr
 
-<img src="/app/src/main/res/drawable/app_screenshots/overview.png" width="850">
-<img src="/app/src/main/res/drawable/app_screenshots/navigation_drawer.png" width="850">
-<img src="/app/src/main/res/drawable/app_screenshots/create_view_01.png" width="850">
-<img src="/app/src/main/res/drawable/app_screenshots/create_view_02.png" width="850">
-<img src="/app/src/main/res/drawable/app_screenshots/update_view_01.png" width="850">
-<img src="/app/src/main/res/drawable/app_screenshots/update_view_02.png" width="850">
-<img src="/app/src/main/res/drawable/app_screenshots/search_view_01.png" width="850">
-<img src="/app/src/main/res/drawable/app_screenshots/search_view_02.png" width="850">
-<img src="/app/src/main/res/drawable/app_screenshots/map_view.png" width="850">
+<img src="/app/src/main/res/drawable/app_screenshots/overview.png" width="650">
+<img src="/app/src/main/res/drawable/app_screenshots/navigation_drawer.png" width="650">
+<img src="/app/src/main/res/drawable/app_screenshots/create_view_01.png" width="650">
+<img src="/app/src/main/res/drawable/app_screenshots/create_view_02.png" width="650">
+<img src="/app/src/main/res/drawable/app_screenshots/update_view_01.png" width="650">
+<img src="/app/src/main/res/drawable/app_screenshots/update_view_02.png" width="650">
+<img src="/app/src/main/res/drawable/app_screenshots/search_view_01.png" width="650">
+<img src="/app/src/main/res/drawable/app_screenshots/search_view_02.png" width="650">
+<img src="/app/src/main/res/drawable/app_screenshots/map_view.png" width="650">
 
-<img src="/app/src/main/res/drawable/app_screenshots/list_view_p.png" width="425"> <img src="/app/src/main/res/drawable/app_screenshots/details_view_p.png" width="425">
-<img src="/app/src/main/res/drawable/app_screenshots/create_view_p.png" width="425"> <img src="/app/src/main/res/drawable/app_screenshots/update_view_p.png" width="425">
-<img src="/app/src/main/res/drawable/app_screenshots/search_view_02_p.png" width="425"> <img src="/app/src/main/res/drawable/app_screenshots/map_view_p.png" width="425">
+<img src="/app/src/main/res/drawable/app_screenshots/list_view_p.png" width="325"> <img src="/app/src/main/res/drawable/app_screenshots/details_view_p.png" width="325">
+<img src="/app/src/main/res/drawable/app_screenshots/create_view_p.png" width="325"> <img src="/app/src/main/res/drawable/app_screenshots/update_view_p.png" width="325">
+<img src="/app/src/main/res/drawable/app_screenshots/search_view_02_p.png" width="325"> <img src="/app/src/main/res/drawable/app_screenshots/map_view_p.png" width="325">
 
