@@ -41,6 +41,7 @@ Its intuitive and user-friendly interface is very easy to use.
 
 You can contact me for any questions : contact_realestatemanager@sfr.fr
 
+<img src="/app/src/main/res/drawable/app_screenshots/overview.png" width="100">
 ![Overview View 01](/app/src/main/res/drawable/app_screenshots/overview.png | width=100)
 ![Navigation Drawer](/app/src/main/res/drawable/app_screenshots/navigation_drawer.png)
 ---------------------------------------------------------------------
