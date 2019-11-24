@@ -41,20 +41,23 @@ Its intuitive and user-friendly interface is very easy to use.
 
 You can contact me for any questions : contact_realestatemanager@sfr.fr
 
-![Top Stories List](/app/src/main/res/drawable/app_screenshots/top_stories_list.png)
-![Most Popular List](/app/src/main/res/drawable/most_popular_list.png)
-![Business List](/app/src/main/res/drawable/business_list.png)
-![Sports List](/app/src/main/res/drawable/sports_list.png)
+![Overview View 01](/app/src/main/res/drawable/app_screenshots/overview_view.png)
+![Navigation Drawer](/app/src/main/res/drawable/app_screenshots/navigation_drawer.png)
 ---------------------------------------------------------------------
-![Top Stories Web view Img](/app/src/main/res/drawable/top_stories_web_view.png)
-![Drawer Menu Img](/app/src/main/res/drawable/drawer_menu.png)
+![List View](/app/src/main/res/drawable/app_screenshots/list_view.png)
+![Details View](/app/src/main/res/drawable/app_screenshots/details_view.png)
 ---------------------------------------------------------------------
-![Search Articles not article found Img](/app/src/main/res/drawable/search_articles_not_articles_found.png)
-![Search Articles required data Img](/app/src/main/res/drawable/search_articles_required_data.png)
-![Search Articles calendar Img](/app/src/main/res/drawable/search_articles_calendar.png)
-![Search Articles keyboard Img](/app/src/main/res/drawable/search_articles_keyboard.png)
-![Search Articles list already read Img](/app/src/main/res/drawable/search_articles_list_already_read.png)
-![Search Articles Web View Img](/app/src/main/res/drawable/search_articles_web_view.png)
+![Create View 01](/app/src/main/res/drawable/app_screenshots/create_view_01.png)
+![Create View 02](/app/src/main/res/drawable/app_screenshots/create_view_02.png)
+![Create View Portrait](/app/src/main/res/drawable/app_screenshots/create_view_p.png)
 ---------------------------------------------------------------------
-![Notifications Set Img](/app/src/main/res/drawable/notifications_set.png)
-![Notifications canceled Img](/app/src/main/res/drawable/notifications_canceled.png)
+![Update View 01](/app/src/main/res/drawable/app_screenshots/update_view_01.png)
+![Update View 02](/app/src/main/res/drawable/app_screenshots/update_view_02.png)
+![Update View Portrait](/app/src/main/res/drawable/app_screenshots/update_view_p.png)
+---------------------------------------------------------------------
+![Search View 01](/app/src/main/res/drawable/app_screenshots/search_view_01.png)
+![Search View 02](/app/src/main/res/drawable/app_screenshots/search_view_02.png)
+![Search View Portrait](/app/src/main/res/drawable/app_screenshots/search_view_p.png)
+---------------------------------------------------------------------
+![Map View](/app/src/main/res/drawable/app_screenshots/map_view.png)
+![Map View Portrait](/app/src/main/res/drawable/app_screenshots/map_view_p.png)
