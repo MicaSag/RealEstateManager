@@ -41,11 +41,11 @@ Its intuitive and user-friendly interface is very easy to use.
 
 You can contact me for any questions : contact_realestatemanager@sfr.fr
 
-![Overview View 01](/app/src/main/res/drawable/app_screenshots/overview_view.png)
+![Overview View 01](/app/src/main/res/drawable/app_screenshots/overview.png){width=250px}
 ![Navigation Drawer](/app/src/main/res/drawable/app_screenshots/navigation_drawer.png)
 ---------------------------------------------------------------------
-![List View](/app/src/main/res/drawable/app_screenshots/list_view.png)
-![Details View](/app/src/main/res/drawable/app_screenshots/details_view.png)
+![List View Portrait](/app/src/main/res/drawable/app_screenshots/list_view_p.png)
+![Details View](/app/src/main/res/drawable/app_screenshots/details_view_p.png)
 ---------------------------------------------------------------------
 ![Create View 01](/app/src/main/res/drawable/app_screenshots/create_view_01.png)
 ![Create View 02](/app/src/main/res/drawable/app_screenshots/create_view_02.png)
@@ -57,7 +57,7 @@ You can contact me for any questions : contact_realestatemanager@sfr.fr
 ---------------------------------------------------------------------
 ![Search View 01](/app/src/main/res/drawable/app_screenshots/search_view_01.png)
 ![Search View 02](/app/src/main/res/drawable/app_screenshots/search_view_02.png)
-![Search View Portrait](/app/src/main/res/drawable/app_screenshots/search_view_p.png)
+![Search View Portrait](/app/src/main/res/drawable/app_screenshots/search_view_02_p.png)
 ---------------------------------------------------------------------
 ![Map View](/app/src/main/res/drawable/app_screenshots/map_view.png)
 ![Map View Portrait](/app/src/main/res/drawable/app_screenshots/map_view_p.png)
