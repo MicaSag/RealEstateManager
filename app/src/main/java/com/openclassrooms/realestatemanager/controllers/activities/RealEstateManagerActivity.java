@@ -220,7 +220,7 @@ public class RealEstateManagerActivity  extends BaseActivity
         Log.d(TAG, "configureNavigationView: ");
         // Subscribes to listen the navigationView
         mNavigationView.setNavigationItemSelectedListener(this);
-        // Mark as selected the menu item corresponding to First tab 'TOP STORIES'
+        // Mark as selected the menu item
         this.mNavigationView.getMenu().getItem(0).setChecked(true);
     }
 

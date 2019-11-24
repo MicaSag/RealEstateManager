@@ -149,11 +149,29 @@ public class EstateDetailsFragment extends Fragment implements PhotoListAdapter.
             mRoomsNumber.setText(estate.getNumberOfParts().toString());
             mBathroomsNumber.setText(estate.getNumberOfBathrooms().toString());
             mBedroomsNumber.setText(estate.getNumberOfBedrooms().toString());
-            mLocation_1.setText(estate.getAddress().get(0));
-            mLocation_2.setText(estate.getAddress().get(1));
-            mLocation_3.setText(estate.getAddress().get(2));
-            mLocation_4.setText(estate.getAddress().get(3));
-            mLocation_5.setText(estate.getAddress().get(4));
+
+            // Display Location
+            if (!estate.getAddress().get(0).isEmpty()) {
+                mLocation_1.setText(estate.getAddress().get(0));
+                mLocation_1.setVisibility(View.VISIBLE);
+            } else  mLocation_1.setVisibility(View.GONE);
+            if (!estate.getAddress().get(1).isEmpty()) {
+                mLocation_2.setText(estate.getAddress().get(1));
+                mLocation_2.setVisibility(View.VISIBLE);
+            } else  mLocation_2.setVisibility(View.GONE);
+            if (!estate.getAddress().get(2).isEmpty()) {
+                mLocation_3.setText(estate.getAddress().get(2));
+                mLocation_3.setVisibility(View.VISIBLE);
+            } else  mLocation_3.setVisibility(View.GONE);
+            if (!estate.getAddress().get(3).isEmpty()) {
+                mLocation_4.setText(estate.getAddress().get(3));
+                mLocation_4.setVisibility(View.VISIBLE);
+            } else  mLocation_4.setVisibility(View.GONE);
+            if (!estate.getAddress().get(4).isEmpty()) {
+                mLocation_5.setText(estate.getAddress().get(4));
+                mLocation_5.setVisibility(View.VISIBLE);
+            } else  mLocation_5.setVisibility(View.GONE);
+
             mPhotoListAdapter.setNewPhotos(estate.getPhotos());
             mPhotoListAdapter.setNewPhotosDescription(estate.getPhotosDescription());
 
