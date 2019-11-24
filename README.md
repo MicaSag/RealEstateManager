@@ -41,24 +41,24 @@ Its intuitive and user-friendly interface is very easy to use.
 
 You can contact me for any questions : contact_realestatemanager@sfr.fr
 
-<img src="/app/src/main/res/drawable/app_screenshots/overview.png" width="100">
-![Overview View 01](/app/src/main/res/drawable/app_screenshots/overview.png | width=100)
-![Navigation Drawer](/app/src/main/res/drawable/app_screenshots/navigation_drawer.png)
+<img src="/app/src/main/res/drawable/app_screenshots/overview.png" width="400">
+<img src="/app/src/main/res/drawable/app_screenshots/overview.png" width="400">
+<img src="/app/src/main/res/drawable/app_screenshots/navigation_drawer.png" width="400">
 ---------------------------------------------------------------------
-![List View Portrait](/app/src/main/res/drawable/app_screenshots/list_view_p.png)
-![Details View](/app/src/main/res/drawable/app_screenshots/details_view_p.png)
+<img src="/app/src/main/res/drawable/app_screenshots/list_view_p.png" width="400">
+<img src="/app/src/main/res/drawable/app_screenshots/details_view_p.png" width="400">
 ---------------------------------------------------------------------
-![Create View 01](/app/src/main/res/drawable/app_screenshots/create_view_01.png)
-![Create View 02](/app/src/main/res/drawable/app_screenshots/create_view_02.png)
-![Create View Portrait](/app/src/main/res/drawable/app_screenshots/create_view_p.png)
+<img src="/app/src/main/res/drawable/app_screenshots/create_view_01.png" width="400">
+<img src="/app/src/main/res/drawable/app_screenshots/create_view_02.png" width="400">
+<img src="/app/src/main/res/drawable/app_screenshots/create_view_p.png" width="400">
 ---------------------------------------------------------------------
-![Update View 01](/app/src/main/res/drawable/app_screenshots/update_view_01.png)
-![Update View 02](/app/src/main/res/drawable/app_screenshots/update_view_02.png)
-![Update View Portrait](/app/src/main/res/drawable/app_screenshots/update_view_p.png)
+<img src="/app/src/main/res/drawable/app_screenshots/update_view_01.png" width="400">
+<img src="/app/src/main/res/drawable/app_screenshots/update_view_02.png" width="400">
+<img src="/app/src/main/res/drawable/app_screenshots/update_view_p.png" width="400">
 ---------------------------------------------------------------------
-![Search View 01](/app/src/main/res/drawable/app_screenshots/search_view_01.png)
-![Search View 02](/app/src/main/res/drawable/app_screenshots/search_view_02.png)
-![Search View Portrait](/app/src/main/res/drawable/app_screenshots/search_view_02_p.png)
+<img src="/app/src/main/res/drawable/app_screenshots/search_view_01.png" width="400">
+<img src="/app/src/main/res/drawable/app_screenshots/search_view_02.png" width="400">
+<img src="/app/src/main/res/drawable/app_screenshots/search_view_02_p.png" width="400">
 ---------------------------------------------------------------------
-![Map View](/app/src/main/res/drawable/app_screenshots/map_view.png)
-![Map View Portrait](/app/src/main/res/drawable/app_screenshots/map_view_p.png)
+<img src="/app/src/main/res/drawable/app_screenshots/map_view.png" width="400">
+<img src="/app/src/main/res/drawable/app_screenshots/map_view_p.png" width="400">
